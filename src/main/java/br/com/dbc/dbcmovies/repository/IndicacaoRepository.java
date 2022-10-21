@@ -1,11 +1,13 @@
 package br.com.dbc.dbcmovies.repository;
 
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+@Repository
 public class IndicacaoRepository {
 
     private ConexaoBancoDeDados conexao;

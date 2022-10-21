@@ -2,6 +2,7 @@ package br.com.dbc.dbcmovies.repository;
 
 import br.com.dbc.dbcmovies.entity.Avaliacao;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class AvaliacaoRepository {
 
     private ConexaoBancoDeDados conexao;

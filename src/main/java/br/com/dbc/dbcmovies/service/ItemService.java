@@ -26,7 +26,10 @@ public class ItemService {
     }
 
     public List<ItemEntretenimento> filter(Filtro filtro) throws BancoDeDadosException {
-        return itemRepository.filtrarItens(filtro);
+        List<ItemEntretenimento> resposta = itemRepository.filtrarItens(filtro);
+        resposta.forEach(x -> x.setMediaAvaliacoes(calcularAvaliacao(x.getId())));
+
+        return resposta;
     }
 
     public ItemEntretenimento update(Integer id, ItemEntretenimento itemEntretenimento) throws RegraDeNegocioException, BancoDeDadosException {
@@ -49,5 +52,14 @@ public class ItemService {
         }catch (BancoDeDadosException ex){
             throw new RegraDeNegocioException("Id não encontrado.");
         }
+    }
+
+    public Double calcularAvaliacao(Integer id){
+        try{
+            return itemRepository.calcularAvaliacoes(id);
+        } catch (BancoDeDadosException ex) {
+            System.out.println("ERRO: "+ex.getMessage());
+        }
+        return null;
     }
 }
