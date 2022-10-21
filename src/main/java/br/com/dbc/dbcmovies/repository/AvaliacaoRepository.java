@@ -2,6 +2,9 @@ package br.com.dbc.dbcmovies.repository;
 
 import br.com.dbc.dbcmovies.entity.Avaliacao;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
+import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
+import br.com.dbc.dbcmovies.service.ItemService;
+import br.com.dbc.dbcmovies.service.UsuarioService;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -15,13 +18,9 @@ import java.util.List;
 public class AvaliacaoRepository {
 
     private ConexaoBancoDeDados conexao;
-    private UsuarioRepository usuarioRepository;
-    private ItemRepository itemRepository;
 
-    public AvaliacaoRepository(ConexaoBancoDeDados conexao, UsuarioRepository usuarioRepository, ItemRepository itemRepository) {
+    public AvaliacaoRepository(ConexaoBancoDeDados conexao) {
         this.conexao = conexao;
-        this.usuarioRepository = usuarioRepository;
-        this.itemRepository = itemRepository;
     }
 
     public Avaliacao adicionar(Avaliacao avaliacao, Integer usuarioId, Integer itemId) throws BancoDeDadosException {
@@ -55,7 +54,7 @@ public class AvaliacaoRepository {
         }
     }
 
-    public List<Avaliacao> listarAvaliacoes () throws BancoDeDadosException {
+    public List<Avaliacao> listarAvaliacoes (UsuarioService usuarioService, ItemService itemService) throws BancoDeDadosException, RegraDeNegocioException {
         List<Avaliacao> avaliacoes = new ArrayList<>();
         Connection con = null;
 
@@ -73,8 +72,8 @@ public class AvaliacaoRepository {
 
             while (res.next()){
                 Avaliacao aval = new Avaliacao();
-                aval.setUsuario(usuarioRepository.pegar(res.getInt("id_usuario")));
-                aval.setItemEntretenimento(itemRepository.pegar(res.getInt("id_item_entretenimento")));
+                aval.setUsuario(usuarioService.findById(res.getInt("id_usuario")));
+                aval.setItemEntretenimento(itemService.findById(res.getInt("id_item_entretenimento")));
                 aval.setNota(res.getDouble("nota"));
                 aval.setComentario(res.getString("comentario"));
 
@@ -97,7 +96,7 @@ public class AvaliacaoRepository {
     }
 
 
-    public List<Avaliacao> listarAvaliacoesUsuario (Integer idUsuario) throws BancoDeDadosException {
+    public List<Avaliacao> listarAvaliacoesUsuario (Integer idUsuario, UsuarioService usuarioService, ItemService itemService) throws BancoDeDadosException, RegraDeNegocioException {
 
         List<Avaliacao> avaliacoes = new ArrayList<>();
         Connection con = null;
@@ -119,8 +118,8 @@ public class AvaliacaoRepository {
 
             while (res.next()){
                 Avaliacao aval = new Avaliacao();
-                aval.setUsuario(usuarioRepository.pegar(res.getInt("id_usuario")));
-                aval.setItemEntretenimento(itemRepository.pegar(res.getInt("id_item_entretenimento")));
+                aval.setUsuario(usuarioService.findById(res.getInt("id_usuario")));
+                aval.setItemEntretenimento(itemService.findById(res.getInt("id_item_entretenimento")));
                 aval.setNota(res.getDouble("nota"));
                 aval.setComentario(res.getString("comentario"));
 
@@ -159,6 +158,43 @@ public class AvaliacaoRepository {
             System.out.println("removerItemPorId.res=" + res);
 
             return res > 0;
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public Avaliacao pegar(Integer idUsuario, Integer idItem, UsuarioService usuarioService, ItemService itemService) throws BancoDeDadosException, RegraDeNegocioException {
+        Connection con = null;
+        try {
+            con = conexao.getConnection();
+
+            String sql = "SELECT * FROM AVALIACAO WHERE id_usuario = ? AND id_item_entretenimento = ? ";
+
+            PreparedStatement stmt = con.prepareStatement(sql);
+
+            stmt.setInt(1, idUsuario);
+            stmt.setInt(2, idItem);
+
+            // Executa-se a consulta
+            ResultSet res = stmt.executeQuery();
+
+            res.next();
+
+            Avaliacao aval = new Avaliacao();
+            aval.setUsuario(usuarioService.findById(res.getInt("id_usuario")));
+            aval.setItemEntretenimento(itemService.findById(res.getInt("id_item_entretenimento")));
+            aval.setNota(res.getDouble("nota"));
+            aval.setComentario(res.getString("comentario"));
+
+            return aval;
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {

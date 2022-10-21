@@ -22,7 +22,10 @@ public class ItemService {
     }
 
     public List<ItemEntretenimento> list() throws BancoDeDadosException {
-        return itemRepository.listar();
+        List<ItemEntretenimento> resposta = itemRepository.listar();
+        resposta.forEach(x -> x.setMediaAvaliacoes(calcularAvaliacao(x.getId())));
+
+        return resposta;
     }
 
     public List<ItemEntretenimento> filter(Filtro filtro) throws BancoDeDadosException {

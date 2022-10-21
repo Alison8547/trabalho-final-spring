@@ -1,9 +1,14 @@
 package br.com.dbc.dbcmovies.entity;
 
+import javax.validation.constraints.NotNull;
+
 public class Avaliacao{
 
+    @NotNull
     private Usuario usuario;
+    @NotNull
     private ItemEntretenimento itemEntretenimento;
+    @NotNull
     private Double nota;
     private String comentario;
 
