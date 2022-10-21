@@ -79,23 +79,33 @@ public class ItemRepository implements Repositorio<Integer, ItemEntretenimento> 
     }
 
     @Override
-    public boolean remover(Integer id) throws BancoDeDadosException {
+    public List<ItemEntretenimento> listar() throws BancoDeDadosException {
+        List<ItemEntretenimento> itemEntretenimentos = new ArrayList<>();
         Connection con = null;
-        try {
+
+        try{
             con = conexao.getConnection();
+            Statement stmt = con.createStatement();
 
-            String sql = "DELETE FROM ITEM_ENTRETENIMENTO WHERE id_item_entretenimento = ?";
+            String sql = "SELECT * FROM ITEM_ENTRETENIMENTO";
+            ResultSet res = stmt.executeQuery(sql);
 
-            PreparedStatement stmt = con.prepareStatement(sql);
+            while (res.next()){
+                ItemEntretenimento item = new ItemEntretenimento();
+                item.setId(res.getInt("id_item_entretenimento"));
+                item.setNome(res.getString("nome"));
+                item.setTipo(res.getString("tipo"));
+                item.setGenero(res.getString("genero"));
+                item.setSinopse(res.getString("sinopse"));
+                item.setAnoLancamento(res.getString("ano_lancamento"));
+                item.setClassificacao(res.getInt("classificacao"));
+                item.setPlataforma(res.getString("plataforma"));
 
-            stmt.setInt(1, id);
+                itemEntretenimentos.add(item);
+            }
 
-            // Executa-se a consulta
-            int res = stmt.executeUpdate();
-
-            return res > 0;
-        } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
+        }catch (SQLException ex){
+            throw new BancoDeDadosException(ex.getCause());
         } finally {
             try {
                 if (con != null) {
@@ -105,6 +115,7 @@ public class ItemRepository implements Repositorio<Integer, ItemEntretenimento> 
                 e.printStackTrace();
             }
         }
+        return itemEntretenimentos;
     }
 
     @Override
@@ -180,46 +191,6 @@ public class ItemRepository implements Repositorio<Integer, ItemEntretenimento> 
         }
     }
 
-    @Override
-    public List<ItemEntretenimento> listar() throws BancoDeDadosException {
-        List<ItemEntretenimento> itemEntretenimentos = new ArrayList<>();
-        Connection con = null;
-
-        try{
-            con = conexao.getConnection();
-            Statement stmt = con.createStatement();
-
-            String sql = "SELECT * FROM ITEM_ENTRETENIMENTO";
-            ResultSet res = stmt.executeQuery(sql);
-
-            while (res.next()){
-                ItemEntretenimento item = new ItemEntretenimento();
-                item.setId(res.getInt("id_item_entretenimento"));
-                item.setNome(res.getString("nome"));
-                item.setTipo(res.getString("tipo"));
-                item.setGenero(res.getString("genero"));
-                item.setSinopse(res.getString("sinopse"));
-                item.setAnoLancamento(res.getString("ano_lancamento"));
-                item.setClassificacao(res.getInt("classificacao"));
-                item.setPlataforma(res.getString("plataforma"));
-
-                itemEntretenimentos.add(item);
-            }
-
-        }catch (SQLException ex){
-            throw new BancoDeDadosException(ex.getCause());
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return itemEntretenimentos;
-    }
-
     public List<ItemEntretenimento> filtrarItens(Filtro filtro) throws BancoDeDadosException {
         List<ItemEntretenimento> itemEntretenimentos = new ArrayList<>();
         Connection con = null;
@@ -266,6 +237,35 @@ public class ItemRepository implements Repositorio<Integer, ItemEntretenimento> 
             }
         }
         return itemEntretenimentos;
+    }
+
+    @Override
+    public boolean remover(Integer id) throws BancoDeDadosException {
+        Connection con = null;
+        try {
+            con = conexao.getConnection();
+
+            String sql = "DELETE FROM ITEM_ENTRETENIMENTO WHERE id_item_entretenimento = ?";
+
+            PreparedStatement stmt = con.prepareStatement(sql);
+
+            stmt.setInt(1, id);
+
+            // Executa-se a consulta
+            int res = stmt.executeUpdate();
+
+            return res > 0;
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public Double calcularAvaliacoes(Integer id) throws BancoDeDadosException{

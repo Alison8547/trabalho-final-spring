@@ -15,7 +15,6 @@ import java.util.List;
 public class AssistidosRepository implements Interacao {
 
     private ConexaoBancoDeDados conexao;
-
     public AssistidosRepository(ConexaoBancoDeDados conexao) {
         this.conexao = conexao;
     }
