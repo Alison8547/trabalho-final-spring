@@ -20,6 +20,11 @@ public class UsuarioService {
         return usuarioRepository.listar();
     }
 
+    public Usuario pegar(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
+        findById(id);
+        return usuarioRepository.pegar(id);
+    }
+
     public Usuario adicionar(Usuario usuario) throws BancoDeDadosException {
         return usuarioRepository.adicionar(usuario);
     }
