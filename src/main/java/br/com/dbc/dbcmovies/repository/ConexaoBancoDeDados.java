@@ -1,4 +1,4 @@
-package br.com.dbc.dbcmovies.config;
+package br.com.dbc.dbcmovies.repository;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
