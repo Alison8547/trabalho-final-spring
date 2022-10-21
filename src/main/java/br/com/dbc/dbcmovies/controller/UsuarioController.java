@@ -45,4 +45,9 @@ public class UsuarioController {
         usuarioService.remover(idUsuario);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{idUsuario}/admin")
+    public ResponseEntity<Usuario> tornarUsuarioAdmin(@PathVariable(name = "idUsuario")Integer idUsuario) throws BancoDeDadosException, RegraDeNegocioException {
+        return new ResponseEntity<>(usuarioService.tornarUsuarioAdmin(idUsuario),HttpStatus.OK);
+    }
 }

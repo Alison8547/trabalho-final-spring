@@ -43,7 +43,7 @@ public class UsuarioService {
         usuarioRepository.remover(id);
     }
 
-    public Usuario pegarUsuario(Usuario usuarioLogin) throws BancoDeDadosException {
+    public Usuario pegarLogin(Usuario usuarioLogin) throws BancoDeDadosException {
         return usuarioRepository.pegarLogin(usuarioLogin);
     }
 
