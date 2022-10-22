@@ -1,5 +1,6 @@
 package br.com.dbc.dbcmovies.controller;
 
+import br.com.dbc.dbcmovies.Dto.UsuarioCreateDto;
 import br.com.dbc.dbcmovies.Dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.Usuario;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
@@ -37,13 +38,19 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> adicionar(@Valid @RequestBody Usuario usuario) throws BancoDeDadosException {
-        return new ResponseEntity<>(usuarioService.adicionar(usuario),HttpStatus.CREATED);
+    public ResponseEntity<UsuarioDto> adicionar(@Valid @RequestBody UsuarioCreateDto usuario) throws BancoDeDadosException {
+        log.info("Adicionando o Usuário...");
+        UsuarioDto user = usuarioService.adicionar(usuario);
+        log.info("Usuário adicionado com sucesso!");
+        return new ResponseEntity<>(user,HttpStatus.CREATED);
     }
 
     @PutMapping("/{idUsuario}")
-    public ResponseEntity<Usuario> editar(@PathVariable(name = "idUsuario")Integer idUsuario,@Valid @RequestBody Usuario usuario) throws BancoDeDadosException, RegraDeNegocioException {
-        return new ResponseEntity<>(usuarioService.editar(idUsuario, usuario),HttpStatus.OK);
+    public ResponseEntity<UsuarioDto> editar(@PathVariable(name = "idUsuario")Integer idUsuario,@Valid @RequestBody UsuarioCreateDto usuario) throws BancoDeDadosException, RegraDeNegocioException {
+        log.info("Editando o Usuário...");
+        UsuarioDto user = usuarioService.editar(idUsuario, usuario);
+        log.info("Usuário editado com sucesso!");
+        return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
     @DeleteMapping("/{idUsuario}")
@@ -53,7 +60,9 @@ public class UsuarioController {
     }
 
     @PutMapping("/{idUsuario}/admin")
-    public ResponseEntity<Usuario> tornarUsuarioAdmin(@PathVariable(name = "idUsuario")Integer idUsuario) throws BancoDeDadosException, RegraDeNegocioException {
-        return new ResponseEntity<>(usuarioService.tornarUsuarioAdmin(idUsuario),HttpStatus.OK);
+    public ResponseEntity<Void> tornarUsuarioAdmin(@PathVariable(name = "idUsuario")Integer idUsuario) throws BancoDeDadosException, RegraDeNegocioException {
+        usuarioService.remover(idUsuario);
+        log.info("Usuário deletado com sucesso");
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,5 +1,6 @@
 package br.com.dbc.dbcmovies.service;
 
+import br.com.dbc.dbcmovies.Dto.UsuarioCreateDto;
 import br.com.dbc.dbcmovies.Dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.Usuario;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
@@ -32,14 +33,18 @@ public class UsuarioService {
         return usuarioRepository.pegar(id);
     }
 
-    public Usuario adicionar(Usuario usuario) throws BancoDeDadosException {
-        return usuarioRepository.adicionar(usuario);
+    public UsuarioDto adicionar(UsuarioCreateDto usuario) throws BancoDeDadosException {
+        Usuario usuarioAdicionado = objectMapper.convertValue(usuario, Usuario.class);
+        usuarioAdicionado = usuarioRepository.adicionar(usuarioAdicionado);
+        UsuarioDto usuarioDto = objectMapper.convertValue(usuarioAdicionado, UsuarioDto.class);
+        return usuarioDto;
     }
 
-    public Usuario editar(Integer id, Usuario usuario) throws BancoDeDadosException, RegraDeNegocioException {
+    public UsuarioDto editar(Integer id, UsuarioCreateDto usuarioCreateDto) throws BancoDeDadosException, RegraDeNegocioException {
         findById(id);
-        if (usuarioRepository.editar(id, usuario)) {
-            return usuarioRepository.pegar(id);
+        Usuario usuarioConvertido = objectMapper.convertValue(usuarioCreateDto, Usuario.class);
+        if (usuarioRepository.editar(id, usuarioConvertido)) {
+            return objectMapper.convertValue(usuarioRepository.pegar(id), UsuarioDto.class) ;
         } else {
             throw new RegraDeNegocioException("Não foi possível atualizar o Usuário!");
         }
