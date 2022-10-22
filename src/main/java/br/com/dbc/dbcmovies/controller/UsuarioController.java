@@ -6,11 +6,14 @@ import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.UsuarioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@Validated
 @RequestMapping("/usuario")
 public class UsuarioController {
 
@@ -31,12 +34,12 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> adicionar(@RequestBody Usuario usuario) throws BancoDeDadosException {
+    public ResponseEntity<Usuario> adicionar(@Valid @RequestBody Usuario usuario) throws BancoDeDadosException {
         return new ResponseEntity<>(usuarioService.adicionar(usuario),HttpStatus.CREATED);
     }
 
     @PutMapping("/{idUsuario}")
-    public ResponseEntity<Usuario> editar(@PathVariable(name = "idUsuario")Integer idUsuario,@RequestBody Usuario usuario) throws BancoDeDadosException, RegraDeNegocioException {
+    public ResponseEntity<Usuario> editar(@PathVariable(name = "idUsuario")Integer idUsuario,@Valid @RequestBody Usuario usuario) throws BancoDeDadosException, RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.editar(idUsuario, usuario),HttpStatus.OK);
     }
 
