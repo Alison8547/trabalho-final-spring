@@ -1,5 +1,12 @@
 package br.com.dbc.dbcmovies.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@AllArgsConstructor
+@Getter
+@Setter
 public class Filtro  {
     public String tipo;
     private String genero;
@@ -7,37 +14,6 @@ public class Filtro  {
 
     //Construtores
     public Filtro() {
-    }
-
-    public Filtro(String tipo, String genero, int classificacao) {
-        this.tipo = tipo;
-        this.genero = genero;
-        this.classificacao = classificacao;
-    }
-
-    //GETTERS AND SETTERS
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public String getGenero() {
-        return genero;
-    }
-
-    public void setGenero(String genero) {
-        this.genero = genero;
-    }
-
-    public Integer getClassificacao() {
-        return classificacao;
-    }
-
-    public void setClassificacao(Integer classificacao) {
-        this.classificacao = classificacao;
     }
 
 }
