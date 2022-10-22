@@ -4,6 +4,7 @@ import br.com.dbc.dbcmovies.entity.ItemEntretenimento;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.AssistidosService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,6 @@ import java.util.List;
 public class AssistidosController {
 
     private final AssistidosService assistidosService;
-
 
     @GetMapping("/{idUsuario}")
     public ResponseEntity<List<ItemEntretenimento>> listarAssistidos(@PathVariable(name = "idUsuario") Integer idUsuario) throws BancoDeDadosException, RegraDeNegocioException {

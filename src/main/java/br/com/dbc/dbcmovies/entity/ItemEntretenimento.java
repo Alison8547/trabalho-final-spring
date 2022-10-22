@@ -119,7 +119,7 @@ public class ItemEntretenimento{
     }
 
     public void setMediaAvaliacoes(Double mediaAvaliacoes) {
-        MediaAvaliacoes = mediaAvaliacoes;
+        this.MediaAvaliacoes = mediaAvaliacoes;
     }
 
     public String getDuracao() {
