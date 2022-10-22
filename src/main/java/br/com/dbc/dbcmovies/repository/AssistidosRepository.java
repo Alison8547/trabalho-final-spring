@@ -50,6 +50,10 @@ public class AssistidosRepository implements Interacao {
                 item.setAnoLancamento(res.getString("ano_lancamento"));
                 item.setClassificacao(res.getInt("classificacao"));
                 item.setPlataforma(res.getString("plataforma"));
+                item.setDuracao(res.getString("duracao"));
+                item.setTemporadas(res.getInt("temporadas"));
+                item.setEpisodios(res.getInt("episodios"));
+         //       item.setMediaAvaliacoes(res.getDouble("mediaAvaliacoes"));
 
                 itemEntretenimentos.add(item);
             }
