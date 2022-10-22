@@ -23,7 +23,11 @@ public class AssistidosService {
 
     public List<ItemEntretenimento> listarAssistidos(Integer idUsuario) throws BancoDeDadosException, RegraDeNegocioException {
         usuarioService.findById(idUsuario);
-        return assistidosRepository.listarAssistidos(idUsuario);
+
+        List<ItemEntretenimento> resultList = assistidosRepository.listarAssistidos(idUsuario);
+        resultList.forEach(item -> item.setMediaAvaliacoes(itemService.calcularAvaliacao(item.getId())));
+
+        return resultList;
     }
 
     public void deletarAssistido(Integer idItem, Integer idUsuario) throws BancoDeDadosException, RegraDeNegocioException {
@@ -39,9 +43,6 @@ public class AssistidosService {
        assistidosRepository.marcarAssistido(idUsuario,idItem);
 
        return itemService.findById(idItem);
-
-
-
     }
 
     public void incluirIndicacao(String itemNome,Integer idUsuario) throws RegraDeNegocioException, BancoDeDadosException {
