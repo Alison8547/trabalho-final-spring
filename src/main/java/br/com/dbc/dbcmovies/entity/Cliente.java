@@ -14,8 +14,7 @@ public class Cliente extends Usuario {
     }
 
     public Cliente(Integer id, String nome, int idade, String email, String senha) {
-        super(id, nome, idade, email, senha);
-        tipoUsuario = TipoUsuario.CLIENTE;
+        super(id, nome, idade, email, senha,TipoUsuario.CLIENTE);
         this.assistidos = new ArrayList<>();
         this.avaliacoes = new ArrayList<>();
     }

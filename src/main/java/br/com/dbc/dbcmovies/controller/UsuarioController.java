@@ -1,15 +1,20 @@
 package br.com.dbc.dbcmovies.controller;
 
+import br.com.dbc.dbcmovies.Dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.Usuario;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.UsuarioService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Validated
+@Slf4j
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
@@ -21,7 +26,7 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Usuario>> listar() throws BancoDeDadosException {
+    public ResponseEntity<List<UsuarioDto>> listar() throws BancoDeDadosException {
         return new ResponseEntity<>(usuarioService.listar(), HttpStatus.OK);
     }
 

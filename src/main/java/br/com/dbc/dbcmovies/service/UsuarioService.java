@@ -1,23 +1,30 @@
 package br.com.dbc.dbcmovies.service;
 
+import br.com.dbc.dbcmovies.Dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.Usuario;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.UsuarioRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class UsuarioService {
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    private final ObjectMapper objectMapper;
+
+    public UsuarioService(UsuarioRepository usuarioRepository, ObjectMapper objectMapper) {
         this.usuarioRepository = usuarioRepository;
+        this.objectMapper = objectMapper;
     }
 
-    public List<Usuario> listar() throws BancoDeDadosException {
-        return usuarioRepository.listar();
+    public List<UsuarioDto> listar() throws BancoDeDadosException {
+        return  usuarioRepository.listar().stream()
+                .map(item -> objectMapper.convertValue(item, UsuarioDto.class))
+                .toList();
     }
 
     public Usuario pegar(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
