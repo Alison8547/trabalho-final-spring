@@ -5,12 +5,13 @@ import br.com.dbc.dbcmovies.entity.TipoUsuario;
 import br.com.dbc.dbcmovies.entity.Usuario;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.repository.interfaces.Repositorio;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+@Slf4j
 @Repository
 public class UsuarioRepository implements Repositorio<Integer, Usuario> {
 
@@ -58,7 +59,6 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
 
             int res = stmt.executeUpdate();
 
-            System.out.println("Adicionar Usuário: " + res);
             return usuario;
 
         } catch (SQLException e) {
@@ -84,7 +84,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
             int res = stmt.executeUpdate();
-            System.out.println("Remover Usuário: " + res);
+            log.info("Usuário deletado com sucesso");
             return res > 0;
 
         } catch (SQLException e) {
@@ -125,8 +125,6 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
 
             int res = stmt.executeUpdate();
 
-            System.out.println("Editar Usuário: " + res);
-
             return res > 0;
 
         } catch (SQLException e) {
@@ -158,8 +156,6 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
             stmt.setInt(2, id);
 
             int res = stmt.executeUpdate();
-
-            System.out.println("Editar Usuário: " + res);
 
             return res > 0;
 
@@ -247,8 +243,6 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
                     usuario.setTipoUsuario(TipoUsuario.CLIENTE);
                 }
             }
-
-            System.out.println("Usuário consultado!!");
 
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
