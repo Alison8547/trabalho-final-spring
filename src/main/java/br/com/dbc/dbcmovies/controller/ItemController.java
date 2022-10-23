@@ -1,7 +1,9 @@
 package br.com.dbc.dbcmovies.controller;
 
+import br.com.dbc.dbcmovies.Dto.FilmeCreateDto;
+import br.com.dbc.dbcmovies.Dto.ItemEntretenimentoDto;
+import br.com.dbc.dbcmovies.Dto.SerieCreateDto;
 import br.com.dbc.dbcmovies.entity.Filtro;
-import br.com.dbc.dbcmovies.entity.ItemEntretenimento;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.ItemService;
@@ -23,34 +25,46 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    @PostMapping
-    public ResponseEntity<ItemEntretenimento> create(@Valid @RequestBody ItemEntretenimento itemEntretenimento) throws BancoDeDadosException {
-        return ResponseEntity.ok(itemService.create(itemEntretenimento));
+    @PostMapping("/filme")
+    public ResponseEntity<ItemEntretenimentoDto> createFilme(@Valid @RequestBody FilmeCreateDto filmeCreateDto) throws BancoDeDadosException {
+        return ResponseEntity.ok(itemService.createFilme(filmeCreateDto));
+    }
+
+    @PostMapping("/serie")
+    public ResponseEntity<ItemEntretenimentoDto> createSerie(@Valid @RequestBody SerieCreateDto serieCreateDto) throws BancoDeDadosException {
+        return ResponseEntity.ok(itemService.createSerie(serieCreateDto));
     }
 
     @GetMapping
-    public ResponseEntity<List<ItemEntretenimento>> list() throws BancoDeDadosException {
+    public ResponseEntity<List<ItemEntretenimentoDto>> listAll() throws BancoDeDadosException {
         return ResponseEntity.ok(itemService.list());
     }
 
-    @GetMapping("/byfiltro")
-    public ResponseEntity<List<ItemEntretenimento>> filter(@RequestParam("tipo") String tipo,
-                                                           @RequestParam("genero") String genero,
-                                                           @RequestParam("class") Integer classificacao) throws BancoDeDadosException {
+    @GetMapping("/filtro")
+    public ResponseEntity<List<ItemEntretenimentoDto>> filterFilme(@RequestParam("tipo") String tipo,
+                                                                   @RequestParam("genero") String genero,
+                                                                   @RequestParam("class") Integer classificacao) throws BancoDeDadosException {
 
         return ResponseEntity.ok(itemService.filter(new Filtro(tipo, genero, classificacao)));
     }
 
     @GetMapping("/{idItem}")
-    public ResponseEntity<ItemEntretenimento> getById(@PathVariable("idItem") Integer id) throws RegraDeNegocioException {
-        return ResponseEntity.ok(itemService.findById(id));
+    public ResponseEntity<ItemEntretenimentoDto> getById(@PathVariable("idItem") Integer id) throws RegraDeNegocioException {
+        return ResponseEntity.ok(itemService.getItem(id));
     }
 
-    @PutMapping("/{idItem}")
-    public ResponseEntity<ItemEntretenimento> update(@PathVariable("idItem") Integer id,
-                                                     @Valid @RequestBody ItemEntretenimento itemEntretenimento) throws BancoDeDadosException, RegraDeNegocioException {
+    @PutMapping("/filme/{idItem}")
+    public ResponseEntity<ItemEntretenimentoDto> updateFilme(@PathVariable("idItem") Integer id,
+                                                     @Valid @RequestBody FilmeCreateDto filmeCreateDto) throws BancoDeDadosException, RegraDeNegocioException {
 
-        return ResponseEntity.ok(itemService.update(id, itemEntretenimento));
+        return ResponseEntity.ok(itemService.updateFilme(id, filmeCreateDto));
+    }
+
+    @PutMapping("/serie/{idItem}")
+    public ResponseEntity<ItemEntretenimentoDto> updateSerie(@PathVariable("idItem") Integer id,
+                                                             @Valid @RequestBody SerieCreateDto serieCreateDto) throws BancoDeDadosException, RegraDeNegocioException {
+
+        return ResponseEntity.ok(itemService.updateSerie(id, serieCreateDto));
     }
 
     @DeleteMapping("/{idItem}")

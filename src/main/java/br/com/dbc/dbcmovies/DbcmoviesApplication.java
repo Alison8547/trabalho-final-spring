@@ -9,5 +9,4 @@ public class DbcmoviesApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DbcmoviesApplication.class, args);
 	}
-
 }
