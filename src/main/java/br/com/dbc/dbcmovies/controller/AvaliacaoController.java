@@ -1,7 +1,8 @@
 package br.com.dbc.dbcmovies.controller;
 
 
-import br.com.dbc.dbcmovies.entity.Avaliacao;
+import br.com.dbc.dbcmovies.Dto.AvaliacaoCreateDto;
+import br.com.dbc.dbcmovies.Dto.AvaliacaoDto;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.AvaliacaoService;
@@ -24,36 +25,36 @@ public class AvaliacaoController {
     }
 
     @PostMapping("/{idUsuario}/{idItem}")
-    public ResponseEntity<Avaliacao> create(@Valid @RequestBody Avaliacao avaliacao,
-                                            @PathVariable("idUsuario") Integer idUsuario,
-                                            @PathVariable("idItem") Integer idItem) throws BancoDeDadosException, RegraDeNegocioException {
+    public ResponseEntity<AvaliacaoDto> create(@Valid @RequestBody AvaliacaoCreateDto avaliacao,
+                                               @PathVariable("idUsuario") Integer idUsuario,
+                                               @PathVariable("idItem") Integer idItem) throws BancoDeDadosException, RegraDeNegocioException {
 
         return ResponseEntity.ok(avaliacaoService.create(avaliacao, idUsuario, idItem));
     }
 
     @GetMapping
-    public ResponseEntity<List<Avaliacao>> listAll() throws BancoDeDadosException, RegraDeNegocioException {
+    public ResponseEntity<List<AvaliacaoDto>> listAll() throws BancoDeDadosException, RegraDeNegocioException {
         return ResponseEntity.ok(avaliacaoService.list());
     }
 
     @GetMapping("/ids")
-    public ResponseEntity<Avaliacao> getByIds(@RequestParam("idUsuario") Integer idUsuario,
-                                              @RequestParam("idItem") Integer idItem) throws BancoDeDadosException, RegraDeNegocioException {
+    public ResponseEntity<AvaliacaoDto> getByIds(@RequestParam("idUsuario") Integer idUsuario,
+                                                 @RequestParam("idItem") Integer idItem) throws BancoDeDadosException, RegraDeNegocioException {
 
-        return ResponseEntity.ok(avaliacaoService.find(idUsuario, idItem));
+        return ResponseEntity.ok(avaliacaoService.getAvaliacao(idUsuario, idItem));
     }
 
     @GetMapping("/{idUsuario}/user")
-    public ResponseEntity<List<Avaliacao>> listByUser(@PathVariable("idUsuario") Integer idUsuario) throws BancoDeDadosException, RegraDeNegocioException {
+    public ResponseEntity<List<AvaliacaoDto>> listByUser(@PathVariable("idUsuario") Integer idUsuario) throws BancoDeDadosException, RegraDeNegocioException {
         return ResponseEntity.ok(avaliacaoService.listByUsers(idUsuario));
     }
 
     @PutMapping("/ids")
-    public ResponseEntity<Avaliacao> update(@Valid @RequestBody Avaliacao avaliacao,
-                                            @RequestParam("idUsuario") Integer idUsuario,
-                                            @RequestParam("idItem") Integer idItem) throws BancoDeDadosException, RegraDeNegocioException {
+    public ResponseEntity<AvaliacaoDto> update(@Valid @RequestBody AvaliacaoCreateDto avaliacaoDto,
+                                               @RequestParam("idUsuario") Integer idUsuario,
+                                               @RequestParam("idItem") Integer idItem) throws BancoDeDadosException, RegraDeNegocioException {
 
-        return ResponseEntity.ok(avaliacaoService.update(avaliacao, idUsuario, idItem));
+        return ResponseEntity.ok(avaliacaoService.update(avaliacaoDto, idUsuario, idItem));
     }
 
     @DeleteMapping("/ids")

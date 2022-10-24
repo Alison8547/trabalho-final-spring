@@ -335,8 +335,6 @@ public class ItemRepository implements Repositorio<Integer, ItemEntretenimento> 
 
             }
 
-            System.out.println("Item Pego!");
-
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {

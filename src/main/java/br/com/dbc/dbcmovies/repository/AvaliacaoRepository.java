@@ -39,7 +39,7 @@ public class AvaliacaoRepository {
             stmt.setDouble(3, avaliacao.getNota());
             stmt.setString(4, avaliacao.getComentario());
 
-            int res = stmt.executeUpdate();
+            stmt.executeUpdate();
             return avaliacao;
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
@@ -155,7 +155,6 @@ public class AvaliacaoRepository {
 
             // Executa-se a consulta
             int res = stmt.executeUpdate();
-            System.out.println("removerItemPorId.res=" + res);
 
             return res > 0;
         } catch (SQLException e) {
