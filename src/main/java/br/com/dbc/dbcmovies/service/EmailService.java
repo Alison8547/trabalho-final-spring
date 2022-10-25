@@ -1,5 +1,6 @@
 package br.com.dbc.dbcmovies.service;
 
+import br.com.dbc.dbcmovies.Dto.AvaliacaoDto;
 import br.com.dbc.dbcmovies.Dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.TipoTemplate;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
@@ -30,7 +31,7 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String from;
 
-    private static final String TO = "alison.ailson@dbccompany.com.br";
+    private static final String TO = "gustavo.lucena@dbccompany.com.br";
 
     private final JavaMailSender emailSender;
 
@@ -63,7 +64,7 @@ public class EmailService {
         emailSender.send(message);
     }
 
-    public void sendEmail(UsuarioDto usuarioDto, TipoTemplate tipoTemplate) {
+    public void sendEmailUsuario(UsuarioDto usuarioDto, TipoTemplate tipoTemplate) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         try {
 
@@ -72,7 +73,7 @@ public class EmailService {
             mimeMessageHelper.setFrom(from);
             mimeMessageHelper.setTo(TO);
             mimeMessageHelper.setSubject("subject");
-            mimeMessageHelper.setText(geContentFromTemplate(usuarioDto, tipoTemplate), true);
+            mimeMessageHelper.setText(geContentFromTemplateUsuario(usuarioDto, tipoTemplate), true);
 
             emailSender.send(mimeMessageHelper.getMimeMessage());
         } catch (MessagingException | IOException | TemplateException | RegraDeNegocioException e) {
@@ -82,14 +83,13 @@ public class EmailService {
 
 
 
-    public String geContentFromTemplate(UsuarioDto usuarioDto, TipoTemplate tipoTemplate) throws IOException, TemplateException, RegraDeNegocioException {
+    public String geContentFromTemplateUsuario(UsuarioDto usuarioDto, TipoTemplate tipoTemplate) throws IOException, TemplateException, RegraDeNegocioException {
         Map<String, Object> dados = new HashMap<>();
         dados.put("nome", usuarioDto.getNome());
         dados.put("id", usuarioDto.getId());
         dados.put("tipoUsuario",usuarioDto.getTipoUsuario());
         dados.put("idade",usuarioDto.getIdade());
         dados.put("emailUsuario",usuarioDto.getEmail());
-        dados.put("senha",usuarioDto.getSenha());
         dados.put("email", from);
         Template template = null;
 
@@ -111,5 +111,41 @@ public class EmailService {
     }
 
 
+    public void sendEmailAvaliacao(AvaliacaoDto avaliacaoDto, TipoTemplate tipoTemplate) {
+        MimeMessage mimeMessage = emailSender.createMimeMessage();
+        try {
 
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+
+            mimeMessageHelper.setFrom(from);
+            mimeMessageHelper.setTo(TO);
+            mimeMessageHelper.setSubject("subject");
+            mimeMessageHelper.setText(geContentFromTemplateAvaliacao(avaliacaoDto, tipoTemplate), true);
+
+            emailSender.send(mimeMessageHelper.getMimeMessage());
+        } catch (MessagingException | IOException | TemplateException | RegraDeNegocioException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String geContentFromTemplateAvaliacao(AvaliacaoDto avaliacaoDto, TipoTemplate tipoTemplate) throws IOException, TemplateException, RegraDeNegocioException {
+        Map<String, Object> dados = new HashMap<>();
+        dados.put("nome", avaliacaoDto.getUsuario().getNome());
+        dados.put("nota", avaliacaoDto.getNota());
+        dados.put("comentario",avaliacaoDto.getComentario());
+        dados.put("tipo", avaliacaoDto.getItemEntretenimento().getTipo());
+        dados.put("itementretenimento", avaliacaoDto.getItemEntretenimento().getNome());
+        dados.put("email", from);
+        Template template = null;
+
+        switch (tipoTemplate) {
+            case CREATE -> {
+                template = fmConfiguration.getTemplate("email-avaliacao-create-template.html");
+            }
+            default -> {
+                throw new RegraDeNegocioException("Tipo de template não encontrado!");
+            }
+        }
+        return FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
+    }
 }

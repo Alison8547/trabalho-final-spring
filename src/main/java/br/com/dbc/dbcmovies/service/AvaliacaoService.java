@@ -3,6 +3,9 @@ package br.com.dbc.dbcmovies.service;
 import br.com.dbc.dbcmovies.Dto.AvaliacaoCreateDto;
 import br.com.dbc.dbcmovies.Dto.AvaliacaoDto;
 import br.com.dbc.dbcmovies.entity.Avaliacao;
+import br.com.dbc.dbcmovies.entity.ItemEntretenimento;
+import br.com.dbc.dbcmovies.entity.TipoTemplate;
+import br.com.dbc.dbcmovies.entity.Usuario;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.AvaliacaoRepository;
@@ -20,14 +23,22 @@ public class AvaliacaoService {
     private final ItemService itemService;
     private final ObjectMapper objectMapper;
 
+    private final EmailService emailService;
+
     public AvaliacaoDto create(AvaliacaoCreateDto avaliacaoDto, Integer idUsuario, Integer idItem) throws RegraDeNegocioException, BancoDeDadosException {
-        usuarioService.findById(idUsuario);
-        itemService.findById(idItem);
+        Usuario usuario = usuarioService.findById(idUsuario);
+        ItemEntretenimento item = itemService.findById(idItem);
 
         Avaliacao avaliacao = objectMapper.convertValue(avaliacaoDto, Avaliacao.class);
         avaliacao = avaliacaoRepository.adicionar(avaliacao, idUsuario, idItem);
+        avaliacao.setUsuario(usuario);
+        avaliacao.setItemEntretenimento(item);
 
-        return objectMapper.convertValue(avaliacao, AvaliacaoDto.class);
+        AvaliacaoDto dto = objectMapper.convertValue(avaliacao, AvaliacaoDto.class);
+
+        emailService.sendEmailAvaliacao(dto, TipoTemplate.CREATE);
+
+        return dto;
     }
 
     public List<AvaliacaoDto> list() throws BancoDeDadosException, RegraDeNegocioException {

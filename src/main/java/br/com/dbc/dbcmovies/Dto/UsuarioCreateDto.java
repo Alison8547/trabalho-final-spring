@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class UsuarioCreateDto {
+    @NotNull
     private String nome;
     @NotNull
     private Integer idade;

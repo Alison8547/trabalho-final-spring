@@ -36,7 +36,9 @@ public class UsuarioService {
         Usuario usuarioAdicionado = objectMapper.convertValue(usuario, Usuario.class);
         usuarioAdicionado = usuarioRepository.adicionar(usuarioAdicionado);
         UsuarioDto usuarioDto = objectMapper.convertValue(usuarioAdicionado, UsuarioDto.class);
-        emailService.sendEmail(usuarioDto, TipoTemplate.CREATE);
+
+        emailService.sendEmailUsuario(usuarioDto, TipoTemplate.CREATE);
+
         return usuarioDto;
     }
 
@@ -45,7 +47,7 @@ public class UsuarioService {
         Usuario usuarioConvertido = objectMapper.convertValue(usuarioCreateDto, Usuario.class);
         if (usuarioRepository.editar(id, usuarioConvertido)) {
             UsuarioDto usuarioDto = objectMapper.convertValue(usuarioRepository.pegar(id), UsuarioDto.class);
-            emailService.sendEmail(usuarioDto,TipoTemplate.UPDATE);
+            emailService.sendEmailUsuario(usuarioDto,TipoTemplate.UPDATE);
             return usuarioDto;
 
         } else {
@@ -57,7 +59,7 @@ public class UsuarioService {
         Usuario usuario = findById(id);
         UsuarioDto usuarioDto = objectMapper.convertValue(usuario, UsuarioDto.class);
         usuarioRepository.remover(id);
-        emailService.sendEmail(usuarioDto,TipoTemplate.DELETE);
+        emailService.sendEmailUsuario(usuarioDto,TipoTemplate.DELETE);
 
     }
 
