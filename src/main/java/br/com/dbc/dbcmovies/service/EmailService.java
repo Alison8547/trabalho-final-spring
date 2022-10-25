@@ -1,6 +1,7 @@
 package br.com.dbc.dbcmovies.service;
 
 import br.com.dbc.dbcmovies.Dto.AvaliacaoDto;
+import br.com.dbc.dbcmovies.Dto.ItemEntretenimentoDto;
 import br.com.dbc.dbcmovies.Dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.TipoTemplate;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
@@ -141,6 +142,51 @@ public class EmailService {
         switch (tipoTemplate) {
             case CREATE -> {
                 template = fmConfiguration.getTemplate("email-avaliacao-create-template.html");
+            }
+            default -> {
+                throw new RegraDeNegocioException("Tipo de template não encontrado!");
+            }
+        }
+        return FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
+    }
+    public void sendEmailItemEntretenimento(ItemEntretenimentoDto itemEntretenimentoDtoDto, TipoTemplate tipoTemplate) {
+        MimeMessage mimeMessage = emailSender.createMimeMessage();
+        try {
+
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+
+            mimeMessageHelper.setFrom(from);
+            mimeMessageHelper.setTo(TO);
+            mimeMessageHelper.setSubject("subject");
+            mimeMessageHelper.setText(geContentFromTemplateItemEntretenimento(itemEntretenimentoDtoDto, tipoTemplate), true);
+
+            emailSender.send(mimeMessageHelper.getMimeMessage());
+        } catch (MessagingException | IOException | TemplateException | RegraDeNegocioException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String geContentFromTemplateItemEntretenimento(ItemEntretenimentoDto itemEntretenimentoDtoDto, TipoTemplate tipoTemplate) throws IOException, TemplateException, RegraDeNegocioException {
+        Map<String, Object> dados = new HashMap<>();
+        dados.put("nome", itemEntretenimentoDtoDto.getNome());
+        dados.put("genero", itemEntretenimentoDtoDto.getGenero());
+        dados.put("ano",itemEntretenimentoDtoDto.getAnoLancamento());
+        dados.put("classificacao", itemEntretenimentoDtoDto.getClassificacao());
+        dados.put("duracao", itemEntretenimentoDtoDto.getDuracao());
+        dados.put("tipo", itemEntretenimentoDtoDto.getTipo());
+        dados.put("email", from);
+        Template template = null;
+
+        switch (tipoTemplate) {
+            case CREATE -> {
+                template = fmConfiguration.getTemplate("email-itementretenimento-template.ftl");
+            }
+            case UPDATE -> {
+                template = fmConfiguration.getTemplate("email-itementretenimentoupdate-template.ftl");
+            }
+            case DELETE -> {
+                template = fmConfiguration.getTemplate("email-itementretenimentodelete-template.ftl");
+
             }
             default -> {
                 throw new RegraDeNegocioException("Tipo de template não encontrado!");

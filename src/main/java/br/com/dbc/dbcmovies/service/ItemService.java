@@ -6,6 +6,7 @@ import br.com.dbc.dbcmovies.Dto.ItemEntretenimentoDto;
 import br.com.dbc.dbcmovies.Dto.SerieCreateDto;
 import br.com.dbc.dbcmovies.entity.Filtro;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimento;
+import br.com.dbc.dbcmovies.entity.TipoTemplate;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.ItemRepository;
@@ -19,12 +20,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemService {
     private final ItemRepository itemRepository;
+
+    private final EmailService emailService;
     private final ObjectMapper objectMapper;
 
     public ItemEntretenimentoDto createFilme(ItemEntretenimentoCreateDto itemEntretenimentoDto) throws BancoDeDadosException {
 
         ItemEntretenimento itemEntity = objectMapper.convertValue(itemEntretenimentoDto, ItemEntretenimento.class);
         itemEntity = itemRepository.adicionar(itemEntity);
+        ItemEntretenimentoDto dto = objectMapper.convertValue(itemEntity, ItemEntretenimentoDto.class);
+        emailService.sendEmailItemEntretenimento(dto, TipoTemplate.CREATE);
         return objectMapper.convertValue(itemEntity, ItemEntretenimentoDto.class);
     }
 
@@ -32,6 +37,8 @@ public class ItemService {
 
         ItemEntretenimento itemEntity = objectMapper.convertValue(itemEntretenimentoDto, ItemEntretenimento.class);
         itemEntity = itemRepository.adicionar(itemEntity);
+        ItemEntretenimentoDto dto = objectMapper.convertValue(itemEntity, ItemEntretenimentoDto.class);
+        emailService.sendEmailItemEntretenimento(dto, TipoTemplate.CREATE);
         return objectMapper.convertValue(itemEntity, ItemEntretenimentoDto.class);
     }
 
@@ -68,6 +75,8 @@ public class ItemService {
     public ItemEntretenimentoDto updateFilme(Integer id, FilmeCreateDto filmeCreateDto) throws RegraDeNegocioException, BancoDeDadosException {
         findById(id);
         ItemEntretenimento itemEntretenimento = objectMapper.convertValue(filmeCreateDto, ItemEntretenimento.class);
+        ItemEntretenimentoDto dto = objectMapper.convertValue(itemEntretenimento, ItemEntretenimentoDto.class);
+        emailService.sendEmailItemEntretenimento(dto, TipoTemplate.UPDATE);
         if(itemRepository.editar(id, itemEntretenimento)){
             return objectMapper.convertValue(itemRepository.pegar(id), ItemEntretenimentoDto.class);
         }else {
@@ -78,6 +87,8 @@ public class ItemService {
     public ItemEntretenimentoDto updateSerie(Integer id, SerieCreateDto serieCreateDto) throws RegraDeNegocioException, BancoDeDadosException {
         findById(id);
         ItemEntretenimento itemEntretenimento = objectMapper.convertValue(serieCreateDto, ItemEntretenimento.class);
+        ItemEntretenimentoDto dto = objectMapper.convertValue(itemEntretenimento, ItemEntretenimentoDto.class);
+        emailService.sendEmailItemEntretenimento(dto, TipoTemplate.UPDATE);
         if(itemRepository.editar(id, itemEntretenimento)){
             return objectMapper.convertValue(itemRepository.pegar(id), ItemEntretenimentoDto.class);
         }else {
@@ -86,8 +97,9 @@ public class ItemService {
     }
 
     public void delete(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
-        findById(id);
-        itemRepository.remover(id);
+        ItemEntretenimento itemEntretenimento = findById(id);
+        ItemEntretenimentoDto itemDto = objectMapper.convertValue(itemEntretenimento, ItemEntretenimentoDto.class);
+        emailService.sendEmailItemEntretenimento(itemDto, TipoTemplate.DELETE);
     }
 
     public ItemEntretenimentoDto getItem(Integer id) throws RegraDeNegocioException {
