@@ -15,7 +15,6 @@ public class Avaliacao{
     private Usuario usuario;
     @NotNull
     private ItemEntretenimento itemEntretenimento;
-    @NotNull
     private Double nota;
     private String comentario;
 

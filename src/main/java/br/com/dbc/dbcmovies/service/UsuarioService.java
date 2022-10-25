@@ -2,6 +2,7 @@ package br.com.dbc.dbcmovies.service;
 
 import br.com.dbc.dbcmovies.Dto.UsuarioCreateDto;
 import br.com.dbc.dbcmovies.Dto.UsuarioDto;
+import br.com.dbc.dbcmovies.entity.TipoTemplate;
 import br.com.dbc.dbcmovies.entity.Usuario;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
@@ -17,6 +18,7 @@ import java.util.List;
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
+    private final EmailService emailService;
 
 
     public List<UsuarioDto> listar() throws BancoDeDadosException {
@@ -34,6 +36,7 @@ public class UsuarioService {
         Usuario usuarioAdicionado = objectMapper.convertValue(usuario, Usuario.class);
         usuarioAdicionado = usuarioRepository.adicionar(usuarioAdicionado);
         UsuarioDto usuarioDto = objectMapper.convertValue(usuarioAdicionado, UsuarioDto.class);
+        emailService.sendEmail(usuarioDto, TipoTemplate.CREATE);
         return usuarioDto;
     }
 
@@ -41,15 +44,21 @@ public class UsuarioService {
         findById(id);
         Usuario usuarioConvertido = objectMapper.convertValue(usuarioCreateDto, Usuario.class);
         if (usuarioRepository.editar(id, usuarioConvertido)) {
-            return objectMapper.convertValue(usuarioRepository.pegar(id), UsuarioDto.class) ;
+            UsuarioDto usuarioDto = objectMapper.convertValue(usuarioRepository.pegar(id), UsuarioDto.class);
+            emailService.sendEmail(usuarioDto,TipoTemplate.UPDATE);
+            return usuarioDto;
+
         } else {
             throw new RegraDeNegocioException("Não foi possível atualizar o Usuário!");
         }
     }
 
     public void remover(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
-        findById(id);
+        Usuario usuario = findById(id);
+        UsuarioDto usuarioDto = objectMapper.convertValue(usuario, UsuarioDto.class);
         usuarioRepository.remover(id);
+        emailService.sendEmail(usuarioDto,TipoTemplate.DELETE);
+
     }
 
     public Usuario pegarLogin(Usuario usuarioLogin) throws BancoDeDadosException {
