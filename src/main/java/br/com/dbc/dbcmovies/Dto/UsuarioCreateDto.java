@@ -16,7 +16,6 @@ public class UsuarioCreateDto {
     @Email
     private String email;
     @NotNull
-    @JsonIgnore
     private String senha;
 
     protected TipoUsuario tipoUsuario;

@@ -4,22 +4,19 @@ import br.com.dbc.dbcmovies.entity.ItemEntretenimento;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.AssistidosRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AssistidosService {
 
-    private AssistidosRepository assistidosRepository;
-    private UsuarioService usuarioService;
-    private ItemService itemService;
+    private final AssistidosRepository assistidosRepository;
+    private final UsuarioService usuarioService;
+    private final ItemService itemService;
 
-    public AssistidosService(AssistidosRepository assistidosRepository, UsuarioService usuarioService, ItemService itemService) {
-        this.assistidosRepository = assistidosRepository;
-        this.usuarioService = usuarioService;
-        this.itemService = itemService;
-    }
 
     public List<ItemEntretenimento> listarAssistidos(Integer idUsuario) throws BancoDeDadosException, RegraDeNegocioException {
         usuarioService.findById(idUsuario);

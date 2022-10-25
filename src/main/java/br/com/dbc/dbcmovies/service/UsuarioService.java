@@ -7,20 +7,17 @@ import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
-
     private final ObjectMapper objectMapper;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, ObjectMapper objectMapper) {
-        this.usuarioRepository = usuarioRepository;
-        this.objectMapper = objectMapper;
-    }
 
     public List<UsuarioDto> listar() throws BancoDeDadosException {
         return  usuarioRepository.listar().stream()
