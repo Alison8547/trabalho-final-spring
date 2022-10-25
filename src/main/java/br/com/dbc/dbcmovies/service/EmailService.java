@@ -72,7 +72,7 @@ public class EmailService {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
             mimeMessageHelper.setFrom(from);
-            mimeMessageHelper.setTo(TO);
+            mimeMessageHelper.setTo(usuarioDto.getEmail());
             mimeMessageHelper.setSubject("subject");
             mimeMessageHelper.setText(geContentFromTemplateUsuario(usuarioDto, tipoTemplate), true);
 
