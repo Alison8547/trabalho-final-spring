@@ -24,82 +24,126 @@ public class ItemService {
     private final EmailService emailService;
     private final ObjectMapper objectMapper;
 
-    public ItemEntretenimentoDto createFilme(ItemEntretenimentoCreateDto itemEntretenimentoDto) throws BancoDeDadosException {
+    public ItemEntretenimentoDto createFilme(ItemEntretenimentoCreateDto itemEntretenimentoDto) throws RegraDeNegocioException {
 
-        ItemEntretenimento itemEntity = objectMapper.convertValue(itemEntretenimentoDto, ItemEntretenimento.class);
-        itemEntity = itemRepository.adicionar(itemEntity);
-        ItemEntretenimentoDto dto = objectMapper.convertValue(itemEntity, ItemEntretenimentoDto.class);
-        emailService.sendEmailItemEntretenimento(dto, TipoTemplate.CREATE);
-        return objectMapper.convertValue(itemEntity, ItemEntretenimentoDto.class);
-    }
+        try{
 
-    public ItemEntretenimentoDto createSerie(ItemEntretenimentoCreateDto itemEntretenimentoDto) throws BancoDeDadosException {
+            ItemEntretenimento itemEntity = objectMapper.convertValue(itemEntretenimentoDto, ItemEntretenimento.class);
+            itemEntity = itemRepository.adicionar(itemEntity);
+            ItemEntretenimentoDto dto = objectMapper.convertValue(itemEntity, ItemEntretenimentoDto.class);
+            emailService.sendEmailItemEntretenimento(dto, TipoTemplate.CREATE);
+            return objectMapper.convertValue(itemEntity, ItemEntretenimentoDto.class);
 
-        ItemEntretenimento itemEntity = objectMapper.convertValue(itemEntretenimentoDto, ItemEntretenimento.class);
-        itemEntity = itemRepository.adicionar(itemEntity);
-        ItemEntretenimentoDto dto = objectMapper.convertValue(itemEntity, ItemEntretenimentoDto.class);
-        emailService.sendEmailItemEntretenimento(dto, TipoTemplate.CREATE);
-        return objectMapper.convertValue(itemEntity, ItemEntretenimentoDto.class);
-    }
-
-    public List<ItemEntretenimentoDto> list() throws BancoDeDadosException {
-        List<ItemEntretenimento> resultList = itemRepository.listar();
-        resultList.forEach(item -> {
-            double media = calcularAvaliacao(item.getId());
-            if(media == 0){
-                item.setMediaAvaliacoes(null);
-            }else {
-                item.setMediaAvaliacoes(media);
-            }
-        });
-
-        return resultList.stream()
-                .map(item -> objectMapper.convertValue(item, ItemEntretenimentoDto.class))
-                .toList();
-    }
-
-    public List<ItemEntretenimentoDto> filter(Filtro filtro) throws BancoDeDadosException {
-        List<ItemEntretenimento> resultList = itemRepository.filtrarItens(filtro);
-        resultList.forEach(item -> {
-            double media = calcularAvaliacao(item.getId());
-            if(media == 0){
-                item.setMediaAvaliacoes(null);
-            }else {
-                item.setMediaAvaliacoes(media);
-            }
-        });
-
-        return resultList.stream().map(item -> objectMapper.convertValue(item, ItemEntretenimentoDto.class)).toList();
-    }
-
-    public ItemEntretenimentoDto updateFilme(Integer id, FilmeCreateDto filmeCreateDto) throws RegraDeNegocioException, BancoDeDadosException {
-        findById(id);
-        ItemEntretenimento itemEntretenimento = objectMapper.convertValue(filmeCreateDto, ItemEntretenimento.class);
-        ItemEntretenimentoDto dto = objectMapper.convertValue(itemEntretenimento, ItemEntretenimentoDto.class);
-        emailService.sendEmailItemEntretenimento(dto, TipoTemplate.UPDATE);
-        if(itemRepository.editar(id, itemEntretenimento)){
-            return objectMapper.convertValue(itemRepository.pegar(id), ItemEntretenimentoDto.class);
-        }else {
-            throw new RegraDeNegocioException("Não foi possivel atualizar o item.");
+        }catch (BancoDeDadosException ex){
+            throw new RegraDeNegocioException("Erro ao criar filme");
         }
     }
 
-    public ItemEntretenimentoDto updateSerie(Integer id, SerieCreateDto serieCreateDto) throws RegraDeNegocioException, BancoDeDadosException {
-        findById(id);
-        ItemEntretenimento itemEntretenimento = objectMapper.convertValue(serieCreateDto, ItemEntretenimento.class);
-        ItemEntretenimentoDto dto = objectMapper.convertValue(itemEntretenimento, ItemEntretenimentoDto.class);
-        emailService.sendEmailItemEntretenimento(dto, TipoTemplate.UPDATE);
-        if(itemRepository.editar(id, itemEntretenimento)){
-            return objectMapper.convertValue(itemRepository.pegar(id), ItemEntretenimentoDto.class);
-        }else {
-            throw new RegraDeNegocioException("Não foi possivel atualizar o item.");
+    public ItemEntretenimentoDto createSerie(ItemEntretenimentoCreateDto itemEntretenimentoDto) throws RegraDeNegocioException {
+
+        try{
+
+            ItemEntretenimento itemEntity = objectMapper.convertValue(itemEntretenimentoDto, ItemEntretenimento.class);
+            itemEntity = itemRepository.adicionar(itemEntity);
+            ItemEntretenimentoDto dto = objectMapper.convertValue(itemEntity, ItemEntretenimentoDto.class);
+            emailService.sendEmailItemEntretenimento(dto, TipoTemplate.CREATE);
+            return objectMapper.convertValue(itemEntity, ItemEntretenimentoDto.class);
+
+        }catch (BancoDeDadosException ex){
+            throw new RegraDeNegocioException("Erro ao cria série");
         }
     }
 
-    public void delete(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
+    public List<ItemEntretenimentoDto> list() throws RegraDeNegocioException {
+
+        try {
+
+            List<ItemEntretenimento> resultList = itemRepository.listar();
+            resultList.forEach(item -> {
+                double media = calcularAvaliacao(item.getId());
+                if(media == 0){
+                    item.setMediaAvaliacoes(null);
+                }else {
+                    item.setMediaAvaliacoes(media);
+                }
+            });
+
+            return resultList.stream()
+                    .map(item -> objectMapper.convertValue(item, ItemEntretenimentoDto.class))
+                    .toList();
+
+        }catch (BancoDeDadosException ex){
+            throw new RegraDeNegocioException(ex.getMessage());
+        }
+    }
+
+    public List<ItemEntretenimentoDto> filter(Filtro filtro) throws RegraDeNegocioException {
+
+        try {
+
+            List<ItemEntretenimento> resultList = itemRepository.filtrarItens(filtro);
+            resultList.forEach(item -> {
+                double media = calcularAvaliacao(item.getId());
+                if(media == 0){
+                    item.setMediaAvaliacoes(null);
+                }else {
+                    item.setMediaAvaliacoes(media);
+                }
+            });
+
+            return resultList.stream().map(item -> objectMapper.convertValue(item, ItemEntretenimentoDto.class)).toList();
+
+        }catch (BancoDeDadosException ex){
+            throw new RegraDeNegocioException(ex.getMessage());
+        }
+    }
+
+    public ItemEntretenimentoDto updateFilme(Integer id, FilmeCreateDto filmeCreateDto) throws RegraDeNegocioException{
+
+        try {
+
+            findById(id);
+            ItemEntretenimento itemEntretenimento = objectMapper.convertValue(filmeCreateDto, ItemEntretenimento.class);
+            ItemEntretenimentoDto dto = objectMapper.convertValue(itemEntretenimento, ItemEntretenimentoDto.class);
+            emailService.sendEmailItemEntretenimento(dto, TipoTemplate.UPDATE);
+
+            if(itemRepository.editar(id, itemEntretenimento)){
+                return objectMapper.convertValue(itemRepository.pegar(id), ItemEntretenimentoDto.class);
+            }else {
+                throw new RegraDeNegocioException("Não foi possivel atualizar o filme.");
+            }
+
+        }catch (BancoDeDadosException ex){
+            throw new RegraDeNegocioException("Não foi possivel atualizar o filme");
+        }
+    }
+
+    public ItemEntretenimentoDto updateSerie(Integer id, SerieCreateDto serieCreateDto) throws RegraDeNegocioException {
+
+        try {
+
+            findById(id);
+            ItemEntretenimento itemEntretenimento = objectMapper.convertValue(serieCreateDto, ItemEntretenimento.class);
+            ItemEntretenimentoDto dto = objectMapper.convertValue(itemEntretenimento, ItemEntretenimentoDto.class);
+            emailService.sendEmailItemEntretenimento(dto, TipoTemplate.UPDATE);
+            if(itemRepository.editar(id, itemEntretenimento)){
+                return objectMapper.convertValue(itemRepository.pegar(id), ItemEntretenimentoDto.class);
+            }else {
+                throw new RegraDeNegocioException("Não foi possivel atualizar a série.");
+            }
+
+        }catch (BancoDeDadosException ex){
+            throw new RegraDeNegocioException("Não foi possivel atualizar a série");
+        }
+    }
+
+    public void delete(Integer id) throws RegraDeNegocioException{
+
         ItemEntretenimento itemEntretenimento = findById(id);
         ItemEntretenimentoDto itemDto = objectMapper.convertValue(itemEntretenimento, ItemEntretenimentoDto.class);
         emailService.sendEmailItemEntretenimento(itemDto, TipoTemplate.DELETE);
+
+
     }
 
     public ItemEntretenimentoDto getItem(Integer id) throws RegraDeNegocioException {

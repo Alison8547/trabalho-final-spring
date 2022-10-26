@@ -25,56 +25,98 @@ public class AvaliacaoService {
 
     private final EmailService emailService;
 
-    public AvaliacaoDto create(AvaliacaoCreateDto avaliacaoDto, Integer idUsuario, Integer idItem) throws RegraDeNegocioException, BancoDeDadosException {
-        Usuario usuario = usuarioService.findById(idUsuario);
-        ItemEntretenimento item = itemService.findById(idItem);
+    public AvaliacaoDto create(AvaliacaoCreateDto avaliacaoDto, Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
 
-        Avaliacao avaliacao = objectMapper.convertValue(avaliacaoDto, Avaliacao.class);
-        avaliacao = avaliacaoRepository.adicionar(avaliacao, idUsuario, idItem);
-        avaliacao.setUsuario(usuario);
-        avaliacao.setItemEntretenimento(item);
+        try{
 
-        AvaliacaoDto dto = objectMapper.convertValue(avaliacao, AvaliacaoDto.class);
+            Usuario usuario = usuarioService.findById(idUsuario);
+            ItemEntretenimento item = itemService.findById(idItem);
 
-        emailService.sendEmailAvaliacao(dto, TipoTemplate.CREATE);
+            Avaliacao avaliacao = objectMapper.convertValue(avaliacaoDto, Avaliacao.class);
+            avaliacao = avaliacaoRepository.adicionar(avaliacao, idUsuario, idItem);
+            avaliacao.setUsuario(usuario);
+            avaliacao.setItemEntretenimento(item);
 
-        return dto;
-    }
+            AvaliacaoDto dto = objectMapper.convertValue(avaliacao, AvaliacaoDto.class);
 
-    public List<AvaliacaoDto> list() throws BancoDeDadosException, RegraDeNegocioException {
+            emailService.sendEmailAvaliacao(dto, TipoTemplate.CREATE);
 
-        return avaliacaoRepository.listarAvaliacoes(usuarioService, itemService).stream()
-                .map(item -> objectMapper.convertValue(item, AvaliacaoDto.class))
-                .toList();
-    }
+            return dto;
 
-    public List<AvaliacaoDto> listByUsers(Integer id) throws BancoDeDadosException, RegraDeNegocioException {
-        usuarioService.findById(id);
-        return avaliacaoRepository.listarAvaliacoesUsuario(id, usuarioService, itemService).stream()
-                .map(item -> objectMapper.convertValue(item, AvaliacaoDto.class))
-                .toList();
-    }
-
-    public AvaliacaoDto update(AvaliacaoCreateDto avaliacaoDto, Integer idUsuario, Integer idItem) throws RegraDeNegocioException, BancoDeDadosException {
-        usuarioService.findById(idUsuario);
-        itemService.findById(idItem);
-
-        Avaliacao avaliacao = objectMapper.convertValue(avaliacaoDto, Avaliacao.class);
-
-        if(avaliacaoRepository.editar(avaliacao, idUsuario, idItem)){
-            return objectMapper.convertValue(find(idUsuario, idItem), AvaliacaoDto.class);
-        }else {
-            throw new RegraDeNegocioException("Avaliação não encontrada");
+        }catch (BancoDeDadosException ex){
+            throw new RegraDeNegocioException("Não foi possivel criar uma avaliação");
         }
     }
 
-    public void delete(Integer idUsuario, Integer idItem) throws BancoDeDadosException {
-        avaliacaoRepository.remover(idUsuario, idItem);
+    public List<AvaliacaoDto> list() throws RegraDeNegocioException {
+
+        try{
+
+            return avaliacaoRepository.listarAvaliacoes(usuarioService, itemService).stream()
+                    .map(item -> objectMapper.convertValue(item, AvaliacaoDto.class))
+                    .toList();
+
+        }catch (BancoDeDadosException ex){
+            throw new RegraDeNegocioException(ex.getMessage());
+        }
     }
 
-    public AvaliacaoDto getAvaliacao(Integer idUsuario, Integer idItem) throws BancoDeDadosException, RegraDeNegocioException {
-        Avaliacao avaliacao = avaliacaoRepository.pegar(idUsuario, idItem, usuarioService, itemService);
-        return objectMapper.convertValue(avaliacao, AvaliacaoDto.class);
+    public List<AvaliacaoDto> listByUsers(Integer id) throws RegraDeNegocioException {
+
+        try{
+
+            usuarioService.findById(id);
+            return avaliacaoRepository.listarAvaliacoesUsuario(id, usuarioService, itemService).stream()
+                    .map(item -> objectMapper.convertValue(item, AvaliacaoDto.class))
+                    .toList();
+
+        }catch (BancoDeDadosException ex){
+            throw new RegraDeNegocioException(ex.getMessage());
+        }
+
+    }
+
+    public AvaliacaoDto update(AvaliacaoCreateDto avaliacaoDto, Integer idUsuario, Integer idItem) throws RegraDeNegocioException{
+
+        try {
+
+            usuarioService.findById(idUsuario);
+            itemService.findById(idItem);
+
+            Avaliacao avaliacao = objectMapper.convertValue(avaliacaoDto, Avaliacao.class);
+
+            if(avaliacaoRepository.editar(avaliacao, idUsuario, idItem)){
+                return objectMapper.convertValue(find(idUsuario, idItem), AvaliacaoDto.class);
+            }else {
+                throw new RegraDeNegocioException("Avaliação não encontrada");
+            }
+
+        }catch (BancoDeDadosException ex){
+            throw new RegraDeNegocioException("Não foi possivel atualizar a avaliação.");
+        }
+    }
+
+    public void delete(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
+
+        try {
+            avaliacaoRepository.remover(idUsuario, idItem);
+
+        }catch (BancoDeDadosException ex){
+            throw new RegraDeNegocioException("Não foi possivel deletar a avaliação");
+        }
+    }
+
+    public AvaliacaoDto getAvaliacao(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
+
+        try {
+
+            Avaliacao avaliacao = avaliacaoRepository.pegar(idUsuario, idItem, usuarioService, itemService);
+            return objectMapper.convertValue(avaliacao, AvaliacaoDto.class);
+
+        }catch (BancoDeDadosException ex){
+            throw new RegraDeNegocioException("Erro ao pegar avaliação.");
+        }
+
     }
 
     public Avaliacao find(Integer idUsuario, Integer idItem) throws BancoDeDadosException, RegraDeNegocioException {

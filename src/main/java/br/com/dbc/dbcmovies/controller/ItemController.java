@@ -4,7 +4,6 @@ import br.com.dbc.dbcmovies.Dto.FilmeCreateDto;
 import br.com.dbc.dbcmovies.Dto.ItemEntretenimentoDto;
 import br.com.dbc.dbcmovies.Dto.SerieCreateDto;
 import br.com.dbc.dbcmovies.entity.Filtro;
-import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.ItemService;
 import org.springframework.http.ResponseEntity;
@@ -26,24 +25,24 @@ public class ItemController {
     }
 
     @PostMapping("/filme")
-    public ResponseEntity<ItemEntretenimentoDto> createFilme(@Valid @RequestBody FilmeCreateDto filmeCreateDto) throws BancoDeDadosException {
+    public ResponseEntity<ItemEntretenimentoDto> createFilme(@Valid @RequestBody FilmeCreateDto filmeCreateDto) throws RegraDeNegocioException {
         return ResponseEntity.ok(itemService.createFilme(filmeCreateDto));
     }
 
     @PostMapping("/serie")
-    public ResponseEntity<ItemEntretenimentoDto> createSerie(@Valid @RequestBody SerieCreateDto serieCreateDto) throws BancoDeDadosException {
+    public ResponseEntity<ItemEntretenimentoDto> createSerie(@Valid @RequestBody SerieCreateDto serieCreateDto) throws RegraDeNegocioException {
         return ResponseEntity.ok(itemService.createSerie(serieCreateDto));
     }
 
     @GetMapping
-    public ResponseEntity<List<ItemEntretenimentoDto>> listAll() throws BancoDeDadosException {
+    public ResponseEntity<List<ItemEntretenimentoDto>> listAll() throws RegraDeNegocioException {
         return ResponseEntity.ok(itemService.list());
     }
 
     @GetMapping("/filtro")
     public ResponseEntity<List<ItemEntretenimentoDto>> filterFilme(@RequestParam("tipo") String tipo,
                                                                    @RequestParam("genero") String genero,
-                                                                   @RequestParam("class") Integer classificacao) throws BancoDeDadosException {
+                                                                   @RequestParam("class") Integer classificacao) throws RegraDeNegocioException {
 
         return ResponseEntity.ok(itemService.filter(new Filtro(tipo, genero, classificacao)));
     }
@@ -55,20 +54,20 @@ public class ItemController {
 
     @PutMapping("/filme/{idItem}")
     public ResponseEntity<ItemEntretenimentoDto> updateFilme(@PathVariable("idItem") Integer id,
-                                                     @Valid @RequestBody FilmeCreateDto filmeCreateDto) throws BancoDeDadosException, RegraDeNegocioException {
+                                                     @Valid @RequestBody FilmeCreateDto filmeCreateDto) throws RegraDeNegocioException {
 
         return ResponseEntity.ok(itemService.updateFilme(id, filmeCreateDto));
     }
 
     @PutMapping("/serie/{idItem}")
     public ResponseEntity<ItemEntretenimentoDto> updateSerie(@PathVariable("idItem") Integer id,
-                                                             @Valid @RequestBody SerieCreateDto serieCreateDto) throws BancoDeDadosException, RegraDeNegocioException {
+                                                             @Valid @RequestBody SerieCreateDto serieCreateDto) throws RegraDeNegocioException {
 
         return ResponseEntity.ok(itemService.updateSerie(id, serieCreateDto));
     }
 
     @DeleteMapping("/{idItem}")
-    public ResponseEntity<Void> delete(@PathVariable("idItem") Integer id) throws BancoDeDadosException, RegraDeNegocioException {
+    public ResponseEntity<Void> delete(@PathVariable("idItem") Integer id) throws RegraDeNegocioException {
         itemService.delete(id);
         return ResponseEntity.noContent().build();
     }

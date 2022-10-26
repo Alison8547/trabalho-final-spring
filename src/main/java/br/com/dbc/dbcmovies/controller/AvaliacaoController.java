@@ -27,7 +27,7 @@ public class AvaliacaoController {
     @PostMapping("/{idUsuario}/{idItem}")
     public ResponseEntity<AvaliacaoDto> create(@Valid @RequestBody AvaliacaoCreateDto avaliacao,
                                                @PathVariable("idUsuario") Integer idUsuario,
-                                               @PathVariable("idItem") Integer idItem) throws BancoDeDadosException, RegraDeNegocioException {
+                                               @PathVariable("idItem") Integer idItem) throws RegraDeNegocioException {
 
         return ResponseEntity.ok(avaliacaoService.create(avaliacao, idUsuario, idItem));
     }
@@ -39,27 +39,27 @@ public class AvaliacaoController {
 
     @GetMapping("/ids")
     public ResponseEntity<AvaliacaoDto> getByIds(@RequestParam("idUsuario") Integer idUsuario,
-                                                 @RequestParam("idItem") Integer idItem) throws BancoDeDadosException, RegraDeNegocioException {
+                                                 @RequestParam("idItem") Integer idItem) throws RegraDeNegocioException {
 
         return ResponseEntity.ok(avaliacaoService.getAvaliacao(idUsuario, idItem));
     }
 
     @GetMapping("/{idUsuario}/user")
-    public ResponseEntity<List<AvaliacaoDto>> listByUser(@PathVariable("idUsuario") Integer idUsuario) throws BancoDeDadosException, RegraDeNegocioException {
+    public ResponseEntity<List<AvaliacaoDto>> listByUser(@PathVariable("idUsuario") Integer idUsuario) throws RegraDeNegocioException {
         return ResponseEntity.ok(avaliacaoService.listByUsers(idUsuario));
     }
 
     @PutMapping("/ids")
     public ResponseEntity<AvaliacaoDto> update(@Valid @RequestBody AvaliacaoCreateDto avaliacaoDto,
                                                @RequestParam("idUsuario") Integer idUsuario,
-                                               @RequestParam("idItem") Integer idItem) throws BancoDeDadosException, RegraDeNegocioException {
+                                               @RequestParam("idItem") Integer idItem) throws RegraDeNegocioException {
 
         return ResponseEntity.ok(avaliacaoService.update(avaliacaoDto, idUsuario, idItem));
     }
 
     @DeleteMapping("/ids")
     public ResponseEntity<Void> delete(@RequestParam("idUsuario") Integer idUsuario,
-                                       @RequestParam("idItem") Integer idItem) throws BancoDeDadosException {
+                                       @RequestParam("idItem") Integer idItem) throws RegraDeNegocioException {
         avaliacaoService.delete(idUsuario, idItem);
         return ResponseEntity.noContent().build();
     }
