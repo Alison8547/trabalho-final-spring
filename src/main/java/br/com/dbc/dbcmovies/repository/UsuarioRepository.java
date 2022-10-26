@@ -141,7 +141,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
         }
     }
 
-    public boolean tornarUsuarioAdmin(Integer id) throws BancoDeDadosException {
+    public boolean tornarUsuarioAdmin(Integer id) throws RegraDeNegocioException {
         Connection conn = null;
         try {
             conn = conexao.getConnection();
@@ -174,7 +174,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     }
 
     @Override
-    public List<Usuario> listar() throws BancoDeDadosException {
+    public List<Usuario> listar() throws RegraDeNegocioException {
         List<Usuario> usuarioList = new ArrayList<>();
 
         Connection conn = null;
@@ -259,7 +259,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
         return usuario;
     }
 
-    public Usuario pegarLogin(Usuario usuarioLogin) throws BancoDeDadosException {
+    public Usuario pegarLogin(Usuario usuarioLogin) throws RegraDeNegocioException {
         Connection conn = null;
         Usuario usuario = new Usuario();
 
@@ -288,7 +288,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
             }
 
         } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
+            throw new RegraDeNegocioException(e.getMessage());
         } finally {
             try {
                 if (conn != null) {

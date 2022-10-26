@@ -28,7 +28,7 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UsuarioDto>> listar() throws BancoDeDadosException {
+    public ResponseEntity<List<UsuarioDto>> listar() throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.listar(), HttpStatus.OK);
     }
 

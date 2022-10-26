@@ -21,7 +21,7 @@ public class UsuarioService {
     private final EmailService emailService;
 
 
-    public List<UsuarioDto> listar() throws BancoDeDadosException {
+    public List<UsuarioDto> listar() throws RegraDeNegocioException {
         return  usuarioRepository.listar().stream()
                 .map(item -> objectMapper.convertValue(item, UsuarioDto.class))
                 .toList();
@@ -63,11 +63,11 @@ public class UsuarioService {
 
     }
 
-    public Usuario pegarLogin(Usuario usuarioLogin) throws BancoDeDadosException {
+    public Usuario pegarLogin(Usuario usuarioLogin) throws RegraDeNegocioException {
         return usuarioRepository.pegarLogin(usuarioLogin);
     }
 
-    public Usuario tornarUsuarioAdmin(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
+    public Usuario tornarUsuarioAdmin(Integer id) throws RegraDeNegocioException {
         findById(id);
         if (usuarioRepository.tornarUsuarioAdmin(id)) {
             return usuarioRepository.pegar(id);
