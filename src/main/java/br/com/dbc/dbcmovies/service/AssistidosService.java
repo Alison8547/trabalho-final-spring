@@ -18,33 +18,46 @@ public class AssistidosService {
     private final ItemService itemService;
 
 
-    public List<ItemEntretenimento> listarAssistidos(Integer idUsuario) throws BancoDeDadosException, RegraDeNegocioException {
+    public List<ItemEntretenimento> listarAssistidos(Integer idUsuario) throws RegraDeNegocioException {
         usuarioService.findById(idUsuario);
 
-        List<ItemEntretenimento> resultList = assistidosRepository.listarAssistidos(idUsuario);
+        List<ItemEntretenimento> resultList = null;
+        try {
+            resultList = assistidosRepository.listarAssistidos(idUsuario);
+        } catch (BancoDeDadosException e) {
+            throw new RuntimeException(e);
+        }
         resultList.forEach(item -> item.setMediaAvaliacoes(itemService.calcularAvaliacao(item.getId())));
 
         return resultList;
     }
 
-    public void deletarAssistido(Integer idItem, Integer idUsuario) throws BancoDeDadosException, RegraDeNegocioException {
+    public void deletarAssistido(Integer idItem, Integer idUsuario) throws RegraDeNegocioException {
         itemService.findById(idItem);
         usuarioService.findById(idUsuario);
-        assistidosRepository.deletarAssistido(idItem, idUsuario);
+        try {
+            assistidosRepository.deletarAssistido(idItem, idUsuario);
+        } catch (BancoDeDadosException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public ItemEntretenimento marcarAssistido(Integer idUsuario, Integer idItem) throws RegraDeNegocioException, BancoDeDadosException {
+    public ItemEntretenimento marcarAssistido(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
         itemService.findById(idItem);
         usuarioService.findById(idUsuario);
 
-       assistidosRepository.marcarAssistido(idUsuario,idItem);
+        try {
+            assistidosRepository.marcarAssistido(idUsuario, idItem);
+        } catch (BancoDeDadosException e) {
+            throw new RuntimeException(e);
+        }
 
-       return itemService.findById(idItem);
+        return itemService.findById(idItem);
     }
 
-    public void incluirIndicacao(String itemNome,Integer idUsuario) throws RegraDeNegocioException, BancoDeDadosException {
+    public void incluirIndicacao(String itemNome, Integer idUsuario) throws RegraDeNegocioException, BancoDeDadosException {
         usuarioService.findById(idUsuario);
-        assistidosRepository.incluirIndicacao(itemNome,idUsuario);
+        assistidosRepository.incluirIndicacao(itemNome, idUsuario);
     }
 
 }

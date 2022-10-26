@@ -10,17 +10,20 @@ import javax.validation.constraints.NotNull;
 @Data
 public class UsuarioDto {
 
-    @Schema(description = "Usuariodeteste")
+    @Schema(description = "Nome do usuário", example = "Alison")
     private String nome;
 
-    @Schema(description = "25")
+
     @NotNull
+    @Schema(description = "Idade do usuário", example = "20")
     private Integer idade;
 
-    @Schema(description = "emaildeteste@gmail.com.br")
-    @Email
-    private String email;
 
+    @Email
+    @Schema(description = "Email do usuário", example = "alison@hotmail.com")
+    private String email;
+    @Schema(description = "Tipo do usuário", example = "CLIENTE")
     protected TipoUsuario tipoUsuario;
+    @Schema(description = "Id do usuário")
     private Integer id;
 }
