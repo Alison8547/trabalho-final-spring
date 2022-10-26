@@ -27,7 +27,7 @@
                             <br> <br> <b>Olá ${nome}</b>
                             <br> <br> <b>Seus dados foram atualizados no nosso sistema</b>
                             <h1>Novos dados</h1>
-                            <br> <br> <b>Nome: ${nome} Idade: ${idade} Email: ${emailUsuario} Senha: ${senha} TipoUsuario: ${tipoUsuario}</b>
+                            <br> <br> <b>Nome: ${nome} Idade: ${idade} Email: ${emailUsuario} TipoUsuario: ${tipoUsuario}</b>
                             <br> <br> <b></b>
                             <br> <br> <b>Qualquer dúvida é só contatar o suporte pelo e-mail ${email}</b>
                             <br> <br> <b></b>

@@ -27,12 +27,12 @@ public class UsuarioService {
                 .toList();
     }
 
-    public Usuario pegar(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
-        findById(id);
-        return usuarioRepository.pegar(id);
+    public UsuarioDto pegar(Integer id) throws RegraDeNegocioException {
+        Usuario usuario =  findById(id);
+        return objectMapper.convertValue(usuario, UsuarioDto.class);
     }
 
-    public UsuarioDto adicionar(UsuarioCreateDto usuario) throws BancoDeDadosException {
+    public UsuarioDto adicionar(UsuarioCreateDto usuario) throws RegraDeNegocioException {
         Usuario usuarioAdicionado = objectMapper.convertValue(usuario, Usuario.class);
         usuarioAdicionado = usuarioRepository.adicionar(usuarioAdicionado);
         UsuarioDto usuarioDto = objectMapper.convertValue(usuarioAdicionado, UsuarioDto.class);
@@ -42,7 +42,7 @@ public class UsuarioService {
         return usuarioDto;
     }
 
-    public UsuarioDto editar(Integer id, UsuarioCreateDto usuarioCreateDto) throws BancoDeDadosException, RegraDeNegocioException {
+    public UsuarioDto editar(Integer id, UsuarioCreateDto usuarioCreateDto) throws RegraDeNegocioException {
         findById(id);
         Usuario usuarioConvertido = objectMapper.convertValue(usuarioCreateDto, Usuario.class);
         if (usuarioRepository.editar(id, usuarioConvertido)) {
@@ -55,7 +55,7 @@ public class UsuarioService {
         }
     }
 
-    public void remover(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
+    public void remover(Integer id) throws RegraDeNegocioException {
         Usuario usuario = findById(id);
         UsuarioDto usuarioDto = objectMapper.convertValue(usuario, UsuarioDto.class);
         usuarioRepository.remover(id);
@@ -79,7 +79,7 @@ public class UsuarioService {
     public Usuario findById(Integer id) throws RegraDeNegocioException {
         try {
             return usuarioRepository.pegar(id);
-        } catch (BancoDeDadosException e) {
+        } catch (RegraDeNegocioException e) {
             throw new RegraDeNegocioException("Usuário não encontrado!");
         }
     }

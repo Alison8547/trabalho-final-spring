@@ -4,6 +4,7 @@ package br.com.dbc.dbcmovies.repository;
 import br.com.dbc.dbcmovies.entity.TipoUsuario;
 import br.com.dbc.dbcmovies.entity.Usuario;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
+import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.interfaces.Repositorio;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -36,7 +37,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     }
 
     @Override
-    public Usuario adicionar(Usuario usuario) throws BancoDeDadosException {
+    public Usuario adicionar(Usuario usuario) throws RegraDeNegocioException {
         Connection conn = null;
 
         try {
@@ -62,7 +63,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
             return usuario;
 
         } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
+            throw new RegraDeNegocioException(e.getMessage());
         } finally {
             try {
                 if (conn != null) {
@@ -75,7 +76,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     }
 
     @Override
-    public boolean remover(Integer id) throws BancoDeDadosException {
+    public boolean remover(Integer id) throws RegraDeNegocioException {
         Connection conn = null;
 
         try {
@@ -88,7 +89,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
             return res > 0;
 
         } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
+            throw new RegraDeNegocioException(e.getMessage());
         } finally {
             try {
                 if (conn != null) {
@@ -101,7 +102,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     }
 
     @Override
-    public boolean editar(Integer id, Usuario usuario) throws BancoDeDadosException {
+    public boolean editar(Integer id, Usuario usuario) throws RegraDeNegocioException {
         Connection conn = null;
         try {
             conn = conexao.getConnection();
@@ -217,7 +218,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     }
 
 
-    public Usuario pegar(Integer id) throws BancoDeDadosException {
+    public Usuario pegar(Integer id) throws RegraDeNegocioException {
         Connection conn = null;
         Usuario usuario = new Usuario();
 
@@ -245,7 +246,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
             }
 
         } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
+            throw new RegraDeNegocioException(e.getMessage());
         } finally {
             try {
                 if (conn != null) {
