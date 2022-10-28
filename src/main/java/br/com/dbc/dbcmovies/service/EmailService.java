@@ -119,7 +119,7 @@ public class EmailService {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
             mimeMessageHelper.setFrom(from);
-            mimeMessageHelper.setTo(TO);
+            mimeMessageHelper.setTo(TO); //CORRIGIR
             mimeMessageHelper.setSubject("subject");
             mimeMessageHelper.setText(geContentFromTemplateAvaliacao(avaliacaoDto, tipoTemplate), true);
 
@@ -156,7 +156,7 @@ public class EmailService {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
             mimeMessageHelper.setFrom(from);
-            mimeMessageHelper.setTo(TO);
+            mimeMessageHelper.setTo(TO); //CORRIGIR
             mimeMessageHelper.setSubject("subject");
             mimeMessageHelper.setText(geContentFromTemplateItemEntretenimento(itemEntretenimentoDtoDto, tipoTemplate), true);
 
