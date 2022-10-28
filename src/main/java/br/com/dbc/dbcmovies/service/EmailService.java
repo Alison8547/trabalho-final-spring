@@ -96,13 +96,13 @@ public class EmailService {
 
         switch (tipoTemplate) {
             case CREATE -> {
-                template = fmConfiguration.getTemplate("emailcreate-template.ftl");
+                template = fmConfiguration.getTemplate("emailcreate-template.html");
             }
             case UPDATE -> {
-                template = fmConfiguration.getTemplate("emailupdate-template.ftl");
+                template = fmConfiguration.getTemplate("emailupdate-template.html");
             }
             case DELETE -> {
-                template = fmConfiguration.getTemplate("emaildelete-template.ftl");
+                template = fmConfiguration.getTemplate("emaildelete-template.html");
             }
             default -> {
                 throw new RegraDeNegocioException("Tipo de template não encontrado!");
@@ -179,13 +179,13 @@ public class EmailService {
 
         switch (tipoTemplate) {
             case CREATE -> {
-                template = fmConfiguration.getTemplate("email-itementretenimento-template.ftl");
+                template = fmConfiguration.getTemplate("email-itementretenimento-template.html");
             }
             case UPDATE -> {
-                template = fmConfiguration.getTemplate("email-itementretenimentoupdate-template.ftl");
+                template = fmConfiguration.getTemplate("email-itementretenimentoupdate-template.html");
             }
             case DELETE -> {
-                template = fmConfiguration.getTemplate("email-itementretenimentodelete-template.ftl");
+                template = fmConfiguration.getTemplate("email-itementretenimentodelete-template.html");
 
             }
             default -> {
