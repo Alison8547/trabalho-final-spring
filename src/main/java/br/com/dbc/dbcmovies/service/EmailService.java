@@ -112,14 +112,14 @@ public class EmailService {
     }
 
 
-    public void sendEmailAvaliacao(AvaliacaoDto avaliacaoDto, TipoTemplate tipoTemplate) {
+    public void sendEmailAvaliacao(AvaliacaoDto avaliacaoDto, TipoTemplate tipoTemplate, UsuarioDto usuarioDto) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         try {
 
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
             mimeMessageHelper.setFrom(from);
-            mimeMessageHelper.setTo(avaliacaoDto.getUsuarioDto().getEmail());
+            mimeMessageHelper.setTo(usuarioDto.getEmail());
             mimeMessageHelper.setSubject("subject");
             mimeMessageHelper.setText(geContentFromTemplateAvaliacao(avaliacaoDto, tipoTemplate), true);
 
@@ -131,7 +131,7 @@ public class EmailService {
 
     public String geContentFromTemplateAvaliacao(AvaliacaoDto avaliacaoDto, TipoTemplate tipoTemplate) throws IOException, TemplateException, RegraDeNegocioException {
         Map<String, Object> dados = new HashMap<>();
-        dados.put("nome", avaliacaoDto.getUsuarioDto().getNome());
+        dados.put("nome", avaliacaoDto.getUsuario().getNome());
         dados.put("nota", avaliacaoDto.getNota());
         dados.put("comentario",avaliacaoDto.getComentario());
         dados.put("tipo", avaliacaoDto.getItemEntretenimento().getTipo());
@@ -158,7 +158,7 @@ public class EmailService {
             mimeMessageHelper.setFrom(from);
             mimeMessageHelper.setTo(usuarioDto.getEmail());
             mimeMessageHelper.setSubject("subject");
-            mimeMessageHelper.setText(geContentFromTemplateItemEntretenimento(itemEntretenimentoDtoDto, tipoTemplate, usuarioDto.getNome()), true);
+            mimeMessageHelper.setText(geContentFromTemplateItemEntretenimento(itemEntretenimentoDtoDto, tipoTemplate, usuarioDto), true);
 
             emailSender.send(mimeMessageHelper.getMimeMessage());
         } catch (MessagingException | IOException | TemplateException | RegraDeNegocioException e) {
@@ -166,16 +166,16 @@ public class EmailService {
         }
     }
 
-    public String geContentFromTemplateItemEntretenimento(ItemEntretenimentoDto itemEntretenimentoDtoDto, TipoTemplate tipoTemplate, String nomeUser) throws IOException, TemplateException, RegraDeNegocioException {
+    public String geContentFromTemplateItemEntretenimento(ItemEntretenimentoDto itemEntretenimentoDtoDto, TipoTemplate tipoTemplate, UsuarioDto usuarioDto) throws IOException, TemplateException, RegraDeNegocioException {
         Map<String, Object> dados = new HashMap<>();
-        dados.put("nome", nomeUser);
+        dados.put("nome", usuarioDto.getNome());
         dados.put("genero", itemEntretenimentoDtoDto.getGenero());
         dados.put("ano",itemEntretenimentoDtoDto.getAnoLancamento());
         dados.put("classificacao", itemEntretenimentoDtoDto.getClassificacao());
         dados.put("duracao", itemEntretenimentoDtoDto.getDuracao());
         dados.put("tipo", itemEntretenimentoDtoDto.getTipo());
-        dados.put("nomeItem", itemEntretenimentoDtoDto.getNome());
         dados.put("email", from);
+        dados.put("nomeItem", itemEntretenimentoDtoDto.getNome());
         Template template = null;
 
         switch (tipoTemplate) {
@@ -187,6 +187,7 @@ public class EmailService {
             }
             case DELETE -> {
                 template = fmConfiguration.getTemplate("email-itementretenimentodelete-template.html");
+
             }
             default -> {
                 throw new RegraDeNegocioException("Tipo de template não encontrado!");

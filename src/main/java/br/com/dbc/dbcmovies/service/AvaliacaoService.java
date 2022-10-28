@@ -2,6 +2,7 @@ package br.com.dbc.dbcmovies.service;
 
 import br.com.dbc.dbcmovies.Dto.AvaliacaoCreateDto;
 import br.com.dbc.dbcmovies.Dto.AvaliacaoDto;
+import br.com.dbc.dbcmovies.Dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.Avaliacao;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimento;
 import br.com.dbc.dbcmovies.entity.TipoTemplate;
@@ -22,7 +23,6 @@ public class AvaliacaoService {
     private final UsuarioService usuarioService;
     private final ItemService itemService;
     private final ObjectMapper objectMapper;
-
     private final EmailService emailService;
 
     public AvaliacaoDto create(AvaliacaoCreateDto avaliacaoDto, Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
@@ -30,14 +30,18 @@ public class AvaliacaoService {
 
             Usuario usuario = usuarioService.findById(idUsuario);
             ItemEntretenimento item = itemService.findById(idItem);
+
+            UsuarioDto usuarioDto = objectMapper.convertValue(usuario, UsuarioDto.class);
+
             Avaliacao avaliacao = objectMapper.convertValue(avaliacaoDto, Avaliacao.class);
+
             avaliacao = avaliacaoRepository.adicionar(avaliacao, idUsuario, idItem);
             avaliacao.setUsuario(usuario);
             avaliacao.setItemEntretenimento(item);
 
             AvaliacaoDto dto = objectMapper.convertValue(avaliacao, AvaliacaoDto.class);
 
-            emailService.sendEmailAvaliacao(dto,TipoTemplate.CREATE);
+            emailService.sendEmailAvaliacao(dto, TipoTemplate.CREATE, usuarioDto);
 
             return dto;
 
