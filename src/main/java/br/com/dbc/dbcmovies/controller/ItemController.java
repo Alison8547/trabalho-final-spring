@@ -6,6 +6,9 @@ import br.com.dbc.dbcmovies.Dto.SerieCreateDto;
 import br.com.dbc.dbcmovies.entity.Filtro;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.ItemService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -24,21 +27,54 @@ public class ItemController {
         this.itemService = itemService;
     }
 
+    @Operation(summary = "Criar Filme", description = "Cria um Filme no banco de dados")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "201", description = "Filme Criado com sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
     @PostMapping("/filme")
     public ResponseEntity<ItemEntretenimentoDto> createFilme(@Valid @RequestBody FilmeCreateDto filmeCreateDto) throws RegraDeNegocioException {
         return ResponseEntity.ok(itemService.createFilme(filmeCreateDto));
     }
 
+    @Operation(summary = "Criar Serie", description = "Cria uma Serie no banco de dados")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "201", description = "Filme Criado com sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
     @PostMapping("/serie")
     public ResponseEntity<ItemEntretenimentoDto> createSerie(@Valid @RequestBody SerieCreateDto serieCreateDto) throws RegraDeNegocioException {
         return ResponseEntity.ok(itemService.createSerie(serieCreateDto));
     }
 
+    @Operation(summary = "Listar Todos item", description = "Lista todos os Itens de entretenimento do banco de dados")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Retorna a lista de itenm entretenimento"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
     @GetMapping
     public ResponseEntity<List<ItemEntretenimentoDto>> listAll() throws RegraDeNegocioException {
         return ResponseEntity.ok(itemService.list());
     }
 
+
+    @Operation(summary = "Filtra os item", description = "Filtra todos os Itens de entretenimento do banco de dados")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Retorna a lista de itenm entretenimento filtrada"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
     @GetMapping("/filtro")
     public ResponseEntity<List<ItemEntretenimentoDto>> filterFilme(@RequestParam("tipo") String tipo,
                                                                    @RequestParam("genero") String genero,
@@ -47,11 +83,29 @@ public class ItemController {
         return ResponseEntity.ok(itemService.filter(new Filtro(tipo, genero, classificacao)));
     }
 
+
+    @Operation(summary = "Pega um item", description = "Pega um Item do banco de dados")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Retorna a lista de itenm entretenimento filtrada"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
     @GetMapping("/{idItem}")
     public ResponseEntity<ItemEntretenimentoDto> getById(@PathVariable("idItem") Integer id) throws RegraDeNegocioException {
         return ResponseEntity.ok(itemService.getItem(id));
     }
 
+
+    @Operation(summary = "Atualizar filme", description = "Atualiza um filme no banco de dados")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Atualizou com sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
     @PutMapping("/filme/{idItem}")
     public ResponseEntity<ItemEntretenimentoDto> updateFilme(@PathVariable("idItem") Integer id,
                                                      @Valid @RequestBody FilmeCreateDto filmeCreateDto) throws RegraDeNegocioException {
@@ -59,6 +113,14 @@ public class ItemController {
         return ResponseEntity.ok(itemService.updateFilme(id, filmeCreateDto));
     }
 
+    @Operation(summary = "Atualizar serie", description = "Atualiza uma serie no banco de dados")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Atualizou com sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
     @PutMapping("/serie/{idItem}")
     public ResponseEntity<ItemEntretenimentoDto> updateSerie(@PathVariable("idItem") Integer id,
                                                              @Valid @RequestBody SerieCreateDto serieCreateDto) throws RegraDeNegocioException {
@@ -66,6 +128,16 @@ public class ItemController {
         return ResponseEntity.ok(itemService.updateSerie(id, serieCreateDto));
     }
 
+
+    @Operation(summary = "Deletar item", description = "Deletar um item entretenimento no banco de dados")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "204", description = "Deletado com sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
     @DeleteMapping("/{idItem}")
     public ResponseEntity<Void> delete(@PathVariable("idItem") Integer id) throws RegraDeNegocioException {
         itemService.delete(id);
