@@ -97,6 +97,7 @@ public class UsuarioController {
     @DeleteMapping("/{idUsuario}")
     public ResponseEntity<Void> remover(@PathVariable(name = "idUsuario") Integer idUsuario) throws RegraDeNegocioException {
         usuarioService.remover(idUsuario);
+        log.info("Usuário deletado com sucesso");
         return ResponseEntity.noContent().build();
     }
 
@@ -110,9 +111,8 @@ public class UsuarioController {
             }
     )
     @PutMapping("/{idUsuario}/admin")
-    public ResponseEntity<Void> tornarUsuarioAdmin(@PathVariable(name = "idUsuario") Integer idUsuario) throws RegraDeNegocioException {
-        usuarioService.remover(idUsuario);
-        log.info("Usuário deletado com sucesso");
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<UsuarioDto> tornarUsuarioAdmin(@PathVariable(name = "idUsuario") Integer idUsuario) throws RegraDeNegocioException {
+        usuarioService.tornarUsuarioAdmin(idUsuario);
+        return new ResponseEntity<>(usuarioService.tornarUsuarioAdmin(idUsuario),HttpStatus.OK);
     }
 }

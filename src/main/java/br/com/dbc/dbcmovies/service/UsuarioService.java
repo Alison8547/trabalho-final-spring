@@ -66,10 +66,10 @@ public class UsuarioService {
         return usuarioRepository.pegarLogin(usuarioLogin);
     }
 
-    public Usuario tornarUsuarioAdmin(Integer id) throws RegraDeNegocioException {
+    public UsuarioDto tornarUsuarioAdmin(Integer id) throws RegraDeNegocioException {
         findById(id);
         if (usuarioRepository.tornarUsuarioAdmin(id)) {
-            return usuarioRepository.pegar(id);
+            return objectMapper.convertValue(usuarioRepository.pegar(id),UsuarioDto.class);
         } else {
             throw new RegraDeNegocioException("Não foi possível transformar o Usuário em Administrador!");
         }
