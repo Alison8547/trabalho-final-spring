@@ -1,15 +1,14 @@
 package br.com.dbc.dbcmovies.service;
 
-import br.com.dbc.dbcmovies.Dto.FilmeCreateDto;
-import br.com.dbc.dbcmovies.Dto.ItemEntretenimentoCreateDto;
-import br.com.dbc.dbcmovies.Dto.ItemEntretenimentoDto;
-import br.com.dbc.dbcmovies.Dto.SerieCreateDto;
+import br.com.dbc.dbcmovies.Dto.*;
 import br.com.dbc.dbcmovies.entity.Filtro;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimento;
 import br.com.dbc.dbcmovies.entity.TipoTemplate;
+import br.com.dbc.dbcmovies.entity.TipoUsuario;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.ItemRepository;
+import br.com.dbc.dbcmovies.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,17 +20,20 @@ import java.util.List;
 public class ItemService {
     private final ItemRepository itemRepository;
 
+    private final UsuarioService usuarioService;
     private final EmailService emailService;
     private final ObjectMapper objectMapper;
 
-    public ItemEntretenimentoDto createFilme(ItemEntretenimentoCreateDto itemEntretenimentoDto) throws RegraDeNegocioException {
-
+    public ItemEntretenimentoDto createFilme(ItemEntretenimentoCreateDto itemEntretenimentoDto, Integer idAdmin) throws RegraDeNegocioException {
+        UsuarioDto usuarioDto = objectMapper.convertValue(usuarioService.findById(idAdmin), UsuarioDto.class) ;
+      if (usuarioDto.getTipoUsuario().equals(TipoUsuario.CLIENTE)){
+          throw new RegraDeNegocioException("Usuario precisa ser administrador para cadastrar um filme.");
+      }
         try{
-
             ItemEntretenimento itemEntity = objectMapper.convertValue(itemEntretenimentoDto, ItemEntretenimento.class);
             itemEntity = itemRepository.adicionar(itemEntity);
             ItemEntretenimentoDto dto = objectMapper.convertValue(itemEntity, ItemEntretenimentoDto.class);
-            emailService.sendEmailItemEntretenimento(dto, TipoTemplate.CREATE);
+            emailService.sendEmailItemEntretenimento(dto, TipoTemplate.CREATE, usuarioDto);
             return objectMapper.convertValue(itemEntity, ItemEntretenimentoDto.class);
 
         }catch (BancoDeDadosException ex){
@@ -39,14 +41,14 @@ public class ItemService {
         }
     }
 
-    public ItemEntretenimentoDto createSerie(ItemEntretenimentoCreateDto itemEntretenimentoDto) throws RegraDeNegocioException {
-
+    public ItemEntretenimentoDto createSerie(ItemEntretenimentoCreateDto itemEntretenimentoDto, Integer idAdmin) throws RegraDeNegocioException {
+        UsuarioDto usuarioDto = objectMapper.convertValue(usuarioService.findById(idAdmin), UsuarioDto.class) ;
         try{
 
             ItemEntretenimento itemEntity = objectMapper.convertValue(itemEntretenimentoDto, ItemEntretenimento.class);
             itemEntity = itemRepository.adicionar(itemEntity);
             ItemEntretenimentoDto dto = objectMapper.convertValue(itemEntity, ItemEntretenimentoDto.class);
-            emailService.sendEmailItemEntretenimento(dto, TipoTemplate.CREATE);
+            emailService.sendEmailItemEntretenimento(dto, TipoTemplate.CREATE, usuarioDto);
             return objectMapper.convertValue(itemEntity, ItemEntretenimentoDto.class);
 
         }catch (BancoDeDadosException ex){
@@ -98,14 +100,14 @@ public class ItemService {
         }
     }
 
-    public ItemEntretenimentoDto updateFilme(Integer id, FilmeCreateDto filmeCreateDto) throws RegraDeNegocioException{
-
+    public ItemEntretenimentoDto updateFilme(Integer id, FilmeCreateDto filmeCreateDto, Integer idAdmin) throws RegraDeNegocioException{
+        UsuarioDto usuarioDto = objectMapper.convertValue(usuarioService.findById(idAdmin), UsuarioDto.class) ;
         try {
 
             findById(id);
             ItemEntretenimento itemEntretenimento = objectMapper.convertValue(filmeCreateDto, ItemEntretenimento.class);
             ItemEntretenimentoDto dto = objectMapper.convertValue(itemEntretenimento, ItemEntretenimentoDto.class);
-            emailService.sendEmailItemEntretenimento(dto, TipoTemplate.UPDATE);
+            emailService.sendEmailItemEntretenimento(dto, TipoTemplate.UPDATE, usuarioDto);
 
             if(itemRepository.editar(id, itemEntretenimento)){
                 return objectMapper.convertValue(itemRepository.pegar(id), ItemEntretenimentoDto.class);
@@ -118,14 +120,14 @@ public class ItemService {
         }
     }
 
-    public ItemEntretenimentoDto updateSerie(Integer id, SerieCreateDto serieCreateDto) throws RegraDeNegocioException {
-
+    public ItemEntretenimentoDto updateSerie(Integer id, SerieCreateDto serieCreateDto, Integer idAdmin) throws RegraDeNegocioException {
+        UsuarioDto usuarioDto = objectMapper.convertValue(usuarioService.findById(idAdmin), UsuarioDto.class) ;
         try {
 
             findById(id);
             ItemEntretenimento itemEntretenimento = objectMapper.convertValue(serieCreateDto, ItemEntretenimento.class);
             ItemEntretenimentoDto dto = objectMapper.convertValue(itemEntretenimento, ItemEntretenimentoDto.class);
-            emailService.sendEmailItemEntretenimento(dto, TipoTemplate.UPDATE);
+            emailService.sendEmailItemEntretenimento(dto, TipoTemplate.UPDATE, usuarioDto);
             if(itemRepository.editar(id, itemEntretenimento)){
                 return objectMapper.convertValue(itemRepository.pegar(id), ItemEntretenimentoDto.class);
             }else {
@@ -137,12 +139,19 @@ public class ItemService {
         }
     }
 
-    public void delete(Integer id) throws RegraDeNegocioException{
-
+    public void delete(Integer id, Integer idAdmin) throws RegraDeNegocioException{
+        UsuarioDto usuarioDto = objectMapper.convertValue(usuarioService.findById(idAdmin), UsuarioDto.class) ;
+        if (usuarioDto.getTipoUsuario().equals(TipoUsuario.CLIENTE)){
+            throw new RegraDeNegocioException("Usuario precisa ser administrador para cadastrar um filme.");
+        }
         ItemEntretenimento itemEntretenimento = findById(id);
         ItemEntretenimentoDto itemDto = objectMapper.convertValue(itemEntretenimento, ItemEntretenimentoDto.class);
-        emailService.sendEmailItemEntretenimento(itemDto, TipoTemplate.DELETE);
-
+        emailService.sendEmailItemEntretenimento(itemDto, TipoTemplate.DELETE, usuarioDto);
+        try {
+            itemRepository.remover(id);
+        } catch (BancoDeDadosException e) {
+            throw new RegraDeNegocioException(e.getMessage());
+        }
 
     }
 

@@ -149,16 +149,16 @@ public class EmailService {
         }
         return FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
     }
-    public void sendEmailItemEntretenimento(ItemEntretenimentoDto itemEntretenimentoDtoDto, TipoTemplate tipoTemplate) {
+    public void sendEmailItemEntretenimento(ItemEntretenimentoDto itemEntretenimentoDtoDto, TipoTemplate tipoTemplate, UsuarioDto usuarioDto) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         try {
 
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
             mimeMessageHelper.setFrom(from);
-            mimeMessageHelper.setTo(TO);
+            mimeMessageHelper.setTo(usuarioDto.getEmail());
             mimeMessageHelper.setSubject("subject");
-            mimeMessageHelper.setText(geContentFromTemplateItemEntretenimento(itemEntretenimentoDtoDto, tipoTemplate), true);
+            mimeMessageHelper.setText(geContentFromTemplateItemEntretenimento(itemEntretenimentoDtoDto, tipoTemplate, usuarioDto.getNome()), true);
 
             emailSender.send(mimeMessageHelper.getMimeMessage());
         } catch (MessagingException | IOException | TemplateException | RegraDeNegocioException e) {
@@ -166,14 +166,15 @@ public class EmailService {
         }
     }
 
-    public String geContentFromTemplateItemEntretenimento(ItemEntretenimentoDto itemEntretenimentoDtoDto, TipoTemplate tipoTemplate) throws IOException, TemplateException, RegraDeNegocioException {
+    public String geContentFromTemplateItemEntretenimento(ItemEntretenimentoDto itemEntretenimentoDtoDto, TipoTemplate tipoTemplate, String nomeUser) throws IOException, TemplateException, RegraDeNegocioException {
         Map<String, Object> dados = new HashMap<>();
-        dados.put("nome", itemEntretenimentoDtoDto.getNome());
+        dados.put("nome", nomeUser);
         dados.put("genero", itemEntretenimentoDtoDto.getGenero());
         dados.put("ano",itemEntretenimentoDtoDto.getAnoLancamento());
         dados.put("classificacao", itemEntretenimentoDtoDto.getClassificacao());
         dados.put("duracao", itemEntretenimentoDtoDto.getDuracao());
         dados.put("tipo", itemEntretenimentoDtoDto.getTipo());
+        dados.put("nomeItem", itemEntretenimentoDtoDto.getNome());
         dados.put("email", from);
         Template template = null;
 
