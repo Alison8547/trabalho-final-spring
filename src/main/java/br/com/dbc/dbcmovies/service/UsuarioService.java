@@ -4,7 +4,6 @@ import br.com.dbc.dbcmovies.Dto.UsuarioCreateDto;
 import br.com.dbc.dbcmovies.Dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.TipoTemplate;
 import br.com.dbc.dbcmovies.entity.Usuario;
-import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
