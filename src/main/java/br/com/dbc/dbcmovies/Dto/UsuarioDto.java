@@ -13,11 +13,9 @@ public class UsuarioDto {
     @Schema(description = "Nome do usuário", example = "Alison")
     private String nome;
 
-
     @NotNull
     @Schema(description = "Idade do usuário", example = "20")
     private Integer idade;
-
 
     @Email
     @Schema(description = "Email do usuário", example = "alison@hotmail.com")
