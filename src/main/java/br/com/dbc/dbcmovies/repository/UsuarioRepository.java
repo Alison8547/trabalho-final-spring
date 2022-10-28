@@ -3,7 +3,6 @@ package br.com.dbc.dbcmovies.repository;
 
 import br.com.dbc.dbcmovies.entity.TipoUsuario;
 import br.com.dbc.dbcmovies.entity.Usuario;
-import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.interfaces.Repositorio;
 import lombok.extern.slf4j.Slf4j;

@@ -9,6 +9,7 @@ import br.com.dbc.dbcmovies.service.ItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,15 +18,14 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @Validated
 @RequestMapping("/item")
 public class ItemController {
 
-    private ItemService itemService;
+    private final ItemService itemService;
 
-    public ItemController(ItemService itemService) {
-        this.itemService = itemService;
-    }
+
 
     @Operation(summary = "Criar Filme", description = "Cria um Filme no banco de dados")
     @ApiResponses(
