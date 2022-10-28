@@ -172,7 +172,6 @@ public class EmailService {
         dados.put("genero", itemEntretenimentoDtoDto.getGenero());
         dados.put("ano",itemEntretenimentoDtoDto.getAnoLancamento());
         dados.put("classificacao", itemEntretenimentoDtoDto.getClassificacao());
-        dados.put("duracao", itemEntretenimentoDtoDto.getDuracao());
         dados.put("tipo", itemEntretenimentoDtoDto.getTipo());
         dados.put("email", from);
         dados.put("nomeItem", itemEntretenimentoDtoDto.getNome());
