@@ -112,14 +112,14 @@ public class EmailService {
     }
 
 
-    public void sendEmailAvaliacao(AvaliacaoDto avaliacaoDto, TipoTemplate tipoTemplate) {
+    public void sendEmailAvaliacao(AvaliacaoDto avaliacaoDto, TipoTemplate tipoTemplate, UsuarioDto usuarioDto) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         try {
 
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
             mimeMessageHelper.setFrom(from);
-            mimeMessageHelper.setTo(TO); //CORRIGIR
+            mimeMessageHelper.setTo(usuarioDto.getEmail());
             mimeMessageHelper.setSubject("subject");
             mimeMessageHelper.setText(geContentFromTemplateAvaliacao(avaliacaoDto, tipoTemplate), true);
 
@@ -149,14 +149,14 @@ public class EmailService {
         }
         return FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
     }
-    public void sendEmailItemEntretenimento(ItemEntretenimentoDto itemEntretenimentoDtoDto, TipoTemplate tipoTemplate) {
+    public void sendEmailItemEntretenimento(ItemEntretenimentoDto itemEntretenimentoDtoDto, TipoTemplate tipoTemplate, UsuarioDto usuarioDto) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         try {
 
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
             mimeMessageHelper.setFrom(from);
-            mimeMessageHelper.setTo(TO); //CORRIGIR
+            mimeMessageHelper.setTo(usuarioDto.getEmail());
             mimeMessageHelper.setSubject("subject");
             mimeMessageHelper.setText(geContentFromTemplateItemEntretenimento(itemEntretenimentoDtoDto, tipoTemplate), true);
 

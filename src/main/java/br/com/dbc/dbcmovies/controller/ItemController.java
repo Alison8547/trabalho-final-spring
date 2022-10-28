@@ -35,9 +35,9 @@ public class ItemController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PostMapping("/filme")
-    public ResponseEntity<ItemEntretenimentoDto> createFilme(@Valid @RequestBody FilmeCreateDto filmeCreateDto) throws RegraDeNegocioException {
-        return ResponseEntity.ok(itemService.createFilme(filmeCreateDto));
+    @PostMapping("/filme/{idAdmin}")
+    public ResponseEntity<ItemEntretenimentoDto> createFilme(@Valid @RequestBody FilmeCreateDto filmeCreateDto,@PathVariable("idAdmin") Integer idAdmin) throws RegraDeNegocioException {
+        return ResponseEntity.ok(itemService.createFilme(filmeCreateDto,idAdmin));
     }
 
     @Operation(summary = "Criar Serie", description = "Cria uma Serie no banco de dados")
@@ -48,9 +48,9 @@ public class ItemController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PostMapping("/serie")
-    public ResponseEntity<ItemEntretenimentoDto> createSerie(@Valid @RequestBody SerieCreateDto serieCreateDto) throws RegraDeNegocioException {
-        return ResponseEntity.ok(itemService.createSerie(serieCreateDto));
+    @PostMapping("/serie/{idAdmin}")
+    public ResponseEntity<ItemEntretenimentoDto> createSerie(@Valid @RequestBody SerieCreateDto serieCreateDto,@PathVariable("idAdmin") Integer idAdmin) throws RegraDeNegocioException {
+        return ResponseEntity.ok(itemService.createSerie(serieCreateDto, idAdmin));
     }
 
     @Operation(summary = "Listar Todos item", description = "Lista todos os Itens de entretenimento do banco de dados")
@@ -106,11 +106,11 @@ public class ItemController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PutMapping("/filme/{idItem}")
+    @PutMapping("/filme/{idItem}/{idAdmin}")
     public ResponseEntity<ItemEntretenimentoDto> updateFilme(@PathVariable("idItem") Integer id,
-                                                     @Valid @RequestBody FilmeCreateDto filmeCreateDto) throws RegraDeNegocioException {
+                                                     @Valid @RequestBody FilmeCreateDto filmeCreateDto, @PathVariable("idAdmin") Integer idAdmin) throws RegraDeNegocioException {
 
-        return ResponseEntity.ok(itemService.updateFilme(id, filmeCreateDto));
+        return ResponseEntity.ok(itemService.updateFilme(id, filmeCreateDto, idAdmin));
     }
 
     @Operation(summary = "Atualizar serie", description = "Atualiza uma serie no banco de dados")
@@ -121,11 +121,11 @@ public class ItemController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PutMapping("/serie/{idItem}")
+    @PutMapping("/serie/{idItem}/{idAdmin}")
     public ResponseEntity<ItemEntretenimentoDto> updateSerie(@PathVariable("idItem") Integer id,
-                                                             @Valid @RequestBody SerieCreateDto serieCreateDto) throws RegraDeNegocioException {
+                                                             @Valid @RequestBody SerieCreateDto serieCreateDto, @PathVariable("idAdmin") Integer idAdmin) throws RegraDeNegocioException {
 
-        return ResponseEntity.ok(itemService.updateSerie(id, serieCreateDto));
+        return ResponseEntity.ok(itemService.updateSerie(id, serieCreateDto, idAdmin));
     }
 
 
@@ -138,9 +138,9 @@ public class ItemController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @DeleteMapping("/{idItem}")
-    public ResponseEntity<Void> delete(@PathVariable("idItem") Integer id) throws RegraDeNegocioException {
-        itemService.delete(id);
+    @DeleteMapping("/{idItem}/{idAdmin}")
+    public ResponseEntity<Void> delete(@PathVariable("idItem") Integer id, @PathVariable("idAdmin") Integer idAdmin) throws RegraDeNegocioException {
+        itemService.delete(id, idAdmin);
         return ResponseEntity.noContent().build();
     }
 }
