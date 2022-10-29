@@ -1,9 +1,14 @@
 package br.com.dbc.dbcmovies.service;
 
+import br.com.dbc.dbcmovies.Dto.IndicacaoCreateDto;
+import br.com.dbc.dbcmovies.Dto.IndicacaoDto;
+import br.com.dbc.dbcmovies.Dto.ItemEntretenimentoDto;
+import br.com.dbc.dbcmovies.Dto.UsuarioNomeDto;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimento;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.AssistidosRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +21,9 @@ public class AssistidosService {
     private final AssistidosRepository assistidosRepository;
     private final UsuarioService usuarioService;
     private final ItemService itemService;
+    private final ObjectMapper objectMapper;
 
-
-    public List<ItemEntretenimento> listarAssistidos(Integer idUsuario) throws RegraDeNegocioException {
+    public List<ItemEntretenimentoDto> listarAssistidos(Integer idUsuario) throws RegraDeNegocioException {
         usuarioService.findById(idUsuario);
 
         List<ItemEntretenimento> resultList = null;
@@ -29,7 +34,9 @@ public class AssistidosService {
         }
         resultList.forEach(item -> item.setMediaAvaliacoes(itemService.calcularAvaliacao(item.getId())));
 
-        return resultList;
+        return resultList.stream()
+                .map(item -> objectMapper.convertValue(item, ItemEntretenimentoDto.class))
+                .toList();
     }
 
     public void deletarAssistido(Integer idItem, Integer idUsuario) throws RegraDeNegocioException {
@@ -42,7 +49,7 @@ public class AssistidosService {
         }
     }
 
-    public ItemEntretenimento marcarAssistido(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
+    public ItemEntretenimentoDto marcarAssistido(Integer idItem, Integer idUsuario) throws RegraDeNegocioException {
         itemService.findById(idItem);
         usuarioService.findById(idUsuario);
 
@@ -52,12 +59,6 @@ public class AssistidosService {
             throw new RuntimeException(e);
         }
 
-        return itemService.findById(idItem);
+        return objectMapper.convertValue(itemService.findById(idItem), ItemEntretenimentoDto.class);
     }
-
-    public void incluirIndicacao(String itemNome, Integer idUsuario) throws RegraDeNegocioException, BancoDeDadosException {
-        usuarioService.findById(idUsuario);
-        assistidosRepository.incluirIndicacao(itemNome, idUsuario);
-    }
-
 }

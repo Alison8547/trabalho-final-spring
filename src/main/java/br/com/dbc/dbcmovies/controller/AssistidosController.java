@@ -1,6 +1,6 @@
 package br.com.dbc.dbcmovies.controller;
 
-import br.com.dbc.dbcmovies.entity.ItemEntretenimento;
+import br.com.dbc.dbcmovies.Dto.ItemEntretenimentoDto;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.AssistidosService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,7 +31,7 @@ public class AssistidosController {
             }
     )
     @GetMapping("/{idUsuario}")
-    public ResponseEntity<List<ItemEntretenimento>> listarAssistidos(@PathVariable(name = "idUsuario") Integer idUsuario) throws RegraDeNegocioException {
+    public ResponseEntity<List<ItemEntretenimentoDto>> listarAssistidos(@PathVariable(name = "idUsuario") Integer idUsuario) throws RegraDeNegocioException {
         return new ResponseEntity<>(assistidosService.listarAssistidos(idUsuario), HttpStatus.OK);
     }
 
@@ -59,7 +59,7 @@ public class AssistidosController {
             }
     )
     @PostMapping("/{idItem}/{idUsuario}")
-    public ResponseEntity<ItemEntretenimento> marcarAssistido(@PathVariable(name = "idItem") Integer idItem, @PathVariable(name = "idUsuario") Integer idUsuario) throws RegraDeNegocioException {
+    public ResponseEntity<ItemEntretenimentoDto> marcarAssistido(@PathVariable(name = "idItem") Integer idItem, @PathVariable(name = "idUsuario") Integer idUsuario) throws RegraDeNegocioException {
         return new ResponseEntity<>(assistidosService.marcarAssistido(idItem, idUsuario), HttpStatus.OK);
     }
 }

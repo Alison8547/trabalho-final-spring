@@ -1,5 +1,6 @@
 package br.com.dbc.dbcmovies.repository;
 
+import br.com.dbc.dbcmovies.entity.Indicacao;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +17,7 @@ public class IndicacaoRepository {
         this.conexao = conexao;
     }
 
-    public boolean indicar(Integer idUsuario, String nomeItem) throws BancoDeDadosException {
+    public Indicacao indicar(String nomeItem, Integer idUsuario) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = conexao.getConnection();
@@ -31,9 +32,9 @@ public class IndicacaoRepository {
             stmt.setString(2, nomeItem);
 
             // Executa-se a consulta
-            int res = stmt.executeUpdate();
+            stmt.executeUpdate();
 
-            return res > 0;
+            return new Indicacao(nomeItem, idUsuario);
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
