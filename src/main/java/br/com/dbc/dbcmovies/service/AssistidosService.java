@@ -1,9 +1,6 @@
 package br.com.dbc.dbcmovies.service;
 
-import br.com.dbc.dbcmovies.Dto.IndicacaoCreateDto;
-import br.com.dbc.dbcmovies.Dto.IndicacaoDto;
 import br.com.dbc.dbcmovies.Dto.ItemEntretenimentoDto;
-import br.com.dbc.dbcmovies.Dto.UsuarioNomeDto;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimento;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
@@ -30,7 +27,7 @@ public class AssistidosService {
         try {
             resultList = assistidosRepository.listarAssistidos(idUsuario);
         } catch (BancoDeDadosException e) {
-            throw new RuntimeException(e);
+            throw new RegraDeNegocioException(e.getMessage());
         }
         resultList.forEach(item -> item.setMediaAvaliacoes(itemService.calcularAvaliacao(item.getId())));
 
@@ -45,7 +42,7 @@ public class AssistidosService {
         try {
             assistidosRepository.deletarAssistido(idItem, idUsuario);
         } catch (BancoDeDadosException e) {
-            throw new RuntimeException(e);
+            throw new RegraDeNegocioException(e.getMessage());
         }
     }
 
@@ -56,7 +53,7 @@ public class AssistidosService {
         try {
             assistidosRepository.marcarAssistido(idUsuario, idItem);
         } catch (BancoDeDadosException e) {
-            throw new RuntimeException(e);
+            throw new RegraDeNegocioException(e.getMessage());
         }
 
         return objectMapper.convertValue(itemService.findById(idItem), ItemEntretenimentoDto.class);
