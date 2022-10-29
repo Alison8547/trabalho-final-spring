@@ -4,16 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
-
 @AllArgsConstructor
 @Getter
 @Setter
 public class Avaliacao{
 
-    @NotNull
+
     private Usuario usuario;
-    @NotNull
+
     private ItemEntretenimento itemEntretenimento;
     private Double nota;
     private String comentario;
