@@ -1,6 +1,6 @@
 package br.com.dbc.dbcmovies.service;
 
-import br.com.dbc.dbcmovies.Dto.ItemEntretenimentoDto;
+import br.com.dbc.dbcmovies.dto.ItemEntretenimentoDto;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimento;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;

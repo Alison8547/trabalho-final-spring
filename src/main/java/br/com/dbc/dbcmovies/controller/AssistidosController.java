@@ -1,6 +1,6 @@
 package br.com.dbc.dbcmovies.controller;
 
-import br.com.dbc.dbcmovies.Dto.ItemEntretenimentoDto;
+import br.com.dbc.dbcmovies.dto.ItemEntretenimentoDto;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.AssistidosService;
 import io.swagger.v3.oas.annotations.Operation;

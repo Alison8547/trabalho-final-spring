@@ -1,7 +1,7 @@
 package br.com.dbc.dbcmovies.controller;
 
-import br.com.dbc.dbcmovies.Dto.IndicacaoCreateDto;
-import br.com.dbc.dbcmovies.Dto.IndicacaoDto;
+import br.com.dbc.dbcmovies.dto.IndicacaoCreateDto;
+import br.com.dbc.dbcmovies.dto.IndicacaoDto;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.IndicacaoService;
 import io.swagger.v3.oas.annotations.Operation;

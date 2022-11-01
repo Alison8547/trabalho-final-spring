@@ -1,6 +1,6 @@
 package br.com.dbc.dbcmovies.service;
 
-import br.com.dbc.dbcmovies.Dto.*;
+import br.com.dbc.dbcmovies.dto.*;
 import br.com.dbc.dbcmovies.entity.Filtro;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimento;
 import br.com.dbc.dbcmovies.entity.TipoTemplate;
@@ -8,7 +8,6 @@ import br.com.dbc.dbcmovies.entity.TipoUsuario;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.ItemRepository;
-import br.com.dbc.dbcmovies.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

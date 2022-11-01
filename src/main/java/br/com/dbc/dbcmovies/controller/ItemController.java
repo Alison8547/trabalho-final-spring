@@ -1,8 +1,8 @@
 package br.com.dbc.dbcmovies.controller;
 
-import br.com.dbc.dbcmovies.Dto.FilmeCreateDto;
-import br.com.dbc.dbcmovies.Dto.ItemEntretenimentoDto;
-import br.com.dbc.dbcmovies.Dto.SerieCreateDto;
+import br.com.dbc.dbcmovies.dto.FilmeCreateDto;
+import br.com.dbc.dbcmovies.dto.ItemEntretenimentoDto;
+import br.com.dbc.dbcmovies.dto.SerieCreateDto;
 import br.com.dbc.dbcmovies.entity.Filtro;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.ItemService;

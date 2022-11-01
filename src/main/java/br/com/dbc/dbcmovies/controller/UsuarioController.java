@@ -1,7 +1,7 @@
 package br.com.dbc.dbcmovies.controller;
 
-import br.com.dbc.dbcmovies.Dto.UsuarioCreateDto;
-import br.com.dbc.dbcmovies.Dto.UsuarioDto;
+import br.com.dbc.dbcmovies.dto.UsuarioCreateDto;
+import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;

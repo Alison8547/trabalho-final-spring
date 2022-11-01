@@ -1,4 +1,4 @@
-package br.com.dbc.dbcmovies.Dto;
+package br.com.dbc.dbcmovies.dto;
 
 import lombok.Data;
 

@@ -1,8 +1,8 @@
 package br.com.dbc.dbcmovies.service;
 
-import br.com.dbc.dbcmovies.Dto.IndicacaoCreateDto;
-import br.com.dbc.dbcmovies.Dto.IndicacaoDto;
-import br.com.dbc.dbcmovies.Dto.UsuarioNomeDto;
+import br.com.dbc.dbcmovies.dto.IndicacaoCreateDto;
+import br.com.dbc.dbcmovies.dto.IndicacaoDto;
+import br.com.dbc.dbcmovies.dto.UsuarioNomeDto;
 import br.com.dbc.dbcmovies.entity.Indicacao;
 import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;

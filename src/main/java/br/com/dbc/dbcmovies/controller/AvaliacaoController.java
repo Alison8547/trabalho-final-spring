@@ -1,8 +1,8 @@
 package br.com.dbc.dbcmovies.controller;
 
 
-import br.com.dbc.dbcmovies.Dto.AvaliacaoCreateDto;
-import br.com.dbc.dbcmovies.Dto.AvaliacaoDto;
+import br.com.dbc.dbcmovies.dto.AvaliacaoCreateDto;
+import br.com.dbc.dbcmovies.dto.AvaliacaoDto;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.AvaliacaoService;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,4 +1,4 @@
-package br.com.dbc.dbcmovies.Dto;
+package br.com.dbc.dbcmovies.dto;
 
 import br.com.dbc.dbcmovies.entity.TipoUsuario;
 import io.swagger.v3.oas.annotations.media.Schema;

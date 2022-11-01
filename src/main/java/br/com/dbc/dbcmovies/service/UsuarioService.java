@@ -1,7 +1,7 @@
 package br.com.dbc.dbcmovies.service;
 
-import br.com.dbc.dbcmovies.Dto.UsuarioCreateDto;
-import br.com.dbc.dbcmovies.Dto.UsuarioDto;
+import br.com.dbc.dbcmovies.dto.UsuarioCreateDto;
+import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.TipoTemplate;
 import br.com.dbc.dbcmovies.entity.Usuario;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
