@@ -45,6 +45,10 @@ public  class UsuarioEntity {
     @ManyToMany(fetch = FetchType.LAZY,mappedBy = "usuarios")
     private Set<ItemEntretenimentoEntity> itemEntretenimentos;
 
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "usuario")
+    private Set<IndicacaoEntity> indicacao;
+
 
 
 //    public UsuarioEntity() {

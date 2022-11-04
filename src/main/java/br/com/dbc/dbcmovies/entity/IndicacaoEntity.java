@@ -1,21 +1,28 @@
 package br.com.dbc.dbcmovies.entity;
 
+import br.com.dbc.dbcmovies.entity.pk.IndicacaoPK;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
+import javax.persistence.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity(name = "INDICACAO")
 public class IndicacaoEntity {
 
-    @Column(name = "idUsuario")
-    private Integer idUsuario;
+    @Id
+    @EmbeddedId
+    private IndicacaoPK indicacaoPK;
 
-    @Column(name = "nomeItem")
-    private String nomeItem;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("idUsuario")
+    @JoinColumn(name = "id_usuario")
+    private UsuarioEntity usuario;
 }
