@@ -1,7 +1,7 @@
 package br.com.dbc.dbcmovies.repository;
 
 import br.com.dbc.dbcmovies.entity.Filtro;
-import br.com.dbc.dbcmovies.entity.ItemEntretenimento;
+import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
 import br.com.dbc.dbcmovies.repository.interfaces.Repositorio;
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class ItemRepository implements Repositorio<Integer, ItemEntretenimento> {
+public class ItemRepository implements Repositorio<Integer, ItemEntretenimentoEntity> {
 
     private ConexaoBancoDeDados conexao;
 
@@ -36,7 +36,7 @@ public class ItemRepository implements Repositorio<Integer, ItemEntretenimento> 
     }
 
     @Override
-    public ItemEntretenimento adicionar(ItemEntretenimento item) throws BancoDeDadosException {
+    public ItemEntretenimentoEntity adicionar(ItemEntretenimentoEntity item) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = conexao.getConnection();
@@ -80,8 +80,8 @@ public class ItemRepository implements Repositorio<Integer, ItemEntretenimento> 
     }
 
     @Override
-    public List<ItemEntretenimento> listar() throws BancoDeDadosException {
-        List<ItemEntretenimento> itemEntretenimentos = new ArrayList<>();
+    public List<ItemEntretenimentoEntity> listar() throws BancoDeDadosException {
+        List<ItemEntretenimentoEntity> itemEntretenimentoEntities = new ArrayList<>();
         Connection con = null;
 
         try{
@@ -92,7 +92,7 @@ public class ItemRepository implements Repositorio<Integer, ItemEntretenimento> 
             ResultSet res = stmt.executeQuery(sql);
 
             while (res.next()){
-                ItemEntretenimento item = new ItemEntretenimento();
+                ItemEntretenimentoEntity item = new ItemEntretenimentoEntity();
                 item.setId(res.getInt("id_item_entretenimento"));
                 item.setNome(res.getString("nome"));
                 item.setTipo(res.getString("tipo"));
@@ -105,7 +105,7 @@ public class ItemRepository implements Repositorio<Integer, ItemEntretenimento> 
                 item.setTemporadas(res.getInt("temporadas"));
                 item.setEpisodios(res.getInt("episodios"));
 
-                itemEntretenimentos.add(item);
+                itemEntretenimentoEntities.add(item);
             }
 
         }catch (SQLException ex){
@@ -119,11 +119,11 @@ public class ItemRepository implements Repositorio<Integer, ItemEntretenimento> 
                 e.printStackTrace();
             }
         }
-        return itemEntretenimentos;
+        return itemEntretenimentoEntities;
     }
 
     @Override
-    public boolean editar(Integer id, ItemEntretenimento item) throws BancoDeDadosException {
+    public boolean editar(Integer id, ItemEntretenimentoEntity item) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = conexao.getConnection();
@@ -195,8 +195,8 @@ public class ItemRepository implements Repositorio<Integer, ItemEntretenimento> 
         }
     }
 
-    public List<ItemEntretenimento> filtrarItens(Filtro filtro) throws BancoDeDadosException {
-        List<ItemEntretenimento> itemEntretenimentos = new ArrayList<>();
+    public List<ItemEntretenimentoEntity> filtrarItens(Filtro filtro) throws BancoDeDadosException {
+        List<ItemEntretenimentoEntity> itemEntretenimentoEntities = new ArrayList<>();
         Connection con = null;
 
         try{
@@ -216,7 +216,7 @@ public class ItemRepository implements Repositorio<Integer, ItemEntretenimento> 
             ResultSet res = stmt.executeQuery();
 
             while (res.next()){
-                ItemEntretenimento item = new ItemEntretenimento();
+                ItemEntretenimentoEntity item = new ItemEntretenimentoEntity();
                 item.setId(res.getInt("id_item_entretenimento"));
                 item.setNome(res.getString("nome"));
                 item.setTipo(res.getString("tipo"));
@@ -229,7 +229,7 @@ public class ItemRepository implements Repositorio<Integer, ItemEntretenimento> 
                 item.setTemporadas(res.getInt("temporadas"));
                 item.setEpisodios(res.getInt("episodios"));
 
-                itemEntretenimentos.add(item);
+                itemEntretenimentoEntities.add(item);
             }
 
         }catch (SQLException ex){
@@ -243,7 +243,7 @@ public class ItemRepository implements Repositorio<Integer, ItemEntretenimento> 
                 e.printStackTrace();
             }
         }
-        return itemEntretenimentos;
+        return itemEntretenimentoEntities;
     }
 
     @Override
@@ -309,9 +309,9 @@ public class ItemRepository implements Repositorio<Integer, ItemEntretenimento> 
         return media;
     }
 
-    public ItemEntretenimento pegar(Integer id) throws BancoDeDadosException {
+    public ItemEntretenimentoEntity pegar(Integer id) throws BancoDeDadosException {
         Connection conn = null;
-        ItemEntretenimento item = new ItemEntretenimento();
+        ItemEntretenimentoEntity item = new ItemEntretenimentoEntity();
 
         try {
             conn = conexao.getConnection();

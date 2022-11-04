@@ -4,7 +4,7 @@ import br.com.dbc.dbcmovies.dto.AvaliacaoCreateDto;
 import br.com.dbc.dbcmovies.dto.AvaliacaoDto;
 import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.Avaliacao;
-import br.com.dbc.dbcmovies.entity.ItemEntretenimento;
+import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
 import br.com.dbc.dbcmovies.entity.TipoTemplate;
 import br.com.dbc.dbcmovies.entity.Usuario;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
@@ -28,7 +28,7 @@ public class AvaliacaoService {
         try{
 
             Usuario usuario = usuarioService.findById(idUsuario);
-            ItemEntretenimento item = itemService.findById(idItem);
+            ItemEntretenimentoEntity item = itemService.findById(idItem);
 
             UsuarioDto usuarioDto = objectMapper.convertValue(usuario, UsuarioDto.class);
 
@@ -36,7 +36,7 @@ public class AvaliacaoService {
 
             avaliacao = avaliacaoRepository.adicionar(avaliacao, idUsuario, idItem);
             avaliacao.setUsuario(usuario);
-            avaliacao.setItemEntretenimento(item);
+            avaliacao.setItemEntretenimentoEntity(item);
 
             AvaliacaoDto dto = objectMapper.convertValue(avaliacao, AvaliacaoDto.class);
 

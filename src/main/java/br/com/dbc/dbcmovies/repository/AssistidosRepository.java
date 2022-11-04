@@ -1,6 +1,6 @@
 package br.com.dbc.dbcmovies.repository;
 
-import br.com.dbc.dbcmovies.entity.ItemEntretenimento;
+import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
 import br.com.dbc.dbcmovies.repository.interfaces.Interacao;
 import org.springframework.stereotype.Repository;
 
@@ -19,9 +19,9 @@ public class AssistidosRepository implements Interacao {
         this.conexao = conexao;
     }
 
-    public List<ItemEntretenimento> listarAssistidos (Integer idUsuario) throws BancoDeDadosException {
+    public List<ItemEntretenimentoEntity> listarAssistidos (Integer idUsuario) throws BancoDeDadosException {
 
-        List<ItemEntretenimento> itemEntretenimentos = new ArrayList<>();
+        List<ItemEntretenimentoEntity> itemEntretenimentoEntities = new ArrayList<>();
         Connection con = null;
 
         try{
@@ -40,7 +40,7 @@ public class AssistidosRepository implements Interacao {
             ResultSet res = stmt.executeQuery();
 
             while (res.next()){
-                ItemEntretenimento item = new ItemEntretenimento();
+                ItemEntretenimentoEntity item = new ItemEntretenimentoEntity();
                 item.setId(res.getInt("id_item_entretenimento"));
                 item.setNome(res.getString("nome"));
                 item.setTipo(res.getString("tipo"));
@@ -53,7 +53,7 @@ public class AssistidosRepository implements Interacao {
                 item.setTemporadas(res.getInt("temporadas"));
                 item.setEpisodios(res.getInt("episodios"));
 
-                itemEntretenimentos.add(item);
+                itemEntretenimentoEntities.add(item);
             }
 
         }catch (
@@ -68,7 +68,7 @@ public class AssistidosRepository implements Interacao {
                 e.printStackTrace();
             }
         }
-        return itemEntretenimentos;
+        return itemEntretenimentoEntities;
     }
 
 
