@@ -1,6 +1,6 @@
 package br.com.dbc.dbcmovies.entity;
 
-public class Administrador extends Usuario{
+public class Administrador extends UsuarioEntity {
 
     public Administrador() {
         super();

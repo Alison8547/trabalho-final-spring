@@ -3,7 +3,7 @@ package br.com.dbc.dbcmovies.service;
 import br.com.dbc.dbcmovies.dto.UsuarioCreateDto;
 import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.TipoTemplate;
-import br.com.dbc.dbcmovies.entity.Usuario;
+import br.com.dbc.dbcmovies.entity.UsuarioEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,14 +27,14 @@ public class UsuarioService {
     }
 
     public UsuarioDto pegar(Integer id) throws RegraDeNegocioException {
-        Usuario usuario =  findById(id);
-        return objectMapper.convertValue(usuario, UsuarioDto.class);
+        UsuarioEntity usuarioEntity =  findById(id);
+        return objectMapper.convertValue(usuarioEntity, UsuarioDto.class);
     }
 
     public UsuarioDto adicionar(UsuarioCreateDto usuario) throws RegraDeNegocioException {
-        Usuario usuarioAdicionado = objectMapper.convertValue(usuario, Usuario.class);
-        usuarioAdicionado = usuarioRepository.adicionar(usuarioAdicionado);
-        UsuarioDto usuarioDto = objectMapper.convertValue(usuarioAdicionado, UsuarioDto.class);
+        UsuarioEntity usuarioEntityAdicionado = objectMapper.convertValue(usuario, UsuarioEntity.class);
+        usuarioEntityAdicionado = usuarioRepository.adicionar(usuarioEntityAdicionado);
+        UsuarioDto usuarioDto = objectMapper.convertValue(usuarioEntityAdicionado, UsuarioDto.class);
 
         emailService.sendEmailUsuario(usuarioDto, TipoTemplate.CREATE);
 
@@ -43,8 +43,8 @@ public class UsuarioService {
 
     public UsuarioDto editar(Integer id, UsuarioCreateDto usuarioCreateDto) throws RegraDeNegocioException {
         findById(id);
-        Usuario usuarioConvertido = objectMapper.convertValue(usuarioCreateDto, Usuario.class);
-        if (usuarioRepository.editar(id, usuarioConvertido)) {
+        UsuarioEntity usuarioEntityConvertido = objectMapper.convertValue(usuarioCreateDto, UsuarioEntity.class);
+        if (usuarioRepository.editar(id, usuarioEntityConvertido)) {
             UsuarioDto usuarioDto = objectMapper.convertValue(usuarioRepository.pegar(id), UsuarioDto.class);
             emailService.sendEmailUsuario(usuarioDto,TipoTemplate.UPDATE);
             return usuarioDto;
@@ -55,15 +55,15 @@ public class UsuarioService {
     }
 
     public void remover(Integer id) throws RegraDeNegocioException {
-        Usuario usuario = findById(id);
-        UsuarioDto usuarioDto = objectMapper.convertValue(usuario, UsuarioDto.class);
+        UsuarioEntity usuarioEntity = findById(id);
+        UsuarioDto usuarioDto = objectMapper.convertValue(usuarioEntity, UsuarioDto.class);
         usuarioRepository.remover(id);
         emailService.sendEmailUsuario(usuarioDto,TipoTemplate.DELETE);
 
     }
 
-    public Usuario pegarLogin(Usuario usuarioLogin) throws RegraDeNegocioException {
-        return usuarioRepository.pegarLogin(usuarioLogin);
+    public UsuarioEntity pegarLogin(UsuarioEntity usuarioEntityLogin) throws RegraDeNegocioException {
+        return usuarioRepository.pegarLogin(usuarioEntityLogin);
     }
 
     public UsuarioDto tornarUsuarioAdmin(Integer id) throws RegraDeNegocioException {
@@ -75,7 +75,7 @@ public class UsuarioService {
         }
     }
 
-    public Usuario findById(Integer id) throws RegraDeNegocioException {
+    public UsuarioEntity findById(Integer id) throws RegraDeNegocioException {
         try {
             return usuarioRepository.pegar(id);
         } catch (RegraDeNegocioException e) {

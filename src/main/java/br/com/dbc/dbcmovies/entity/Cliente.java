@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cliente extends Usuario {
+    private List<ItemEntretenimentoEntity> assistidos;
+public class Cliente extends UsuarioEntity {
     private List<ItemEntretenimento> assistidos;
     private List<Avaliacao> avaliacoes;
 
@@ -21,11 +23,11 @@ public class Cliente extends Usuario {
 
 
     //GETTERS AND SETTERS
-    public List<ItemEntretenimento> getAssistidos() {
+    public List<ItemEntretenimentoEntity> getAssistidos() {
         return assistidos;
     }
 
-    public void setAssistidos(List<ItemEntretenimento> assistidos) {
+    public void setAssistidos(List<ItemEntretenimentoEntity> assistidos) {
         this.assistidos = assistidos;
     }
 

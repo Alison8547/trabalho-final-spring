@@ -1,7 +1,7 @@
 package br.com.dbc.dbcmovies.service;
 
 import br.com.dbc.dbcmovies.dto.ItemEntretenimentoDto;
-import br.com.dbc.dbcmovies.entity.ItemEntretenimento;
+import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.AssistidosRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +22,7 @@ public class AssistidosService {
     public List<ItemEntretenimentoDto> listarAssistidos(Integer idUsuario) throws RegraDeNegocioException {
         usuarioService.findById(idUsuario);
 
-        List<ItemEntretenimento> resultList = null;
+        List<ItemEntretenimentoEntity> resultList = null;
         try {
             resultList = assistidosRepository.listarAssistidos(idUsuario);
         } catch (BancoDeDadosException e) {

@@ -10,9 +10,9 @@ import lombok.Setter;
 public class Avaliacao{
 
 
-    private Usuario usuario;
+    private UsuarioEntity usuarioEntity;
 
-    private ItemEntretenimento itemEntretenimento;
+    private ItemEntretenimentoEntity itemEntretenimentoEntity;
     private Double nota;
     private String comentario;
 
@@ -27,8 +27,8 @@ public class Avaliacao{
     }
 
 
-    public void setItemEntretenimento(ItemEntretenimento itemEntretenimento) {
-        this.itemEntretenimento = itemEntretenimento;
+    public void setItemEntretenimentoEntity(ItemEntretenimentoEntity itemEntretenimentoEntity) {
+        this.itemEntretenimentoEntity = itemEntretenimentoEntity;
     }
 
 
