@@ -2,7 +2,6 @@ package br.com.dbc.dbcmovies.repository;
 
 import br.com.dbc.dbcmovies.entity.FiltroEntity;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
-import br.com.dbc.dbcmovies.repository.interfaces.Repositorio;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
