@@ -29,12 +29,12 @@ public class AvaliacaoEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("idUsuario")
     @JoinColumn(name = "id_usuario")
-    private UsuarioEntity idUsuario;
+    private UsuarioEntity usuario;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("idItem_Entretenimento")
+    @MapsId("idItemEntretenimento")
     @JoinColumn(name = "id_Item_Entretenimento")
-    private ItemEntretenimentoEntity idItemEntretenimento;
+    private ItemEntretenimentoEntity itemEntretenimento;
 
 }

@@ -17,9 +17,9 @@ import java.io.Serializable;
 @Embeddable
 public class AvaliacaoPK implements Serializable {
 
-    @Column(name = "idUsuario")
+    @Column(name = "id_usuario")
     private Integer idUsuario;
 
-    @Column(name = "idItem_Entretenimento")
+    @Column(name = "id_item_entretenimento")
     private Integer idItemEntretenimento;
 }
