@@ -2,7 +2,7 @@ package br.com.dbc.dbcmovies.repository;
 
 
 import br.com.dbc.dbcmovies.entity.TipoUsuario;
-import br.com.dbc.dbcmovies.entity.Usuario;
+import br.com.dbc.dbcmovies.entity.UsuarioEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.interfaces.Repositorio;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 @Slf4j
 @Repository
-public class UsuarioRepository implements Repositorio<Integer, Usuario> {
+public class UsuarioRepository implements Repositorio<Integer, UsuarioEntity> {
 
     private ConexaoBancoDeDados conexao;
 
@@ -36,13 +36,13 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     }
 
     @Override
-    public Usuario adicionar(Usuario usuario) throws RegraDeNegocioException {
+    public UsuarioEntity adicionar(UsuarioEntity usuarioEntity) throws RegraDeNegocioException {
         Connection conn = null;
 
         try {
             conn = conexao.getConnection();
             Integer proximoId = this.getProximoId(conn);
-            usuario.setId(proximoId);
+            usuarioEntity.setId(proximoId);
 
             String sql = "INSERT INTO USUARIO\n" +
                     "(id_usuario, nome, idade, email, senha, tipo_usuario)\n" +
@@ -50,16 +50,16 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
 
             PreparedStatement stmt = conn.prepareStatement(sql);
 
-            stmt.setInt(1, usuario.getId());
-            stmt.setString(2, usuario.getNome());
-            stmt.setInt(3, usuario.getIdade());
-            stmt.setString(4, usuario.getEmail());
-            stmt.setString(5, usuario.getSenha());
-            stmt.setString(6, usuario.getTipoUsuario().getDescricao());
+            stmt.setInt(1, usuarioEntity.getId());
+            stmt.setString(2, usuarioEntity.getNome());
+            stmt.setInt(3, usuarioEntity.getIdade());
+            stmt.setString(4, usuarioEntity.getEmail());
+            stmt.setString(5, usuarioEntity.getSenha());
+            stmt.setString(6, usuarioEntity.getTipoUsuario().getDescricao());
 
             int res = stmt.executeUpdate();
 
-            return usuario;
+            return usuarioEntity;
 
         } catch (SQLException e) {
             throw new RegraDeNegocioException(e.getMessage());
@@ -101,7 +101,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     }
 
     @Override
-    public boolean editar(Integer id, Usuario usuario) throws RegraDeNegocioException {
+    public boolean editar(Integer id, UsuarioEntity usuarioEntity) throws RegraDeNegocioException {
         Connection conn = null;
         try {
             conn = conexao.getConnection();
@@ -116,10 +116,10 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
 
             PreparedStatement stmt = conn.prepareStatement(sql.toString());
 
-            stmt.setString(1, usuario.getNome());
-            stmt.setInt(2, usuario.getIdade());
-            stmt.setString(3, usuario.getEmail());
-            stmt.setString(4, usuario.getSenha());
+            stmt.setString(1, usuarioEntity.getNome());
+            stmt.setInt(2, usuarioEntity.getIdade());
+            stmt.setString(3, usuarioEntity.getEmail());
+            stmt.setString(4, usuarioEntity.getSenha());
 
             stmt.setInt(5, id);
 
@@ -173,8 +173,8 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     }
 
     @Override
-    public List<Usuario> listar() throws RegraDeNegocioException {
-        List<Usuario> usuarioList = new ArrayList<>();
+    public List<UsuarioEntity> listar() throws RegraDeNegocioException {
+        List<UsuarioEntity> usuarioEntityList = new ArrayList<>();
 
         Connection conn = null;
 
@@ -187,19 +187,19 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
             ResultSet res = stmt.executeQuery(sql);
 
             while (res.next()) {
-                Usuario usuario = new Usuario();
-                usuario.setId(res.getInt("id_usuario"));
-                usuario.setNome(res.getString("nome"));
-                usuario.setIdade(res.getInt("idade"));
-                usuario.setEmail(res.getString("email"));
-                usuario.setSenha(res.getString("senha"));
+                UsuarioEntity usuarioEntity = new UsuarioEntity();
+                usuarioEntity.setId(res.getInt("id_usuario"));
+                usuarioEntity.setNome(res.getString("nome"));
+                usuarioEntity.setIdade(res.getInt("idade"));
+                usuarioEntity.setEmail(res.getString("email"));
+                usuarioEntity.setSenha(res.getString("senha"));
                 if (res.getString("tipo_usuario").equalsIgnoreCase("administrador")) {
-                    usuario.setTipoUsuario(TipoUsuario.ADMINISTRADOR);
+                    usuarioEntity.setTipoUsuario(TipoUsuario.ADMINISTRADOR);
 
                 }else {
-                    usuario.setTipoUsuario(TipoUsuario.CLIENTE);
+                    usuarioEntity.setTipoUsuario(TipoUsuario.CLIENTE);
                 }
-               usuarioList.add(usuario);
+               usuarioEntityList.add(usuarioEntity);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -213,13 +213,13 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
             }
         }
 
-        return usuarioList;
+        return usuarioEntityList;
     }
 
 
-    public Usuario pegar(Integer id) throws RegraDeNegocioException {
+    public UsuarioEntity pegar(Integer id) throws RegraDeNegocioException {
         Connection conn = null;
-        Usuario usuario = new Usuario();
+        UsuarioEntity usuarioEntity = new UsuarioEntity();
 
         try {
             conn = conexao.getConnection();
@@ -231,16 +231,16 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
             ResultSet res = stmt.executeQuery();
 
             while (res.next()){
-                usuario.setId(res.getInt("id_usuario"));
-                usuario.setNome(res.getString("nome"));
-                usuario.setIdade(res.getInt("idade"));
-                usuario.setEmail(res.getString("email"));
-                usuario.setSenha(res.getString("senha"));
+                usuarioEntity.setId(res.getInt("id_usuario"));
+                usuarioEntity.setNome(res.getString("nome"));
+                usuarioEntity.setIdade(res.getInt("idade"));
+                usuarioEntity.setEmail(res.getString("email"));
+                usuarioEntity.setSenha(res.getString("senha"));
                 if (res.getString("tipo_usuario").equalsIgnoreCase("administrador")) {
-                    usuario.setTipoUsuario(TipoUsuario.ADMINISTRADOR);
+                    usuarioEntity.setTipoUsuario(TipoUsuario.ADMINISTRADOR);
 
                 }else {
-                    usuario.setTipoUsuario(TipoUsuario.CLIENTE);
+                    usuarioEntity.setTipoUsuario(TipoUsuario.CLIENTE);
                 }
             }
 
@@ -255,34 +255,34 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
                 e.printStackTrace();
             }
         }
-        return usuario;
+        return usuarioEntity;
     }
 
-    public Usuario pegarLogin(Usuario usuarioLogin) throws RegraDeNegocioException {
+    public UsuarioEntity pegarLogin(UsuarioEntity usuarioEntityLogin) throws RegraDeNegocioException {
         Connection conn = null;
-        Usuario usuario = new Usuario();
+        UsuarioEntity usuarioEntity = new UsuarioEntity();
 
         try {
             conn = conexao.getConnection();
             String sql = "SELECT * FROM USUARIO WHERE email = ? AND senha = ?";
 
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, usuarioLogin.getEmail());
-            stmt.setString(2, usuarioLogin.getSenha());
+            stmt.setString(1, usuarioEntityLogin.getEmail());
+            stmt.setString(2, usuarioEntityLogin.getSenha());
 
             ResultSet res = stmt.executeQuery();
 
             while (res.next()){
-                usuario.setId(res.getInt("id_usuario"));
-                usuario.setNome(res.getString("nome"));
-                usuario.setIdade(res.getInt("idade"));
-                usuario.setEmail(res.getString("email"));
-                usuario.setSenha(res.getString("senha"));
+                usuarioEntity.setId(res.getInt("id_usuario"));
+                usuarioEntity.setNome(res.getString("nome"));
+                usuarioEntity.setIdade(res.getInt("idade"));
+                usuarioEntity.setEmail(res.getString("email"));
+                usuarioEntity.setSenha(res.getString("senha"));
                 if (res.getString("tipo_usuario").equalsIgnoreCase("administrador")) {
-                    usuario.setTipoUsuario(TipoUsuario.ADMINISTRADOR);
+                    usuarioEntity.setTipoUsuario(TipoUsuario.ADMINISTRADOR);
 
                 }else {
-                    usuario.setTipoUsuario(TipoUsuario.CLIENTE);
+                    usuarioEntity.setTipoUsuario(TipoUsuario.CLIENTE);
                 }
             }
 
@@ -297,6 +297,6 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
                 e.printStackTrace();
             }
         }
-        return usuario;
+        return usuarioEntity;
     }
 }

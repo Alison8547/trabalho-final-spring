@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Cliente extends Usuario {
     private List<ItemEntretenimentoEntity> assistidos;
+public class Cliente extends UsuarioEntity {
+    private List<ItemEntretenimento> assistidos;
     private List<Avaliacao> avaliacoes;
 
 
