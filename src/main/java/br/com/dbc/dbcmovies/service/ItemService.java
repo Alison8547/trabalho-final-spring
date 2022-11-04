@@ -25,7 +25,7 @@ public class ItemService {
     public ItemEntretenimentoDto createFilme(ItemEntretenimentoCreateDto itemEntretenimentoDto, Integer idAdmin) throws RegraDeNegocioException {
         UsuarioDto usuarioDto = objectMapper.convertValue(usuarioService.findById(idAdmin), UsuarioDto.class) ;
       if (usuarioDto.getTipoUsuario().equals(TipoUsuario.CLIENTE)){
-          throw new RegraDeNegocioException("Usuario precisa ser administrador para cadastrar um filme.");
+          throw new RegraDeNegocioException("UsuarioEntity precisa ser administrador para cadastrar um filme.");
       }
         try{
             ItemEntretenimento itemEntity = objectMapper.convertValue(itemEntretenimentoDto, ItemEntretenimento.class);
@@ -140,7 +140,7 @@ public class ItemService {
     public void delete(Integer id, Integer idAdmin) throws RegraDeNegocioException{
         UsuarioDto usuarioDto = objectMapper.convertValue(usuarioService.findById(idAdmin), UsuarioDto.class) ;
         if (usuarioDto.getTipoUsuario().equals(TipoUsuario.CLIENTE)){
-            throw new RegraDeNegocioException("Usuario precisa ser administrador para cadastrar um filme.");
+            throw new RegraDeNegocioException("UsuarioEntity precisa ser administrador para cadastrar um filme.");
         }
         ItemEntretenimento itemEntretenimento = findById(id);
         ItemEntretenimentoDto itemDto = objectMapper.convertValue(itemEntretenimento, ItemEntretenimentoDto.class);

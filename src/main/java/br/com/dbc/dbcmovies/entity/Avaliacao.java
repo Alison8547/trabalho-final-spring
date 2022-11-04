@@ -10,7 +10,7 @@ import lombok.Setter;
 public class Avaliacao{
 
 
-    private Usuario usuario;
+    private UsuarioEntity usuarioEntity;
 
     private ItemEntretenimento itemEntretenimento;
     private Double nota;

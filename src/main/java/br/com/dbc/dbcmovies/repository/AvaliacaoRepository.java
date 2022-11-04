@@ -71,7 +71,7 @@ public class AvaliacaoRepository {
 
             while (res.next()){
                 Avaliacao aval = new Avaliacao();
-                aval.setUsuario(usuarioService.findById(res.getInt("id_usuario")));
+                aval.setUsuarioEntity(usuarioService.findById(res.getInt("id_usuario")));
                 aval.setItemEntretenimento(itemService.findById(res.getInt("id_item_entretenimento")));
                 aval.setNota(res.getDouble("nota"));
                 aval.setComentario(res.getString("comentario"));
@@ -117,7 +117,7 @@ public class AvaliacaoRepository {
 
             while (res.next()){
                 Avaliacao aval = new Avaliacao();
-                aval.setUsuario(usuarioService.findById(res.getInt("id_usuario")));
+                aval.setUsuarioEntity(usuarioService.findById(res.getInt("id_usuario")));
                 aval.setItemEntretenimento(itemService.findById(res.getInt("id_item_entretenimento")));
                 aval.setNota(res.getDouble("nota"));
                 aval.setComentario(res.getString("comentario"));
@@ -187,7 +187,7 @@ public class AvaliacaoRepository {
             res.next();
 
             Avaliacao aval = new Avaliacao();
-            aval.setUsuario(usuarioService.findById(res.getInt("id_usuario")));
+            aval.setUsuarioEntity(usuarioService.findById(res.getInt("id_usuario")));
             aval.setItemEntretenimento(itemService.findById(res.getInt("id_item_entretenimento")));
             aval.setNota(res.getDouble("nota"));
             aval.setComentario(res.getString("comentario"));

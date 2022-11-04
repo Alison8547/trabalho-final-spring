@@ -3,7 +3,7 @@ package br.com.dbc.dbcmovies.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cliente extends Usuario {
+public class Cliente extends UsuarioEntity {
     private List<ItemEntretenimento> assistidos;
     private List<Avaliacao> avaliacoes;
 

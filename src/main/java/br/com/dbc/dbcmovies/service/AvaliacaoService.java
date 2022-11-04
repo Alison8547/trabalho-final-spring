@@ -6,7 +6,7 @@ import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.Avaliacao;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimento;
 import br.com.dbc.dbcmovies.entity.TipoTemplate;
-import br.com.dbc.dbcmovies.entity.Usuario;
+import br.com.dbc.dbcmovies.entity.UsuarioEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.AvaliacaoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,15 +27,15 @@ public class AvaliacaoService {
     public AvaliacaoDto create(AvaliacaoCreateDto avaliacaoDto, Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
         try{
 
-            Usuario usuario = usuarioService.findById(idUsuario);
+            UsuarioEntity usuarioEntity = usuarioService.findById(idUsuario);
             ItemEntretenimento item = itemService.findById(idItem);
 
-            UsuarioDto usuarioDto = objectMapper.convertValue(usuario, UsuarioDto.class);
+            UsuarioDto usuarioDto = objectMapper.convertValue(usuarioEntity, UsuarioDto.class);
 
             Avaliacao avaliacao = objectMapper.convertValue(avaliacaoDto, Avaliacao.class);
 
             avaliacao = avaliacaoRepository.adicionar(avaliacao, idUsuario, idItem);
-            avaliacao.setUsuario(usuario);
+            avaliacao.setUsuarioEntity(usuarioEntity);
             avaliacao.setItemEntretenimento(item);
 
             AvaliacaoDto dto = objectMapper.convertValue(avaliacao, AvaliacaoDto.class);
