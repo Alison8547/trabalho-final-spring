@@ -3,7 +3,6 @@ package br.com.dbc.dbcmovies.service;
 import br.com.dbc.dbcmovies.dto.AvaliacaoCreateDto;
 import br.com.dbc.dbcmovies.dto.AvaliacaoDto;
 import br.com.dbc.dbcmovies.dto.UsuarioDto;
-import br.com.dbc.dbcmovies.entity.Avaliacao;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
 import br.com.dbc.dbcmovies.entity.TipoTemplate;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;

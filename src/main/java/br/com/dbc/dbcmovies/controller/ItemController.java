@@ -3,7 +3,7 @@ package br.com.dbc.dbcmovies.controller;
 import br.com.dbc.dbcmovies.dto.FilmeCreateDto;
 import br.com.dbc.dbcmovies.dto.ItemEntretenimentoDto;
 import br.com.dbc.dbcmovies.dto.SerieCreateDto;
-import br.com.dbc.dbcmovies.entity.Filtro;
+import br.com.dbc.dbcmovies.entity.FiltroEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.ItemService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -80,7 +80,7 @@ public class ItemController {
                                                                    @RequestParam("genero") String genero,
                                                                    @RequestParam("class") Integer classificacao) throws RegraDeNegocioException {
 
-        return ResponseEntity.ok(itemService.filter(new Filtro(tipo, genero, classificacao)));
+        return ResponseEntity.ok(itemService.filter(new FiltroEntity(tipo, genero, classificacao)));
     }
 
 

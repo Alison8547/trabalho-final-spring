@@ -3,7 +3,6 @@ package br.com.dbc.dbcmovies.service;
 import br.com.dbc.dbcmovies.dto.IndicacaoCreateDto;
 import br.com.dbc.dbcmovies.dto.IndicacaoDto;
 import br.com.dbc.dbcmovies.dto.UsuarioNomeDto;
-import br.com.dbc.dbcmovies.entity.Indicacao;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.IndicacaoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;

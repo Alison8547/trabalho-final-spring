@@ -7,13 +7,13 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Filtro  {
+public class FiltroEntity {
     public String tipo;
     private String genero;
     private Integer classificacao;
 
     //Construtores
-    public Filtro() {
+    public FiltroEntity() {
     }
 
 }

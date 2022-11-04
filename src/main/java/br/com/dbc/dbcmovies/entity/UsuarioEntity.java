@@ -37,13 +37,15 @@ public  class UsuarioEntity {
     @Column(name = "tipo_usuario")
     protected TipoUsuario tipoUsuario;
 
-//    @JsonIgnore
-//    @OneToMany()
-//    private Set<Avaliacao> avaliacaos;
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "usuario")
+    private Set<AvaliacaoEntity> avaliacaos;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY,mappedBy = "usuarios")
     private Set<ItemEntretenimentoEntity> itemEntretenimentos;
+
+
 
 //    public UsuarioEntity() {
 //

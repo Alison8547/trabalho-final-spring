@@ -1,6 +1,6 @@
 package br.com.dbc.dbcmovies.repository;
 
-import br.com.dbc.dbcmovies.entity.Filtro;
+import br.com.dbc.dbcmovies.entity.FiltroEntity;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
 import br.com.dbc.dbcmovies.repository.interfaces.Repositorio;
 import org.springframework.stereotype.Repository;
@@ -195,7 +195,7 @@ public class ItemRepository implements Repositorio<Integer, ItemEntretenimentoEn
         }
     }
 
-    public List<ItemEntretenimentoEntity> filtrarItens(Filtro filtro) throws BancoDeDadosException {
+    public List<ItemEntretenimentoEntity> filtrarItens(FiltroEntity filtroEntity) throws BancoDeDadosException {
         List<ItemEntretenimentoEntity> itemEntretenimentoEntities = new ArrayList<>();
         Connection con = null;
 
@@ -209,9 +209,9 @@ public class ItemRepository implements Repositorio<Integer, ItemEntretenimentoEn
 
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
-            stmt.setString(1, filtro.getTipo().toUpperCase());
-            stmt.setString(2, filtro.getGenero().toUpperCase());
-            stmt.setInt(3, filtro.getClassificacao());
+            stmt.setString(1, filtroEntity.getTipo().toUpperCase());
+            stmt.setString(2, filtroEntity.getGenero().toUpperCase());
+            stmt.setInt(3, filtroEntity.getClassificacao());
 
             ResultSet res = stmt.executeQuery();
 

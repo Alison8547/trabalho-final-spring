@@ -1,7 +1,7 @@
 package br.com.dbc.dbcmovies.service;
 
 import br.com.dbc.dbcmovies.dto.*;
-import br.com.dbc.dbcmovies.entity.Filtro;
+import br.com.dbc.dbcmovies.entity.FiltroEntity;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
 import br.com.dbc.dbcmovies.entity.TipoTemplate;
 import br.com.dbc.dbcmovies.entity.TipoUsuario;
@@ -78,11 +78,11 @@ public class ItemService {
         }
     }
 
-    public List<ItemEntretenimentoDto> filter(Filtro filtro) throws RegraDeNegocioException {
+    public List<ItemEntretenimentoDto> filter(FiltroEntity filtroEntity) throws RegraDeNegocioException {
 
         try {
 
-            List<ItemEntretenimentoEntity> resultList = itemRepository.filtrarItens(filtro);
+            List<ItemEntretenimentoEntity> resultList = itemRepository.filtrarItens(filtroEntity);
             resultList.forEach(item -> {
                 double media = calcularAvaliacao(item.getId());
                 if(media == 0){
