@@ -1,7 +1,6 @@
 package br.com.dbc.dbcmovies.repository;
 
 import br.com.dbc.dbcmovies.entity.Indicacao;
-import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;

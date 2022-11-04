@@ -7,7 +7,6 @@ import br.com.dbc.dbcmovies.entity.Avaliacao;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimento;
 import br.com.dbc.dbcmovies.entity.TipoTemplate;
 import br.com.dbc.dbcmovies.entity.Usuario;
-import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.AvaliacaoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,7 +1,6 @@
 package br.com.dbc.dbcmovies.repository;
 
 import br.com.dbc.dbcmovies.entity.Avaliacao;
-import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.ItemService;
 import br.com.dbc.dbcmovies.service.UsuarioService;

@@ -2,7 +2,6 @@ package br.com.dbc.dbcmovies.repository;
 
 import br.com.dbc.dbcmovies.entity.Filtro;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimento;
-import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.repository.interfaces.Repositorio;
 import org.springframework.stereotype.Repository;
 
