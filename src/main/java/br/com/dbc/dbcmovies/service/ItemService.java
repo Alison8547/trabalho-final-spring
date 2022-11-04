@@ -5,7 +5,6 @@ import br.com.dbc.dbcmovies.entity.FiltroEntity;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
 import br.com.dbc.dbcmovies.entity.TipoTemplate;
 import br.com.dbc.dbcmovies.entity.TipoUsuario;
-import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.ItemRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -2,7 +2,6 @@ package br.com.dbc.dbcmovies.service;
 
 import br.com.dbc.dbcmovies.dto.ItemEntretenimentoDto;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
-import br.com.dbc.dbcmovies.exceptions.BancoDeDadosException;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.AssistidosRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
