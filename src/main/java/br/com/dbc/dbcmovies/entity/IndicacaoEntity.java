@@ -16,7 +16,6 @@ import javax.persistence.*;
 @Entity(name = "INDICACAO")
 public class IndicacaoEntity {
 
-    @Id
     @EmbeddedId
     private IndicacaoPK indicacaoPK;
 
@@ -26,3 +25,4 @@ public class IndicacaoEntity {
     @JoinColumn(name = "id_usuario")
     private UsuarioEntity usuario;
 }
+

@@ -1,6 +1,5 @@
 package br.com.dbc.dbcmovies.entity;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -36,29 +35,16 @@ public  class UsuarioEntity {
     @Column(name = "tipo_usuario")
     private TipoUsuario tipoUsuario;
 
-//    @JsonIgnore
-//    @OneToMany(fetch = FetchType.LAZY,mappedBy = "usuario")
-//    private Set<AvaliacaoEntity> avaliacaos;
-//
-//    @JsonIgnore
-//    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "usuarios")
-//    private Set<ItemEntretenimentoEntity> itemEntretenimentos;
-//
-//    @JsonIgnore
-//    @OneToMany(fetch = FetchType.LAZY,mappedBy = "usuario")
-//    private Set<IndicacaoEntity> indicacao;
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "usuario")
+    private Set<AvaliacaoEntity> avaliacaos;
 
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "usuarios")
+    private Set<ItemEntretenimentoEntity> itemEntretenimentos;
 
-
-//    public UsuarioEntity() {
-//
-//    }
-//
-//
-//    public void setUsuarioAdmin(UsuarioEntity cliente){
-//        if(this.tipoUsuario.equals(TipoUsuario.ADMINISTRADOR)){
-//            cliente.tipoUsuario = TipoUsuario.ADMINISTRADOR;
-//        }
-//    }
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "usuario")
+    private Set<IndicacaoEntity> indicacao;
 
 }

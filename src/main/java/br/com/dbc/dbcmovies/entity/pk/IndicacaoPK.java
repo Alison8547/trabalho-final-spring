@@ -21,5 +21,4 @@ public class IndicacaoPK implements Serializable {
 
     @Column(name = "nome_item")
     private String nomeItem;
-
 }
