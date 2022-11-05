@@ -3,7 +3,6 @@ package br.com.dbc.dbcmovies.service;
 import br.com.dbc.dbcmovies.dto.*;
 import br.com.dbc.dbcmovies.entity.AvaliacaoEntity;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
-import br.com.dbc.dbcmovies.entity.TipoTemplate;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;
 import br.com.dbc.dbcmovies.entity.pk.AvaliacaoPK;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
@@ -101,7 +100,12 @@ public class AvaliacaoService {
     }
 
     public void delete(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
-            avaliacaoRepository.remover(idUsuario, idItem);
+        usuarioService.findById(idUsuario);
+        itemService.findById(idItem);
+
+        AvaliacaoEntity avaliacao = this.findByIdAvaliacao(idUsuario, idItem);
+
+        avaliacaoRepository.delete(avaliacao);
     }
 
     public AvaliacaoItemDto getAvaliacao(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
@@ -114,7 +118,13 @@ public class AvaliacaoService {
         return avaliacaoItemDto;
     }
 
-    public AvaliacaoEntity find(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
-        return avaliacaoRepository.pegar(idUsuario, idItem);
+    public AvaliacaoEntity findByIdAvaliacao(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
+        AvaliacaoEntity avaliacao = avaliacaoRepository.findByIdAvaliacao(idUsuario, idItem);
+
+        if(avaliacao != null) {
+            return avaliacao;
+        }else {
+            throw new RegraDeNegocioException("Avaliação não existe!");
+        }
     }
 }

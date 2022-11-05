@@ -1,7 +1,9 @@
 package br.com.dbc.dbcmovies.controller;
 
+import br.com.dbc.dbcmovies.dto.UsuarioAssistidoPersonalizadoDto;
 import br.com.dbc.dbcmovies.dto.UsuarioCreateDto;
 import br.com.dbc.dbcmovies.dto.UsuarioDto;
+import br.com.dbc.dbcmovies.dto.UsuarioItemPersonalizadoDto;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -114,5 +116,15 @@ public class UsuarioController {
     public ResponseEntity<UsuarioDto> tornarUsuarioAdmin(@PathVariable(name = "idUsuario") Integer idUsuario) throws RegraDeNegocioException {
         usuarioService.tornarUsuarioAdmin(idUsuario);
         return new ResponseEntity<>(usuarioService.tornarUsuarioAdmin(idUsuario),HttpStatus.OK);
+    }
+
+    @GetMapping("/usuario-item-personalizado")
+    public List<UsuarioItemPersonalizadoDto> listaPersonalizadaUsuarioItem(@RequestParam(required = false, name = "idUsuario") Integer idUsuario){
+        return usuarioService.listaPersonalizadaUsuarioItem(idUsuario);
+    }
+
+    @GetMapping("/usuario-avaliacao-personalizado")
+    public List<UsuarioAssistidoPersonalizadoDto> listaPersonalizadaUsuarioAssistido(@RequestParam(required = false, name = "idUsuario") Integer idUsuario){
+        return usuarioService.listaPersonalizadaUsuarioAssistido(idUsuario);
     }
 }
