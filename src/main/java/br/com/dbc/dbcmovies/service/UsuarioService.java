@@ -2,7 +2,6 @@ package br.com.dbc.dbcmovies.service;
 
 import br.com.dbc.dbcmovies.dto.UsuarioCreateDto;
 import br.com.dbc.dbcmovies.dto.UsuarioDto;
-import br.com.dbc.dbcmovies.entity.TipoTemplate;
 import br.com.dbc.dbcmovies.entity.TipoUsuario;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
@@ -32,7 +31,7 @@ public class UsuarioService {
         return objectMapper.convertValue(usuarioEntity, UsuarioDto.class);
     }
 
-    public UsuarioDto adicionar(UsuarioCreateDto usuario) throws RegraDeNegocioException {
+    public UsuarioDto adicionar(UsuarioCreateDto usuario){
         UsuarioEntity usuarioEntityAdicionado = objectMapper.convertValue(usuario, UsuarioEntity.class);
         usuarioEntityAdicionado = usuarioRepository.save(usuarioEntityAdicionado);
         UsuarioDto usuarioDto = objectMapper.convertValue(usuarioEntityAdicionado, UsuarioDto.class);

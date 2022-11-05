@@ -44,14 +44,12 @@ public class ItemEntretenimentoEntity {
     @Column(name = "duracao")
     private String duracao;
 
-//    @Column(name = "")
-    private Double mediaAvaliacoes;
 
     @Column(name = "temporadas")
-    private int temporadas;
+    private Integer temporadas;
 
     @Column(name = "episodios")
-    private int episodios;
+    private Integer episodios;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
