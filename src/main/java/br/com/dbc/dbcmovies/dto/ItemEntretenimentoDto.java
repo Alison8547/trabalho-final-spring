@@ -15,5 +15,5 @@ public class ItemEntretenimentoDto extends ItemEntretenimentoCreateDto{
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private Double mediaAvaliacoes;
 
-    private Integer id;
+    private Integer idItem;
 }

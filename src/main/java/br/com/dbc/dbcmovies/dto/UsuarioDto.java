@@ -23,5 +23,5 @@ public class UsuarioDto {
     @Schema(description = "Tipo do usuário", example = "CLIENTE")
     private TipoUsuario tipoUsuario;
     @Schema(description = "Id do usuário")
-    private Integer id;
+    private Integer idUsuario;
 }

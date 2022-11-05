@@ -18,7 +18,7 @@ public class ItemEntretenimentoEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ITEM_ENTRETENIMENTO_SEQ")
     @SequenceGenerator(name = "ITEM_ENTRETENIMENTO_SEQ", sequenceName = "SEQ_ITEM_ENTRETENIMENTO", allocationSize = 1)
     @Column(name = "id_item_entretenimento")
-    private Integer id;
+    private Integer idItem;
 
     @Column(name = "nome")
     private String nome;

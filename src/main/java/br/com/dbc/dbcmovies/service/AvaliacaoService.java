@@ -62,7 +62,7 @@ public class AvaliacaoService {
             avaliacaoRecuperada.setItemEntretenimento(itemRecuperado);
             avaliacaoRepository.save(avaliacaoRecuperada);
             AvaliacaoEntity avaliacao = objectMapper.convertValue(avaliacaoAtualizar, AvaliacaoEntity.class);
-            return objectMapper.convertValue(find(idUsuario, idItem), AvaliacaoDto.class);
+            return objectMapper.convertValue(avaliacaoRecuperada, AvaliacaoDto.class);
 
     }
 
