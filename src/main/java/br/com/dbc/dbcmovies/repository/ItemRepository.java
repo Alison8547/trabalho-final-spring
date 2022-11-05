@@ -9,8 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ItemRepository extends JpaRepository<ItemEntretenimentoEntity,Integer> {
-//    sql.append("SELECT * FROM ITEM_ENTRETENIMENTO ");
-//            sql.append("WHERE UPPER(tipo) = ? AND UPPER(genero) = ? AND classificacao <= ?");
 
     @Query(" select i from ITEM_ENTRETENIMENTO i " +
             "WHERE UPPER(i.tipo) = :tipo  and UPPER(i.genero) = :genero and i.classificacao = :classificacao")
