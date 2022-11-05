@@ -34,7 +34,7 @@ public class AssistidosService {
         ItemEntretenimentoEntity item = itemService.findById(idItem);
         UsuarioEntity usuario = usuarioService.findById(idUsuario);
 
-        verificarItemAssistido(idItem, usuario);
+        verificarItemAssistido(usuario, idItem);
 
         usuario.getItemEntretenimentos().add(item);
         item.getUsuarios().add(usuario);
@@ -46,8 +46,8 @@ public class AssistidosService {
     }
 
     public void deletarAssistido(Integer idItem, Integer idUsuario) throws RegraDeNegocioException {
-        UsuarioEntity usuario = usuarioService.findById(idUsuario);
         ItemEntretenimentoEntity item = itemService.findById(idItem);
+        UsuarioEntity usuario = usuarioService.findById(idUsuario);
 
         this.verificarUsuarioNaTabela(idUsuario);
         verificarItemNaTabela(idItem, usuario);
@@ -59,11 +59,15 @@ public class AssistidosService {
         itemRepository.save(item);
     }
 
-    public void verificarItemAssistido(Integer idItem, UsuarioEntity usuario) throws RegraDeNegocioException {
-        usuario.getItemEntretenimentos().stream()
-                .filter(item -> !(item.getIdItem() == idItem))
+    public void verificarItemAssistido(UsuarioEntity usuario, Integer idItem) throws RegraDeNegocioException {
+        ItemEntretenimentoEntity itemPego = usuario.getItemEntretenimentos().stream()
+                .filter(item -> item.getIdItem() == idItem)
                 .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("Item já está marcado como assistido para o usuário selecionado!"));
+                .orElse(null);
+
+        if(itemPego != null) {
+            throw new RegraDeNegocioException("Item já está marcado como assistido para o usuário selecionado!");
+        }
     }
 
     public void verificarItemNaTabela(Integer idItem, UsuarioEntity usuario) throws RegraDeNegocioException {
