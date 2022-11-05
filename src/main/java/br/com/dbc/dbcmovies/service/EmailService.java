@@ -78,44 +78,6 @@ public class EmailService {
     }
 
 
-    public void sendEmailAvaliacao(AvaliacaoDto avaliacaoDto, TipoTemplate tipoTemplate, UsuarioDto usuarioDto) {
-        MimeMessage mimeMessage = emailSender.createMimeMessage();
-        try {
-
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-
-            mimeMessageHelper.setFrom(from);
-            mimeMessageHelper.setTo(usuarioDto.getEmail());
-            mimeMessageHelper.setSubject("subject");
-            mimeMessageHelper.setText(geContentFromTemplateAvaliacao(avaliacaoDto, tipoTemplate), true);
-
-            emailSender.send(mimeMessageHelper.getMimeMessage());
-        } catch (MessagingException | IOException | TemplateException | RegraDeNegocioException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public String geContentFromTemplateAvaliacao(AvaliacaoDto avaliacaoDto, TipoTemplate tipoTemplate) throws IOException, TemplateException, RegraDeNegocioException {
-        Map<String, Object> dados = new HashMap<>();
-        dados.put("nome", avaliacaoDto.getUsuario().getNome());
-        dados.put("nota", avaliacaoDto.getNota());
-        dados.put("comentario", avaliacaoDto.getComentario());
-        dados.put("tipo", avaliacaoDto.getItemEntretenimento().getTipo());
-        dados.put("itementretenimento", avaliacaoDto.getItemEntretenimento().getNome());
-        dados.put("email", from);
-        Template template = null;
-
-        switch (tipoTemplate) {
-            case CREATE -> {
-                template = fmConfiguration.getTemplate("email-avaliacao-create-template.html");
-            }
-            default -> {
-                throw new RegraDeNegocioException("Tipo de template não encontrado!");
-            }
-        }
-        return FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
-    }
-
     public void sendEmailItemEntretenimento(ItemEntretenimentoDto itemEntretenimentoDtoDto, TipoTemplate tipoTemplate, UsuarioDto usuarioDto) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         try {
