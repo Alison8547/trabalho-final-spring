@@ -59,6 +59,10 @@ public class ItemEntretenimentoEntity {
     )
     private Set<UsuarioEntity> usuarios;
 
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "itemEntretenimento")
+    private Set<AvaliacaoEntity> avaliacaos;
+
     //Construtor
 //    public ItemEntretenimentoEntity(Integer id, String nome, String genero, String sinopse, String anoLancamento, Integer classificacao, String plataforma) {
 //        this.id = id;

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -33,7 +34,7 @@ public class AvaliacaoEntity {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("idItemEntretenimento")
+    @MapsId("idItem")
     @JoinColumn(name = "id_Item_Entretenimento")
     private ItemEntretenimentoEntity itemEntretenimento;
 

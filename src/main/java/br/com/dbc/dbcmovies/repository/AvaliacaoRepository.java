@@ -26,12 +26,12 @@ public interface AvaliacaoRepository extends JpaRepository<AvaliacaoEntity, Inte
 
     @Query("select a" +
             " from AVALIACAO a" +
-            " where a.avaliacaoPK.idUsuario = :idUsuario and a.avaliacaoPK.idItemEntretenimento = :idItem")
+            " where a.avaliacaoPK.idUsuario = :idUsuario and a.avaliacaoPK.idItem = :idItem")
     AvaliacaoEntity pegar(Integer idUsuario, Integer idItem);
 
 
     @Query("select a" +
             " from AVALIACAO a" +
-            " where a.avaliacaoPK.idUsuario = :idUsuario and a.avaliacaoPK.idItemEntretenimento = :idItem")
+            " where a.avaliacaoPK.idUsuario = :idUsuario and a.avaliacaoPK.idItem = :idItem")
     AvaliacaoEntity remover(Integer idUsuario, Integer idItem);
 }

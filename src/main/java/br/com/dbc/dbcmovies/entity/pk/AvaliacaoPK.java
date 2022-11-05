@@ -21,5 +21,5 @@ public class AvaliacaoPK implements Serializable {
     private Integer idUsuario;
 
     @Column(name = "id_item_entretenimento")
-    private Integer idItemEntretenimento;
+    private Integer idItem;
 }
