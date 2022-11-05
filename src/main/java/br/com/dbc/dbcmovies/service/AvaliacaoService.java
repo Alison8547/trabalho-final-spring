@@ -44,8 +44,8 @@ public class AvaliacaoService {
         AvaliacaoDto avaliacaoDTO = objectMapper.convertValue(avaliacaoEntity, AvaliacaoDto.class);
         avaliacaoDTO.setIdUsuario(avaliacaoEntity.getAvaliacaoPK().getIdUsuario());
         avaliacaoDTO.setIdItemEntretenimento(avaliacaoEntity.getAvaliacaoPK().getIdItem());
-        avaliacaoDTO.setUsuarioDto(usuarioDto);
-        avaliacaoDTO.setItemEntretenimentoDto(itemDto);
+        avaliacaoDTO.setUsuario(usuarioDto);
+        avaliacaoDTO.setItemEntretenimento(itemDto);
 
         return avaliacaoDTO;
     }

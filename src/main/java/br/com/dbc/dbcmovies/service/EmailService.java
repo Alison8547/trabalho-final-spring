@@ -97,11 +97,11 @@ public class EmailService {
 
     public String geContentFromTemplateAvaliacao(AvaliacaoDto avaliacaoDto, TipoTemplate tipoTemplate) throws IOException, TemplateException, RegraDeNegocioException {
         Map<String, Object> dados = new HashMap<>();
-        dados.put("nome", avaliacaoDto.getUsuarioDto().getNome());
+        dados.put("nome", avaliacaoDto.getUsuario().getNome());
         dados.put("nota", avaliacaoDto.getNota());
         dados.put("comentario", avaliacaoDto.getComentario());
-        dados.put("tipo", avaliacaoDto.getItemEntretenimentoDto().getTipo());
-        dados.put("itementretenimento", avaliacaoDto.getItemEntretenimentoDto().getNome());
+        dados.put("tipo", avaliacaoDto.getItemEntretenimento().getTipo());
+        dados.put("itementretenimento", avaliacaoDto.getItemEntretenimento().getNome());
         dados.put("email", from);
         Template template = null;
 

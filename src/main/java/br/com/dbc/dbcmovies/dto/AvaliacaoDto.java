@@ -9,7 +9,7 @@ public class AvaliacaoDto extends AvaliacaoCreateDto {
 
     private Integer idItemEntretenimento;
 
-    private UsuarioDto usuarioDto;
+    private UsuarioDto usuario;
 
-    private ItemEntretenimentoDto itemEntretenimentoDto;
+    private ItemEntretenimentoDto itemEntretenimento;
 }
