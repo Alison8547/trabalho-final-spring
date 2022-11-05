@@ -2,6 +2,7 @@ package br.com.dbc.dbcmovies.service;
 
 import br.com.dbc.dbcmovies.dto.AvaliacaoCreateDto;
 import br.com.dbc.dbcmovies.dto.AvaliacaoDto;
+import br.com.dbc.dbcmovies.dto.AvaliacaoItemDto;
 import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.AvaliacaoEntity;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
@@ -39,9 +40,9 @@ public class AvaliacaoService {
             return dto;
     }
 
-    public List<AvaliacaoDto> list() throws RegraDeNegocioException {
+    public List<AvaliacaoItemDto> list() throws RegraDeNegocioException {
             return avaliacaoRepository.findItemEntretenimento().stream()
-                    .map(item -> objectMapper.convertValue(item, AvaliacaoDto.class))
+                    .map(item -> objectMapper.convertValue(item, AvaliacaoItemDto.class))
                     .toList();
     }
     public List<AvaliacaoDto> listByUsers(Integer id) throws RegraDeNegocioException {
@@ -70,9 +71,9 @@ public class AvaliacaoService {
             avaliacaoRepository.remover(idUsuario, idItem);
     }
 
-    public AvaliacaoDto getAvaliacao(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
+    public AvaliacaoItemDto getAvaliacao(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
             AvaliacaoEntity avaliacaoEntity = avaliacaoRepository.pegar(idUsuario, idItem);
-            return objectMapper.convertValue(avaliacaoEntity, AvaliacaoDto.class);
+            return objectMapper.convertValue(avaliacaoEntity, AvaliacaoItemDto.class);
     }
 
     public AvaliacaoEntity find(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {

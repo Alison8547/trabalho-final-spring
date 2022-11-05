@@ -8,4 +8,8 @@ public class AvaliacaoDto extends AvaliacaoCreateDto {
     private Integer idUsuario;
 
     private Integer idItemEntretenimento;
+
+    private UsuarioDto usuarioDto;
+
+    private ItemEntretenimentoDto itemEntretenimentoDto;
 }

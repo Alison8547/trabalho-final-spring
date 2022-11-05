@@ -3,6 +3,7 @@ package br.com.dbc.dbcmovies.controller;
 
 import br.com.dbc.dbcmovies.dto.AvaliacaoCreateDto;
 import br.com.dbc.dbcmovies.dto.AvaliacaoDto;
+import br.com.dbc.dbcmovies.dto.AvaliacaoItemDto;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.AvaliacaoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,7 +51,7 @@ public class AvaliacaoController {
             }
     )
     @GetMapping
-    public ResponseEntity<List<AvaliacaoDto>> listAll() throws RegraDeNegocioException {
+    public ResponseEntity<List<AvaliacaoItemDto>> listAll() throws RegraDeNegocioException {
         return ResponseEntity.ok(avaliacaoService.list());
     }
 
@@ -63,7 +64,7 @@ public class AvaliacaoController {
             }
     )
     @GetMapping("/ids")
-    public ResponseEntity<AvaliacaoDto> getByIds(@RequestParam("idUsuario") Integer idUsuario,
+    public ResponseEntity<AvaliacaoItemDto> getByIds(@RequestParam("idUsuario") Integer idUsuario,
                                                  @RequestParam("idItem") Integer idItem) throws RegraDeNegocioException {
 
         return ResponseEntity.ok(avaliacaoService.getAvaliacao(idUsuario, idItem));
