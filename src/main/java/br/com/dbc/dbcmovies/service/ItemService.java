@@ -58,7 +58,7 @@ public class ItemService {
 
     }
 
-    public List<ItemEntretenimentoDto> filter(String tipo, String genero, Integer classificacao) throws RegraDeNegocioException {
+    public List<ItemEntretenimentoDto> filter(String tipo, String genero, Integer classificacao){
 
         return itemRepository.filtrar(tipo.toUpperCase(), genero.toUpperCase(), classificacao).stream()
                 .map(itemEntretenimentoEntity -> objectMapper.convertValue(itemEntretenimentoEntity, ItemEntretenimentoDto.class))

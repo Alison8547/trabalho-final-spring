@@ -38,7 +38,7 @@ public class UsuarioController {
             }
     )
     @GetMapping
-    public ResponseEntity<List<UsuarioDto>> listar() throws RegraDeNegocioException {
+    public ResponseEntity<List<UsuarioDto>> listar(){
         return new ResponseEntity<>(usuarioService.listar(), HttpStatus.OK);
     }
 
@@ -78,7 +78,7 @@ public class UsuarioController {
             }
     )
     @PostMapping
-    public ResponseEntity<UsuarioDto> adicionar(@Valid @RequestBody UsuarioCreateDto usuario) throws RegraDeNegocioException {
+    public ResponseEntity<UsuarioDto> adicionar(@Valid @RequestBody UsuarioCreateDto usuario){
         log.info("Adicionando o Usuário...");
         UsuarioDto user = usuarioService.adicionar(usuario);
         log.info("Usuário adicionado com sucesso!");

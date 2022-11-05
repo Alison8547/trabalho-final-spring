@@ -65,7 +65,7 @@ public class AvaliacaoController {
     )
     @GetMapping("/ids")
     public ResponseEntity<AvaliacaoItemDto> getByIds(@RequestParam("idUsuario") Integer idUsuario,
-                                                 @RequestParam("idItem") Integer idItem) throws RegraDeNegocioException {
+                                                 @RequestParam("idItem") Integer idItem){
 
         return ResponseEntity.ok(avaliacaoService.getAvaliacao(idUsuario, idItem));
     }
@@ -80,7 +80,7 @@ public class AvaliacaoController {
             }
     )
     @GetMapping("/{idUsuario}/user")
-    public ResponseEntity<List<AvaliacaoItemDto>> listByUser(@PathVariable("idUsuario") Integer idUsuario) throws RegraDeNegocioException {
+    public ResponseEntity<List<AvaliacaoItemDto>> listByUser(@PathVariable("idUsuario") Integer idUsuario){
         return ResponseEntity.ok(avaliacaoService.listByUsers(idUsuario));
     }
 

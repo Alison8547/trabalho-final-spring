@@ -74,7 +74,7 @@ public class AvaliacaoService {
 
     }
 
-    public List<AvaliacaoItemDto> listByUsers(Integer id) throws RegraDeNegocioException {
+    public List<AvaliacaoItemDto> listByUsers(Integer id){
         List<AvaliacaoEntity> avaliacaoEntities = avaliacaoRepository.pegarUsuario(id);
         return avaliacaoEntities.stream()
                 .map(avaliacaoEntity -> {
@@ -107,7 +107,7 @@ public class AvaliacaoService {
         avaliacaoRepository.delete(avaliacao);
     }
 
-    public AvaliacaoItemDto getAvaliacao(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
+    public AvaliacaoItemDto getAvaliacao(Integer idUsuario, Integer idItem){
 
         AvaliacaoEntity avaliacaoEntity = avaliacaoRepository.pegar(idUsuario, idItem);
         AvaliacaoItemDto avaliacaoItemDto = objectMapper.convertValue(avaliacaoEntity, AvaliacaoItemDto.class);

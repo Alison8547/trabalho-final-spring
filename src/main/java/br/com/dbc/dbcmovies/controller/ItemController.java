@@ -77,7 +77,7 @@ public class ItemController {
     @GetMapping("/filtro")
     public ResponseEntity<List<ItemEntretenimentoDto>> filterFilme(@RequestParam("tipo") String tipo,
                                                                    @RequestParam("genero") String genero,
-                                                                   @RequestParam("class") Integer classificacao) throws RegraDeNegocioException {
+                                                                   @RequestParam("class") Integer classificacao){
 
         return ResponseEntity.ok(itemService.filter(tipo, genero, classificacao));
     }
