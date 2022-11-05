@@ -20,7 +20,7 @@ public class AvaliacaoEntity {
     private AvaliacaoPK avaliacaoPK;
 
     @Column(name = "nota")
-    private String nota;
+    private Double nota;
 
     @Column(name = "comentario")
     private String comentario;
