@@ -55,6 +55,20 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarioService.pegar(idUsuario), HttpStatus.OK);
     }
 
+
+    @Operation(summary = "Pega o login do usuário", description = "Resgata o usuário do banco de dados")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Foi logado com sucesso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
+    @GetMapping("/pegar-login")
+    public ResponseEntity<UsuarioDto> pegarLogin(@RequestParam(name = "email") String email,@RequestParam(name = "senha") String senha) throws RegraDeNegocioException {
+        return new ResponseEntity<>(usuarioService.pegarLogin(email,senha), HttpStatus.OK);
+    }
+
     @Operation(summary = "Criar usuário", description = "Cria um usuário no banco de dados")
     @ApiResponses(
             value = {

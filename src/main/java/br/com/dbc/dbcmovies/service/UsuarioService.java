@@ -69,8 +69,8 @@ public class UsuarioService {
 
     }
 
-    public UsuarioEntity pegarLogin(String email, String senha) {
-        return usuarioRepository.findByEmailAndSenha(email, senha);
+    public UsuarioDto pegarLogin(String email, String senha) {
+        return objectMapper.convertValue(usuarioRepository.findByEmailAndSenha(email, senha),UsuarioDto.class);
     }
 
     public UsuarioDto tornarUsuarioAdmin(Integer id) throws RegraDeNegocioException {
