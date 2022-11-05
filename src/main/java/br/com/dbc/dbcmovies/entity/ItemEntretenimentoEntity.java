@@ -21,7 +21,7 @@ public class ItemEntretenimentoEntity {
     private Integer idItem;
 
     @Column(name = "nome")
-    private String nome;
+    private String nomeItem;
 
     @Column(name = "tipo")
     private String tipo;

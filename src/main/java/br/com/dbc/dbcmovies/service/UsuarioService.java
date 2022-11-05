@@ -1,7 +1,9 @@
 package br.com.dbc.dbcmovies.service;
 
+import br.com.dbc.dbcmovies.dto.UsuarioAssistidoPersonalizadoDto;
 import br.com.dbc.dbcmovies.dto.UsuarioCreateDto;
 import br.com.dbc.dbcmovies.dto.UsuarioDto;
+import br.com.dbc.dbcmovies.dto.UsuarioItemPersonalizadoDto;
 import br.com.dbc.dbcmovies.entity.TipoUsuario;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
@@ -80,9 +82,18 @@ public class UsuarioService {
     }
 
     public UsuarioEntity findById(Integer id) throws RegraDeNegocioException {
-
             return usuarioRepository.findById(id)
                     .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!"));
+    }
 
+
+    public List<UsuarioItemPersonalizadoDto> listaPersonalizadaUsuarioItem(Integer idUsuario) {
+        return usuarioRepository.listaPersonalizadaUsuarioItem(idUsuario)
+                .stream().toList();
+    }
+
+    public List<UsuarioAssistidoPersonalizadoDto> listaPersonalizadaUsuarioAssistido(Integer idUsuario) {
+        return usuarioRepository.listaPersonalizadaUsuarioAssistido(idUsuario)
+                .stream().toList();
     }
 }

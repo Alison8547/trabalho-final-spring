@@ -70,7 +70,7 @@ public class ItemService {
             throw new RegraDeNegocioException("Usuario precisa ser administrador para atualizar um filme.");
         }
         ItemEntretenimentoEntity itemEntretenimentoEncontrado = findById(id);
-        itemEntretenimentoEncontrado.setNome(filmeAtualizar.getNome());
+        itemEntretenimentoEncontrado.setNomeItem(filmeAtualizar.getNome());
         itemEntretenimentoEncontrado.setTipo(filmeAtualizar.getTipo());
         itemEntretenimentoEncontrado.setGenero(filmeAtualizar.getGenero());
         itemEntretenimentoEncontrado.setSinopse(filmeAtualizar.getSinopse());
@@ -93,7 +93,7 @@ public class ItemService {
             throw new RegraDeNegocioException("Usuario precisa ser administrador para atualizar um filme.");
         }
         ItemEntretenimentoEntity itemEntretenimentoEncontrado = findById(id);
-        itemEntretenimentoEncontrado.setNome(serieAtualizar.getNome());
+        itemEntretenimentoEncontrado.setNomeItem(serieAtualizar.getNome());
         itemEntretenimentoEncontrado.setTipo(serieAtualizar.getTipo());
         itemEntretenimentoEncontrado.setGenero(serieAtualizar.getGenero());
         itemEntretenimentoEncontrado.setSinopse(serieAtualizar.getSinopse());
