@@ -4,6 +4,7 @@ import br.com.dbc.dbcmovies.dto.UsuarioAssistidoPersonalizadoDto;
 import br.com.dbc.dbcmovies.dto.UsuarioCreateDto;
 import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.dto.UsuarioItemPersonalizadoDto;
+import br.com.dbc.dbcmovies.entity.TipoTemplate;
 import br.com.dbc.dbcmovies.entity.TipoUsuario;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
@@ -19,26 +20,26 @@ import java.util.List;
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
- //   private final EmailService emailService;
+    private final EmailService emailService;
 
 
-    public List<UsuarioDto> listar(){
-        return  usuarioRepository.findAll().stream()
+    public List<UsuarioDto> listar() {
+        return usuarioRepository.findAll().stream()
                 .map(item -> objectMapper.convertValue(item, UsuarioDto.class))
                 .toList();
     }
 
     public UsuarioDto pegar(Integer id) throws RegraDeNegocioException {
-        UsuarioEntity usuarioEntity =  findById(id);
+        UsuarioEntity usuarioEntity = findById(id);
         return objectMapper.convertValue(usuarioEntity, UsuarioDto.class);
     }
 
-    public UsuarioDto adicionar(UsuarioCreateDto usuario){
+    public UsuarioDto adicionar(UsuarioCreateDto usuario) {
         UsuarioEntity usuarioEntityAdicionado = objectMapper.convertValue(usuario, UsuarioEntity.class);
         usuarioEntityAdicionado = usuarioRepository.save(usuarioEntityAdicionado);
         UsuarioDto usuarioDto = objectMapper.convertValue(usuarioEntityAdicionado, UsuarioDto.class);
 
-    //    emailService.sendEmailUsuario(usuarioDto, TipoTemplate.CREATE);
+        emailService.sendEmailUsuario(usuarioDto, TipoTemplate.CREATE);
 
         return usuarioDto;
     }
@@ -54,7 +55,7 @@ public class UsuarioService {
 
         UsuarioDto usuarioDto = objectMapper.convertValue(usuarioEncontrado, UsuarioDto.class);
 
-    //    emailService.sendEmailUsuario(usuarioDto,TipoTemplate.UPDATE);
+        emailService.sendEmailUsuario(usuarioDto, TipoTemplate.UPDATE);
 
         return usuarioDto;
 
@@ -64,12 +65,12 @@ public class UsuarioService {
         UsuarioEntity usuarioEntity = findById(id);
         UsuarioDto usuarioDto = objectMapper.convertValue(usuarioEntity, UsuarioDto.class);
         usuarioRepository.delete(usuarioEntity);
-   //     emailService.sendEmailUsuario(usuarioDto,TipoTemplate.DELETE);
+        emailService.sendEmailUsuario(usuarioDto, TipoTemplate.DELETE);
 
     }
 
-    public UsuarioEntity pegarLogin(String email,String senha){
-        return usuarioRepository.findByEmailAndSenha(email,senha);
+    public UsuarioEntity pegarLogin(String email, String senha) {
+        return usuarioRepository.findByEmailAndSenha(email, senha);
     }
 
     public UsuarioDto tornarUsuarioAdmin(Integer id) throws RegraDeNegocioException {
@@ -77,13 +78,13 @@ public class UsuarioService {
         usuarioEncontrado.setTipoUsuario(TipoUsuario.ADMINISTRADOR);
         usuarioRepository.save(usuarioEncontrado);
 
-        return objectMapper.convertValue(usuarioEncontrado,UsuarioDto.class);
+        return objectMapper.convertValue(usuarioEncontrado, UsuarioDto.class);
 
     }
 
     public UsuarioEntity findById(Integer id) throws RegraDeNegocioException {
-            return usuarioRepository.findById(id)
-                    .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!"));
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!"));
     }
 
 

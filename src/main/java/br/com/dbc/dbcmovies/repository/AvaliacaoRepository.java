@@ -12,17 +12,6 @@ import java.util.List;
 @Repository
 public interface AvaliacaoRepository extends JpaRepository<AvaliacaoEntity, Integer> {
 
-    @Query( "select a" +
-            " from AVALIACAO a" +
-            " join a.itemEntretenimento it")
-    List<AvaliacaoEntity>findItemEntretenimento();
-
-    @Query ("select a" +
-            " from AVALIACAO a" +
-            " join a.itemEntretenimento it" +
-            " where (:idUsuario is null or a.avaliacaoPK.idUsuario = :idUsuario)")
-    List<AvaliacaoEntity>findByIdEntretenimento(Integer idUsuario);
-
     @Query("select a" +
             " from AVALIACAO a" +
             " where a.avaliacaoPK.idUsuario = :idUsuario and a.avaliacaoPK.idItem = :idItem")
@@ -33,7 +22,9 @@ public interface AvaliacaoRepository extends JpaRepository<AvaliacaoEntity, Inte
             " where a.avaliacaoPK.idUsuario = :idUsuario")
     List<AvaliacaoEntity> pegarUsuario(Integer idUsuario);
 
-
+    @Query("select a" +
+            " from AVALIACAO a" +
+            " where a.avaliacaoPK.idUsuario = :idUsuario and a.avaliacaoPK.idItem = :idItem")
     AvaliacaoEntity findByIdAvaliacao(Integer idUsuario, Integer idItem);
 }
 

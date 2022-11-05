@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 public class ItemEntretenimentoCreateDto {
 
     @NotBlank
-    @Schema(description = "Tipo de usuário." , example = "filme")
+    @Schema(description = "Tipo de item" , example = "filme")
     private String tipo;
     @NotBlank
     @Size(min = 3, max = 255, message = "O nome deve ter de 3 a 255 caracteres.")
@@ -28,7 +28,7 @@ public class ItemEntretenimentoCreateDto {
     @Schema(example = "2006")
     private String anoLancamento;
     @NotNull
-    @Schema(description = "Classificação livre = 0",example = "0")
+    @Schema(description = "Classificação livre = 12",example = "12")
     private Integer classificacao;
     @NotBlank
     @Schema(example = "Apple TV")

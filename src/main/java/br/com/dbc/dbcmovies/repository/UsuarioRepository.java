@@ -21,7 +21,7 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity,Integer> 
             " u.nome," +
             " u.idade," +
             " u.email," +
-            " f.nomeItem," +
+            " f.nome," +
             " f.tipo," +
             " f.genero," +
             " f.sinopse," +

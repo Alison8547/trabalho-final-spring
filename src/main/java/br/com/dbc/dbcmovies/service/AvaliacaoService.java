@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +20,6 @@ public class AvaliacaoService {
     private final UsuarioService usuarioService;
     private final ItemService itemService;
     private final ObjectMapper objectMapper;
-//    private final EmailService emailService;
 
     public AvaliacaoDto create(AvaliacaoCreateDto avaliacaoDto, Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
 
@@ -58,7 +56,7 @@ public class AvaliacaoService {
                 .findFirst()
                 .orElse(null);
 
-        if(avaliacaoEntity != null) {
+        if (avaliacaoEntity != null) {
             throw new RegraDeNegocioException("Item já foi avaliado pelo usuário selecionado!");
         }
     }
@@ -66,7 +64,7 @@ public class AvaliacaoService {
     public List<AvaliacaoItemDto> list() throws RegraDeNegocioException {
         List<AvaliacaoEntity> avaliacaoEntities = avaliacaoRepository.findAll();
 
-       return avaliacaoEntities.stream()
+        return avaliacaoEntities.stream()
                 .map(avaliacaoEntity -> {
                     AvaliacaoItemDto avaliacaoItemDto = objectMapper.convertValue(avaliacaoEntity, AvaliacaoItemDto.class);
                     avaliacaoItemDto.setIdUsuario(avaliacaoEntity.getAvaliacaoPK().getIdUsuario());
@@ -75,27 +73,28 @@ public class AvaliacaoService {
                 }).toList();
 
     }
+
     public List<AvaliacaoItemDto> listByUsers(Integer id) throws RegraDeNegocioException {
         List<AvaliacaoEntity> avaliacaoEntities = avaliacaoRepository.pegarUsuario(id);
         return avaliacaoEntities.stream()
-                    .map(avaliacaoEntity -> {
-                        AvaliacaoItemDto avaliacaoItemDto = objectMapper.convertValue(avaliacaoEntity, AvaliacaoItemDto.class);
-                        avaliacaoItemDto.setIdUsuario(avaliacaoEntity.getAvaliacaoPK().getIdUsuario());
-                        avaliacaoItemDto.setIdItem(avaliacaoEntity.getAvaliacaoPK().getIdItem());
-                        return avaliacaoItemDto;
-                    }).toList();
+                .map(avaliacaoEntity -> {
+                    AvaliacaoItemDto avaliacaoItemDto = objectMapper.convertValue(avaliacaoEntity, AvaliacaoItemDto.class);
+                    avaliacaoItemDto.setIdUsuario(avaliacaoEntity.getAvaliacaoPK().getIdUsuario());
+                    avaliacaoItemDto.setIdItem(avaliacaoEntity.getAvaliacaoPK().getIdItem());
+                    return avaliacaoItemDto;
+                }).toList();
 
     }
 
-    public AvaliacaoItemDto update(AvaliacaoCreateDto avaliacaoAtualizar, Integer idUsuario, Integer idItem) throws RegraDeNegocioException{
+    public AvaliacaoItemDto update(AvaliacaoCreateDto avaliacaoAtualizar, Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
 
-            AvaliacaoEntity avaliacaoRecuperada = avaliacaoRepository.pegar(idUsuario, idItem);
-            avaliacaoRecuperada.setNota(avaliacaoAtualizar.getNota());
-            avaliacaoRecuperada.setComentario(avaliacaoAtualizar.getComentario());
+        AvaliacaoEntity avaliacaoRecuperada = avaliacaoRepository.pegar(idUsuario, idItem);
+        avaliacaoRecuperada.setNota(avaliacaoAtualizar.getNota());
+        avaliacaoRecuperada.setComentario(avaliacaoAtualizar.getComentario());
 
-            avaliacaoRepository.save(avaliacaoRecuperada);
+        avaliacaoRepository.save(avaliacaoRecuperada);
 
-            return getAvaliacao(idUsuario,idItem);
+        return getAvaliacao(idUsuario, idItem);
 
     }
 
@@ -110,7 +109,7 @@ public class AvaliacaoService {
 
     public AvaliacaoItemDto getAvaliacao(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
 
-        AvaliacaoEntity avaliacaoEntity = avaliacaoRepository.pegar(idUsuario,idItem);
+        AvaliacaoEntity avaliacaoEntity = avaliacaoRepository.pegar(idUsuario, idItem);
         AvaliacaoItemDto avaliacaoItemDto = objectMapper.convertValue(avaliacaoEntity, AvaliacaoItemDto.class);
         avaliacaoItemDto.setIdItem(avaliacaoEntity.getAvaliacaoPK().getIdItem());
         avaliacaoItemDto.setIdUsuario(avaliacaoEntity.getAvaliacaoPK().getIdUsuario());
@@ -121,10 +120,10 @@ public class AvaliacaoService {
     public AvaliacaoEntity findByIdAvaliacao(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
         AvaliacaoEntity avaliacao = avaliacaoRepository.findByIdAvaliacao(idUsuario, idItem);
 
-        if(avaliacao != null) {
+        if (avaliacao != null) {
             return avaliacao;
-        }else {
-            throw new RegraDeNegocioException("Avaliação não existe!");
+        } else {
+            throw new RegraDeNegocioException("Não existe avaliação para o usuário selecionado!");
         }
     }
 }

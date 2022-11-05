@@ -2,6 +2,7 @@ package br.com.dbc.dbcmovies.service;
 
 import br.com.dbc.dbcmovies.dto.*;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
+import br.com.dbc.dbcmovies.entity.TipoTemplate;
 import br.com.dbc.dbcmovies.entity.TipoUsuario;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.ItemRepository;
@@ -17,7 +18,7 @@ public class ItemService {
     private final ItemRepository itemRepository;
 
     private final UsuarioService usuarioService;
-    //  private final EmailService emailService;
+    private final EmailService emailService;
     private final ObjectMapper objectMapper;
 
     public ItemEntretenimentoDto createFilme(ItemEntretenimentoCreateDto itemEntretenimentoDto, Integer idAdmin) throws RegraDeNegocioException {
@@ -31,7 +32,7 @@ public class ItemService {
         ItemEntretenimentoEntity itemEntity = objectMapper.convertValue(itemEntretenimentoDto, ItemEntretenimentoEntity.class);
 
         ItemEntretenimentoDto dto = objectMapper.convertValue(itemRepository.save(itemEntity), ItemEntretenimentoDto.class);
-        // emailService.sendEmailItemEntretenimento(dto, TipoTemplate.CREATE, usuarioDto);
+        emailService.sendEmailItemEntretenimento(dto, TipoTemplate.CREATE, usuarioDto);
         return objectMapper.convertValue(itemEntity, ItemEntretenimentoDto.class);
 
     }
@@ -44,7 +45,7 @@ public class ItemService {
         }
         ItemEntretenimentoEntity itemEntity = objectMapper.convertValue(itemEntretenimentoDto, ItemEntretenimentoEntity.class);
         ItemEntretenimentoDto dto = objectMapper.convertValue(itemRepository.save(itemEntity), ItemEntretenimentoDto.class);
-        //  emailService.sendEmailItemEntretenimento(dto, TipoTemplate.CREATE, usuarioDto);
+        emailService.sendEmailItemEntretenimento(dto, TipoTemplate.CREATE, usuarioDto);
         return objectMapper.convertValue(itemEntity, ItemEntretenimentoDto.class);
 
     }
@@ -70,7 +71,7 @@ public class ItemService {
             throw new RegraDeNegocioException("Usuario precisa ser administrador para atualizar um filme.");
         }
         ItemEntretenimentoEntity itemEntretenimentoEncontrado = findById(id);
-        itemEntretenimentoEncontrado.setNomeItem(filmeAtualizar.getNome());
+        itemEntretenimentoEncontrado.setNome(filmeAtualizar.getNome());
         itemEntretenimentoEncontrado.setTipo(filmeAtualizar.getTipo());
         itemEntretenimentoEncontrado.setGenero(filmeAtualizar.getGenero());
         itemEntretenimentoEncontrado.setSinopse(filmeAtualizar.getSinopse());
@@ -80,7 +81,7 @@ public class ItemService {
         itemEntretenimentoEncontrado.setDuracao(filmeAtualizar.getDuracao());
         itemRepository.save(itemEntretenimentoEncontrado);
         ItemEntretenimentoDto dto = objectMapper.convertValue(itemEntretenimentoEncontrado, ItemEntretenimentoDto.class);
-        //   emailService.sendEmailItemEntretenimento(dto, TipoTemplate.UPDATE, usuarioDto);
+        emailService.sendEmailItemEntretenimento(dto, TipoTemplate.UPDATE, usuarioDto);
 
 
         return dto;
@@ -93,7 +94,7 @@ public class ItemService {
             throw new RegraDeNegocioException("Usuario precisa ser administrador para atualizar um filme.");
         }
         ItemEntretenimentoEntity itemEntretenimentoEncontrado = findById(id);
-        itemEntretenimentoEncontrado.setNomeItem(serieAtualizar.getNome());
+        itemEntretenimentoEncontrado.setNome(serieAtualizar.getNome());
         itemEntretenimentoEncontrado.setTipo(serieAtualizar.getTipo());
         itemEntretenimentoEncontrado.setGenero(serieAtualizar.getGenero());
         itemEntretenimentoEncontrado.setSinopse(serieAtualizar.getSinopse());
@@ -104,7 +105,7 @@ public class ItemService {
         itemEntretenimentoEncontrado.setEpisodios(serieAtualizar.getEpisodios());
         itemRepository.save(itemEntretenimentoEncontrado);
         ItemEntretenimentoDto dto = objectMapper.convertValue(itemEntretenimentoEncontrado, ItemEntretenimentoDto.class);
-        //   emailService.sendEmailItemEntretenimento(dto, TipoTemplate.UPDATE, usuarioDto);
+        emailService.sendEmailItemEntretenimento(dto, TipoTemplate.UPDATE, usuarioDto);
 
 
         return dto;
@@ -117,7 +118,7 @@ public class ItemService {
         }
         ItemEntretenimentoEntity itemEntretenimentoEntity = findById(id);
         ItemEntretenimentoDto itemDto = objectMapper.convertValue(itemEntretenimentoEntity, ItemEntretenimentoDto.class);
-        //   emailService.sendEmailItemEntretenimento(itemDto, TipoTemplate.DELETE, usuarioDto);
+        emailService.sendEmailItemEntretenimento(itemDto, TipoTemplate.DELETE, usuarioDto);
 
         itemRepository.delete(itemEntretenimentoEntity);
 
@@ -134,12 +135,4 @@ public class ItemService {
                 .orElseThrow(() -> new RegraDeNegocioException("Item não encontrado!"));
     }
 
-//    public Double calcularAvaliacao(Integer id) {
-//        try {
-//            return itemRepository.calcularAvaliacoes(id);
-//        } catch (BancoDeDadosException ex) {
-//            System.out.println("ERRO: " + ex.getMessage());
-//        }
-//        return null;
-//    }
 }
