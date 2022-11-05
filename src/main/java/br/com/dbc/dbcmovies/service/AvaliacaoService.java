@@ -1,13 +1,11 @@
 package br.com.dbc.dbcmovies.service;
 
-import br.com.dbc.dbcmovies.dto.AvaliacaoCreateDto;
-import br.com.dbc.dbcmovies.dto.AvaliacaoDto;
-import br.com.dbc.dbcmovies.dto.AvaliacaoItemDto;
-import br.com.dbc.dbcmovies.dto.UsuarioDto;
+import br.com.dbc.dbcmovies.dto.*;
 import br.com.dbc.dbcmovies.entity.AvaliacaoEntity;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
 import br.com.dbc.dbcmovies.entity.TipoTemplate;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;
+import br.com.dbc.dbcmovies.entity.pk.AvaliacaoPK;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.AvaliacaoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,17 +25,42 @@ public class AvaliacaoService {
 
     public AvaliacaoDto create(AvaliacaoCreateDto avaliacaoDto, Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
 
-            ItemEntretenimentoEntity item = itemService.findById(idItem);
-            UsuarioEntity usuarioEntity = usuarioService.findById(idUsuario);
-            UsuarioDto usuarioDto = objectMapper.convertValue(usuarioEntity, UsuarioDto.class);
+        UsuarioEntity usuarioEntity = usuarioService.findById(idUsuario);
+        this.verificarItemAvaliado(usuarioEntity, idItem);
 
-            AvaliacaoEntity avaliacaoEntity = objectMapper.convertValue(avaliacaoDto, AvaliacaoEntity.class);
-            avaliacaoEntity.setUsuario(usuarioEntity);
-            avaliacaoEntity.setItemEntretenimento(item);
-            avaliacaoRepository.save(avaliacaoEntity);
-            AvaliacaoDto dto = objectMapper.convertValue(avaliacaoEntity, AvaliacaoDto.class);
-//            emailService.sendEmailAvaliacao(dto, TipoTemplate.CREATE, usuarioDto);
-            return dto;
+        ItemEntretenimentoEntity itemEntity = itemService.findById(idItem);
+        AvaliacaoEntity avaliacaoEntity = objectMapper.convertValue(avaliacaoDto, AvaliacaoEntity.class);
+        avaliacaoEntity.setAvaliacaoPK(new AvaliacaoPK());
+
+        avaliacaoEntity.getAvaliacaoPK().setIdItem(idItem);
+        avaliacaoEntity.getAvaliacaoPK().setIdUsuario(idUsuario);
+
+        avaliacaoEntity.setUsuario(usuarioEntity);
+        avaliacaoEntity.setItemEntretenimento(itemEntity);
+
+        avaliacaoRepository.save(avaliacaoEntity);
+
+        UsuarioDto usuarioDto = objectMapper.convertValue(usuarioEntity, UsuarioDto.class);
+        ItemEntretenimentoDto itemDto = objectMapper.convertValue(itemEntity, ItemEntretenimentoDto.class);
+
+        AvaliacaoDto avaliacaoDTO = objectMapper.convertValue(avaliacaoEntity, AvaliacaoDto.class);
+        avaliacaoDTO.setIdUsuario(avaliacaoEntity.getAvaliacaoPK().getIdUsuario());
+        avaliacaoDTO.setIdItemEntretenimento(avaliacaoEntity.getAvaliacaoPK().getIdItem());
+        avaliacaoDTO.setUsuarioDto(usuarioDto);
+        avaliacaoDTO.setItemEntretenimentoDto(itemDto);
+
+        return avaliacaoDTO;
+    }
+
+    public void verificarItemAvaliado(UsuarioEntity usuario, Integer idItem) throws RegraDeNegocioException {
+        AvaliacaoEntity avaliacaoEntity = usuario.getAvaliacaos().stream()
+                .filter(avaliacao -> avaliacao.getItemEntretenimento().getIdItem() == idItem)
+                .findFirst()
+                .orElse(null);
+
+        if(avaliacaoEntity != null) {
+            throw new RegraDeNegocioException("Item já foi avaliado pelo usuário selecionado!");
+        }
     }
 
     public List<AvaliacaoItemDto> list() throws RegraDeNegocioException {
