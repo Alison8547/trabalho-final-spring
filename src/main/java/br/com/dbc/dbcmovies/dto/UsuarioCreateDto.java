@@ -22,5 +22,5 @@ public class UsuarioCreateDto {
     @Schema(description = "Senha do usuário",example = "12345")
     private String senha;
     @Schema(description = "Tipo do usuário", example = "CLIENTE")
-    protected TipoUsuario tipoUsuario;
+    private TipoUsuario tipoUsuario;
 }

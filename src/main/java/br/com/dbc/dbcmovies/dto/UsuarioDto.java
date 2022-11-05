@@ -21,7 +21,7 @@ public class UsuarioDto {
     @Schema(description = "Email do usuário", example = "alison@hotmail.com")
     private String email;
     @Schema(description = "Tipo do usuário", example = "CLIENTE")
-    protected TipoUsuario tipoUsuario;
+    private TipoUsuario tipoUsuario;
     @Schema(description = "Id do usuário")
     private Integer id;
 }

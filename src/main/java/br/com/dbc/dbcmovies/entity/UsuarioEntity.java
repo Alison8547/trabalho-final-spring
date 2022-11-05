@@ -11,7 +11,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 @Entity(name = "USUARIO")
 public  class UsuarioEntity {
 
@@ -33,21 +32,21 @@ public  class UsuarioEntity {
     @Column(name = "senha")
     private String senha;
 
-    @Enumerated(EnumType.STRING)
+
     @Column(name = "tipo_usuario")
-    protected TipoUsuario tipoUsuario;
+    private TipoUsuario tipoUsuario;
 
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "usuario")
-    private Set<AvaliacaoEntity> avaliacaos;
-
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "usuarios")
-    private Set<ItemEntretenimentoEntity> itemEntretenimentos;
-
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "usuario")
-    private Set<IndicacaoEntity> indicacao;
+//    @JsonIgnore
+//    @OneToMany(fetch = FetchType.LAZY,mappedBy = "usuario")
+//    private Set<AvaliacaoEntity> avaliacaos;
+//
+//    @JsonIgnore
+//    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "usuarios")
+//    private Set<ItemEntretenimentoEntity> itemEntretenimentos;
+//
+//    @JsonIgnore
+//    @OneToMany(fetch = FetchType.LAZY,mappedBy = "usuario")
+//    private Set<IndicacaoEntity> indicacao;
 
 
 
