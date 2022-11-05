@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -64,29 +65,38 @@ public class AvaliacaoService {
     }
 
     public List<AvaliacaoItemDto> list() throws RegraDeNegocioException {
-            return avaliacaoRepository.findItemEntretenimento().stream()
-                    .map(item -> objectMapper.convertValue(item, AvaliacaoItemDto.class))
-                    .toList();
+        List<AvaliacaoEntity> avaliacaoEntities = avaliacaoRepository.findAll();
+
+       return avaliacaoEntities.stream()
+                .map(avaliacaoEntity -> {
+                    AvaliacaoItemDto avaliacaoItemDto = objectMapper.convertValue(avaliacaoEntity, AvaliacaoItemDto.class);
+                    avaliacaoItemDto.setIdUsuario(avaliacaoEntity.getAvaliacaoPK().getIdUsuario());
+                    avaliacaoItemDto.setIdItem(avaliacaoEntity.getAvaliacaoPK().getIdItem());
+                    return avaliacaoItemDto;
+                }).toList();
+
     }
-    public List<AvaliacaoDto> listByUsers(Integer id) throws RegraDeNegocioException {
-            usuarioService.findById(id);
-            return avaliacaoRepository.findByIdEntretenimento(id).stream()
-                    .map(item -> objectMapper.convertValue(item, AvaliacaoDto.class))
-                    .toList();
+    public List<AvaliacaoItemDto> listByUsers(Integer id) throws RegraDeNegocioException {
+        List<AvaliacaoEntity> avaliacaoEntities = avaliacaoRepository.pegarUsuario(id);
+        return avaliacaoEntities.stream()
+                    .map(avaliacaoEntity -> {
+                        AvaliacaoItemDto avaliacaoItemDto = objectMapper.convertValue(avaliacaoEntity, AvaliacaoItemDto.class);
+                        avaliacaoItemDto.setIdUsuario(avaliacaoEntity.getAvaliacaoPK().getIdUsuario());
+                        avaliacaoItemDto.setIdItem(avaliacaoEntity.getAvaliacaoPK().getIdItem());
+                        return avaliacaoItemDto;
+                    }).toList();
+
     }
 
-    public AvaliacaoDto update(AvaliacaoCreateDto avaliacaoAtualizar, Integer idUsuario, Integer idItem) throws RegraDeNegocioException{
+    public AvaliacaoItemDto update(AvaliacaoCreateDto avaliacaoAtualizar, Integer idUsuario, Integer idItem) throws RegraDeNegocioException{
 
-        UsuarioEntity usuarioRecuperado = usuarioService.findById(idUsuario);
-        ItemEntretenimentoEntity itemRecuperado = itemService.findById(idItem);
-        AvaliacaoEntity avaliacaoRecuperada = find(idUsuario, idItem);
+            AvaliacaoEntity avaliacaoRecuperada = avaliacaoRepository.pegar(idUsuario, idItem);
             avaliacaoRecuperada.setNota(avaliacaoAtualizar.getNota());
             avaliacaoRecuperada.setComentario(avaliacaoAtualizar.getComentario());
-            avaliacaoRecuperada.setUsuario(usuarioRecuperado);
-            avaliacaoRecuperada.setItemEntretenimento(itemRecuperado);
+
             avaliacaoRepository.save(avaliacaoRecuperada);
-            AvaliacaoEntity avaliacao = objectMapper.convertValue(avaliacaoAtualizar, AvaliacaoEntity.class);
-            return objectMapper.convertValue(avaliacaoRecuperada, AvaliacaoDto.class);
+
+            return getAvaliacao(idUsuario,idItem);
 
     }
 
@@ -95,8 +105,13 @@ public class AvaliacaoService {
     }
 
     public AvaliacaoItemDto getAvaliacao(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
-            AvaliacaoEntity avaliacaoEntity = avaliacaoRepository.pegar(idUsuario, idItem);
-            return objectMapper.convertValue(avaliacaoEntity, AvaliacaoItemDto.class);
+
+        AvaliacaoEntity avaliacaoEntity = avaliacaoRepository.pegar(idUsuario,idItem);
+        AvaliacaoItemDto avaliacaoItemDto = objectMapper.convertValue(avaliacaoEntity, AvaliacaoItemDto.class);
+        avaliacaoItemDto.setIdItem(avaliacaoEntity.getAvaliacaoPK().getIdItem());
+        avaliacaoItemDto.setIdUsuario(avaliacaoEntity.getAvaliacaoPK().getIdUsuario());
+
+        return avaliacaoItemDto;
     }
 
     public AvaliacaoEntity find(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {

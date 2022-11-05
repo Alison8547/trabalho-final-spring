@@ -80,7 +80,7 @@ public class AvaliacaoController {
             }
     )
     @GetMapping("/{idUsuario}/user")
-    public ResponseEntity<List<AvaliacaoDto>> listByUser(@PathVariable("idUsuario") Integer idUsuario) throws RegraDeNegocioException {
+    public ResponseEntity<List<AvaliacaoItemDto>> listByUser(@PathVariable("idUsuario") Integer idUsuario) throws RegraDeNegocioException {
         return ResponseEntity.ok(avaliacaoService.listByUsers(idUsuario));
     }
 
@@ -94,7 +94,7 @@ public class AvaliacaoController {
             }
     )
     @PutMapping("/ids")
-    public ResponseEntity<AvaliacaoDto> update(@Valid @RequestBody AvaliacaoCreateDto avaliacaoDto,
+    public ResponseEntity<AvaliacaoItemDto> update(@Valid @RequestBody AvaliacaoCreateDto avaliacaoDto,
                                                @RequestParam("idUsuario") Integer idUsuario,
                                                @RequestParam("idItem") Integer idItem) throws RegraDeNegocioException {
 
