@@ -3,7 +3,6 @@ package br.com.dbc.dbcmovies.service;
 import br.com.dbc.dbcmovies.dto.*;
 import br.com.dbc.dbcmovies.entity.AvaliacaoEntity;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
-import br.com.dbc.dbcmovies.entity.TipoTemplate;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;
 import br.com.dbc.dbcmovies.entity.pk.AvaliacaoPK;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
@@ -64,42 +63,53 @@ public class AvaliacaoService {
     }
 
     public List<AvaliacaoItemDto> list() throws RegraDeNegocioException {
-            return avaliacaoRepository.findItemEntretenimento().stream()
-                    .map(item -> objectMapper.convertValue(item, AvaliacaoItemDto.class))
-                    .toList();
+        return avaliacaoRepository.findItemEntretenimento().stream()
+                .map(item -> objectMapper.convertValue(item, AvaliacaoItemDto.class))
+                .toList();
     }
     public List<AvaliacaoDto> listByUsers(Integer id) throws RegraDeNegocioException {
-            usuarioService.findById(id);
-            return avaliacaoRepository.findByIdEntretenimento(id).stream()
-                    .map(item -> objectMapper.convertValue(item, AvaliacaoDto.class))
-                    .toList();
+        usuarioService.findById(id);
+        return avaliacaoRepository.findByIdEntretenimento(id).stream()
+                .map(item -> objectMapper.convertValue(item, AvaliacaoDto.class))
+                .toList();
     }
 
     public AvaliacaoDto update(AvaliacaoCreateDto avaliacaoAtualizar, Integer idUsuario, Integer idItem) throws RegraDeNegocioException{
 
         UsuarioEntity usuarioRecuperado = usuarioService.findById(idUsuario);
         ItemEntretenimentoEntity itemRecuperado = itemService.findById(idItem);
-        AvaliacaoEntity avaliacaoRecuperada = find(idUsuario, idItem);
-            avaliacaoRecuperada.setNota(avaliacaoAtualizar.getNota());
-            avaliacaoRecuperada.setComentario(avaliacaoAtualizar.getComentario());
-            avaliacaoRecuperada.setUsuario(usuarioRecuperado);
-            avaliacaoRecuperada.setItemEntretenimento(itemRecuperado);
-            avaliacaoRepository.save(avaliacaoRecuperada);
-            AvaliacaoEntity avaliacao = objectMapper.convertValue(avaliacaoAtualizar, AvaliacaoEntity.class);
-            return objectMapper.convertValue(avaliacaoRecuperada, AvaliacaoDto.class);
+        AvaliacaoEntity avaliacaoRecuperada = findByIdAvaliacao(idUsuario, idItem);
+        avaliacaoRecuperada.setNota(avaliacaoAtualizar.getNota());
+        avaliacaoRecuperada.setComentario(avaliacaoAtualizar.getComentario());
+        avaliacaoRecuperada.setUsuario(usuarioRecuperado);
+        avaliacaoRecuperada.setItemEntretenimento(itemRecuperado);
+        avaliacaoRepository.save(avaliacaoRecuperada);
+        AvaliacaoEntity avaliacao = objectMapper.convertValue(avaliacaoAtualizar, AvaliacaoEntity.class);
+        return objectMapper.convertValue(avaliacaoRecuperada, AvaliacaoDto.class);
 
     }
 
     public void delete(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
-            avaliacaoRepository.remover(idUsuario, idItem);
+        usuarioService.findById(idUsuario);
+        itemService.findById(idItem);
+
+        AvaliacaoEntity avaliacao = this.findByIdAvaliacao(idUsuario, idItem);
+
+        avaliacaoRepository.delete(avaliacao);
     }
 
     public AvaliacaoItemDto getAvaliacao(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
-            AvaliacaoEntity avaliacaoEntity = avaliacaoRepository.pegar(idUsuario, idItem);
-            return objectMapper.convertValue(avaliacaoEntity, AvaliacaoItemDto.class);
+        AvaliacaoEntity avaliacaoEntity = avaliacaoRepository.findByIdAvaliacao(idUsuario, idItem);
+        return objectMapper.convertValue(avaliacaoEntity, AvaliacaoItemDto.class);
     }
 
-    public AvaliacaoEntity find(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
-        return avaliacaoRepository.pegar(idUsuario, idItem);
+    public AvaliacaoEntity findByIdAvaliacao(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
+        AvaliacaoEntity avaliacao = avaliacaoRepository.findByIdAvaliacao(idUsuario, idItem);
+
+        if(avaliacao != null) {
+            return avaliacao;
+        }else {
+            throw new RegraDeNegocioException("Avaliação não existe!");
+        }
     }
 }

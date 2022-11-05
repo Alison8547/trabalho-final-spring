@@ -23,15 +23,9 @@ public interface AvaliacaoRepository extends JpaRepository<AvaliacaoEntity, Inte
             " where (:idUsuario is null or a.avaliacaoPK.idUsuario = :idUsuario)")
     List<AvaliacaoEntity>findByIdEntretenimento(Integer idUsuario);
 
-
     @Query("select a" +
             " from AVALIACAO a" +
             " where a.avaliacaoPK.idUsuario = :idUsuario and a.avaliacaoPK.idItem = :idItem")
-    AvaliacaoEntity pegar(Integer idUsuario, Integer idItem);
-
-
-    @Query("select a" +
-            " from AVALIACAO a" +
-            " where a.avaliacaoPK.idUsuario = :idUsuario and a.avaliacaoPK.idItem = :idItem")
-    AvaliacaoEntity remover(Integer idUsuario, Integer idItem);
+    AvaliacaoEntity findByIdAvaliacao(Integer idUsuario, Integer idItem);
 }
+
