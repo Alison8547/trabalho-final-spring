@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -138,7 +139,8 @@ public class ItemService {
     }
 
     public PageDTO<ItemEntretenimentoDto> listaItemEntretenimentoPaginado(Integer pagina, Integer tamanho) {
-        PageRequest pageRequest = PageRequest.of(pagina, tamanho);
+        Sort ordenacao = Sort.by("nome");
+        PageRequest pageRequest = PageRequest.of(pagina, tamanho,ordenacao);
         Page<ItemEntretenimentoEntity> paginaDoRepositorio = itemRepository.findAll(pageRequest);
         List<ItemEntretenimentoDto> pessoasDaPagina = paginaDoRepositorio.getContent().stream()
                 .map(itemEntretenimentoEntity -> objectMapper.convertValue(itemEntretenimentoEntity, ItemEntretenimentoDto.class))
