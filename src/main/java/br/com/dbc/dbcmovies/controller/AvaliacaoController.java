@@ -65,7 +65,7 @@ public class AvaliacaoController {
     )
     @GetMapping("/ids")
     public ResponseEntity<AvaliacaoItemDto> getByIds(@RequestParam("idUsuario") Integer idUsuario,
-                                                 @RequestParam("idItem") Integer idItem){
+                                                 @RequestParam("idItem") Integer idItem) throws RegraDeNegocioException {
 
         return ResponseEntity.ok(avaliacaoService.getAvaliacao(idUsuario, idItem));
     }

@@ -87,8 +87,11 @@ public class AvaliacaoService {
     }
 
     public AvaliacaoItemDto update(AvaliacaoCreateDto avaliacaoAtualizar, Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
+        usuarioService.findById(idUsuario);
+        itemService.findById(idItem);
 
-        AvaliacaoEntity avaliacaoRecuperada = avaliacaoRepository.pegar(idUsuario, idItem);
+        AvaliacaoEntity avaliacaoRecuperada = this.findByIdAvaliacao(idUsuario, idItem);
+
         avaliacaoRecuperada.setNota(avaliacaoAtualizar.getNota());
         avaliacaoRecuperada.setComentario(avaliacaoAtualizar.getComentario());
 
@@ -107,9 +110,13 @@ public class AvaliacaoService {
         avaliacaoRepository.delete(avaliacao);
     }
 
-    public AvaliacaoItemDto getAvaliacao(Integer idUsuario, Integer idItem){
+    public AvaliacaoItemDto getAvaliacao(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
 
-        AvaliacaoEntity avaliacaoEntity = avaliacaoRepository.pegar(idUsuario, idItem);
+        usuarioService.findById(idUsuario);
+        itemService.findById(idItem);
+
+        AvaliacaoEntity avaliacaoEntity = this.findByIdAvaliacao(idUsuario, idItem);
+
         AvaliacaoItemDto avaliacaoItemDto = objectMapper.convertValue(avaliacaoEntity, AvaliacaoItemDto.class);
         avaliacaoItemDto.setIdItem(avaliacaoEntity.getAvaliacaoPK().getIdItem());
         avaliacaoItemDto.setIdUsuario(avaliacaoEntity.getAvaliacaoPK().getIdUsuario());
