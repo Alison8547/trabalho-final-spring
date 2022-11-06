@@ -1,14 +1,13 @@
 package br.com.dbc.dbcmovies.controller;
 
-import br.com.dbc.dbcmovies.dto.FilmeCreateDto;
-import br.com.dbc.dbcmovies.dto.ItemEntretenimentoDto;
-import br.com.dbc.dbcmovies.dto.SerieCreateDto;
+import br.com.dbc.dbcmovies.dto.*;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.ItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -141,5 +140,17 @@ public class ItemController {
     public ResponseEntity<Void> delete(@PathVariable("idItem") Integer id, @PathVariable("idAdmin") Integer idAdmin) throws RegraDeNegocioException {
         itemService.delete(id, idAdmin);
         return ResponseEntity.noContent().build();
+    }
+    @Operation(summary = "Pega a lista paginada de itens", description = "Resgata a lista de itens paginado")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Foi resgatado com sucesso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
+    @GetMapping("/itens-paginados")
+    public ResponseEntity<PageDTO<ItemEntretenimentoDto>> listaItemEntretenimentoPaginado(Integer pagina, Integer tamanho) {
+        return new ResponseEntity<>(itemService.listaItemEntretenimentoPaginado(pagina,tamanho),HttpStatus.OK);
     }
 }

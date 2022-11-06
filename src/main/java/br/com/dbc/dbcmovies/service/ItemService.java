@@ -8,6 +8,8 @@ import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.ItemRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -135,4 +137,17 @@ public class ItemService {
                 .orElseThrow(() -> new RegraDeNegocioException("Item não encontrado!"));
     }
 
+    public PageDTO<ItemEntretenimentoDto> listaItemEntretenimentoPaginado(Integer pagina, Integer tamanho) {
+        PageRequest pageRequest = PageRequest.of(pagina, tamanho);
+        Page<ItemEntretenimentoEntity> paginaDoRepositorio = itemRepository.findAll(pageRequest);
+        List<ItemEntretenimentoDto> pessoasDaPagina = paginaDoRepositorio.getContent().stream()
+                .map(itemEntretenimentoEntity -> objectMapper.convertValue(itemEntretenimentoEntity, ItemEntretenimentoDto.class))
+                .toList();
+        return new PageDTO<>(paginaDoRepositorio.getTotalElements(),
+                paginaDoRepositorio.getTotalPages(),
+                pagina,
+                tamanho,
+                pessoasDaPagina
+        );
+    }
 }
