@@ -2,6 +2,8 @@ package br.com.dbc.dbcmovies.controller;
 
 import br.com.dbc.dbcmovies.dto.IndicacaoCreateDto;
 import br.com.dbc.dbcmovies.dto.IndicacaoDto;
+import br.com.dbc.dbcmovies.dto.IndicacaoPagDto;
+import br.com.dbc.dbcmovies.dto.PageDTO;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.IndicacaoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,5 +35,18 @@ public class IndicacaoController {
     @PostMapping("/{idUsuario}")
     public ResponseEntity<IndicacaoDto> indicar(@PathVariable(name = "idUsuario") Integer idUsuario, @RequestBody IndicacaoCreateDto indicacaoDto) throws RegraDeNegocioException {
         return new ResponseEntity<>(indicacaoService.incluirIndicacao(indicacaoDto, idUsuario), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Pega a lista paginada de indicações", description = "Resgata a lista paginada do banco de dados")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Foi resgatado com sucesso"),
+                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
+    @GetMapping("/indicacao-paginada")
+    public ResponseEntity<PageDTO<IndicacaoPagDto>> listIndicacaoPaginada(Integer pagina, Integer tamanho) {
+        return new ResponseEntity<>(indicacaoService.listPessoaIndicacaoPaginada(pagina,tamanho),HttpStatus.OK);
     }
 }
