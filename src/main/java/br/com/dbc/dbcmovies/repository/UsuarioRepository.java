@@ -1,7 +1,7 @@
 package br.com.dbc.dbcmovies.repository;
 
 
-import br.com.dbc.dbcmovies.dto.UsuarioAssistidoPersonalizadoDto;
+import br.com.dbc.dbcmovies.dto.UsuarioAvaliacaoPersonalizadoDto;
 import br.com.dbc.dbcmovies.dto.UsuarioItemPersonalizadoDto;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,15 +32,16 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity,Integer> 
             " where (:idUsuario is null or u.idUsuario = :idUsuario)")
     List<UsuarioItemPersonalizadoDto> listaPersonalizadaUsuarioItem (Integer idUsuario);
 
-    @Query("select new br.com.dbc.dbcmovies.dto.UsuarioAssistidoPersonalizadoDto(" +
+    @Query("select new br.com.dbc.dbcmovies.dto.UsuarioAvaliacaoPersonalizadoDto(" +
             " u.idUsuario," +
             " u.nome," +
             " u.idade," +
             " u.email," +
+            " a.itemEntretenimento.nome," +
             " a.nota," +
             " a.comentario)" +
             " from USUARIO u" +
             " join u.avaliacaos a" +
             " where (:idUsuario is null or u.idUsuario = :idUsuario)")
-    List<UsuarioAssistidoPersonalizadoDto> listaPersonalizadaUsuarioAvaliacao (Integer idUsuario);
+    List<UsuarioAvaliacaoPersonalizadoDto> listaPersonalizadaUsuarioAvaliacao (Integer idUsuario);
 }

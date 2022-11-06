@@ -1,6 +1,6 @@
 package br.com.dbc.dbcmovies.controller;
 
-import br.com.dbc.dbcmovies.dto.UsuarioAssistidoPersonalizadoDto;
+import br.com.dbc.dbcmovies.dto.UsuarioAvaliacaoPersonalizadoDto;
 import br.com.dbc.dbcmovies.dto.UsuarioCreateDto;
 import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.dto.UsuarioItemPersonalizadoDto;
@@ -154,7 +154,7 @@ public class UsuarioController {
             }
     )
     @GetMapping("/usuario-avaliacao-personalizado")
-    public ResponseEntity<List<UsuarioAssistidoPersonalizadoDto>> listaPersonalizadaUsuarioAvaliacao(@RequestParam(required = false, name = "idUsuario") Integer idUsuario){
+    public ResponseEntity<List<UsuarioAvaliacaoPersonalizadoDto>> listaPersonalizadaUsuarioAvaliacao(@RequestParam(required = false, name = "idUsuario") Integer idUsuario){
         return new ResponseEntity<>(usuarioService.listaPersonalizadaUsuarioAvaliacao(idUsuario),HttpStatus.OK);
     }
 }

@@ -1,6 +1,6 @@
 package br.com.dbc.dbcmovies.service;
 
-import br.com.dbc.dbcmovies.dto.UsuarioAssistidoPersonalizadoDto;
+import br.com.dbc.dbcmovies.dto.UsuarioAvaliacaoPersonalizadoDto;
 import br.com.dbc.dbcmovies.dto.UsuarioCreateDto;
 import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.dto.UsuarioItemPersonalizadoDto;
@@ -93,7 +93,7 @@ public class UsuarioService {
                 .stream().toList();
     }
 
-    public List<UsuarioAssistidoPersonalizadoDto> listaPersonalizadaUsuarioAvaliacao(Integer idUsuario) {
+    public List<UsuarioAvaliacaoPersonalizadoDto> listaPersonalizadaUsuarioAvaliacao(Integer idUsuario) {
         return usuarioRepository.listaPersonalizadaUsuarioAvaliacao(idUsuario)
                 .stream().toList();
     }
