@@ -74,7 +74,7 @@ public class AssistidosService {
         usuario.getItemEntretenimentos().stream()
                 .filter(item -> item.getIdItem() == idItem)
                 .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("Item ainda não foi maracado como assistido para o usuário selecionado"));
+                .orElseThrow(() -> new RegraDeNegocioException("Item ainda não foi marcado como assistido para o usuário selecionado"));
     }
     public void verificarUsuarioNaTabela(Integer idUsuario) throws RegraDeNegocioException {
         if(assistidosRepository.verificarUsuarioNaTabela(idUsuario) == 0) {
