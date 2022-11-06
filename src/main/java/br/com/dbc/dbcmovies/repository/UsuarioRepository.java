@@ -42,5 +42,5 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity,Integer> 
             " from USUARIO u" +
             " join u.avaliacaos a" +
             " where (:idUsuario is null or u.idUsuario = :idUsuario)")
-    List<UsuarioAssistidoPersonalizadoDto> listaPersonalizadaUsuarioAssistido (Integer idUsuario);
+    List<UsuarioAssistidoPersonalizadoDto> listaPersonalizadaUsuarioAvaliacao (Integer idUsuario);
 }

@@ -93,8 +93,8 @@ public class UsuarioService {
                 .stream().toList();
     }
 
-    public List<UsuarioAssistidoPersonalizadoDto> listaPersonalizadaUsuarioAssistido(Integer idUsuario) {
-        return usuarioRepository.listaPersonalizadaUsuarioAssistido(idUsuario)
+    public List<UsuarioAssistidoPersonalizadoDto> listaPersonalizadaUsuarioAvaliacao(Integer idUsuario) {
+        return usuarioRepository.listaPersonalizadaUsuarioAvaliacao(idUsuario)
                 .stream().toList();
     }
 }

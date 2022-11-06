@@ -138,7 +138,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/usuario-avaliacao-personalizado")
-    public List<UsuarioAssistidoPersonalizadoDto> listaPersonalizadaUsuarioAssistido(@RequestParam(required = false, name = "idUsuario") Integer idUsuario){
-        return usuarioService.listaPersonalizadaUsuarioAssistido(idUsuario);
+    public List<UsuarioAssistidoPersonalizadoDto> listaPersonalizadaUsuarioAvaliacao(@RequestParam(required = false, name = "idUsuario") Integer idUsuario){
+        return usuarioService.listaPersonalizadaUsuarioAvaliacao(idUsuario);
     }
 }
