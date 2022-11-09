@@ -21,13 +21,13 @@ public class AvaliacaoService {
     private final ItemService itemService;
     private final ObjectMapper objectMapper;
 
-    public AvaliacaoDto create(AvaliacaoCreateDto avaliacaoDto, Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
+    public AvaliacaoDto create(AvaliacaoCreateDto avaliacaoDTO, Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
 
         UsuarioEntity usuarioEntity = usuarioService.findById(idUsuario);
         this.verificarItemAvaliado(usuarioEntity, idItem);
 
         ItemEntretenimentoEntity itemEntity = itemService.findById(idItem);
-        AvaliacaoEntity avaliacaoEntity = objectMapper.convertValue(avaliacaoDto, AvaliacaoEntity.class);
+        AvaliacaoEntity avaliacaoEntity = objectMapper.convertValue(avaliacaoDTO, AvaliacaoEntity.class);
         avaliacaoEntity.setAvaliacaoPK(new AvaliacaoPK());
 
         avaliacaoEntity.getAvaliacaoPK().setIdItem(idItem);
@@ -38,16 +38,9 @@ public class AvaliacaoService {
 
         avaliacaoRepository.save(avaliacaoEntity);
 
-        UsuarioDto usuarioDto = objectMapper.convertValue(usuarioEntity, UsuarioDto.class);
-        ItemEntretenimentoDto itemDto = objectMapper.convertValue(itemEntity, ItemEntretenimentoDto.class);
+        AvaliacaoDto avaliacaoDto = getAvaliacaoDto(avaliacaoEntity);
 
-        AvaliacaoDto avaliacaoDTO = objectMapper.convertValue(avaliacaoEntity, AvaliacaoDto.class);
-        avaliacaoDTO.setIdUsuario(avaliacaoEntity.getAvaliacaoPK().getIdUsuario());
-        avaliacaoDTO.setIdItemEntretenimento(avaliacaoEntity.getAvaliacaoPK().getIdItem());
-        avaliacaoDTO.setUsuario(usuarioDto);
-        avaliacaoDTO.setItemEntretenimento(itemDto);
-
-        return avaliacaoDTO;
+        return avaliacaoDto;
     }
 
     public void verificarItemAvaliado(UsuarioEntity usuario, Integer idItem) throws RegraDeNegocioException {
@@ -61,32 +54,28 @@ public class AvaliacaoService {
         }
     }
 
-    public List<AvaliacaoItemDto> list() throws RegraDeNegocioException {
+    public List<AvaliacaoDto> list() throws RegraDeNegocioException {
         List<AvaliacaoEntity> avaliacaoEntities = avaliacaoRepository.findAll();
 
         return avaliacaoEntities.stream()
                 .map(avaliacaoEntity -> {
-                    AvaliacaoItemDto avaliacaoItemDto = objectMapper.convertValue(avaliacaoEntity, AvaliacaoItemDto.class);
-                    avaliacaoItemDto.setIdUsuario(avaliacaoEntity.getAvaliacaoPK().getIdUsuario());
-                    avaliacaoItemDto.setIdItem(avaliacaoEntity.getAvaliacaoPK().getIdItem());
-                    return avaliacaoItemDto;
+                    AvaliacaoDto avaliacaoDto = getAvaliacaoDto(avaliacaoEntity);
+                    return avaliacaoDto;
                 }).toList();
 
     }
 
-    public List<AvaliacaoItemDto> listByUsers(Integer id){
+    public List<AvaliacaoDto> listByUsers(Integer id){
         List<AvaliacaoEntity> avaliacaoEntities = avaliacaoRepository.pegarUsuario(id);
         return avaliacaoEntities.stream()
                 .map(avaliacaoEntity -> {
-                    AvaliacaoItemDto avaliacaoItemDto = objectMapper.convertValue(avaliacaoEntity, AvaliacaoItemDto.class);
-                    avaliacaoItemDto.setIdUsuario(avaliacaoEntity.getAvaliacaoPK().getIdUsuario());
-                    avaliacaoItemDto.setIdItem(avaliacaoEntity.getAvaliacaoPK().getIdItem());
-                    return avaliacaoItemDto;
+                    AvaliacaoDto avaliacaoDto = getAvaliacaoDto(avaliacaoEntity);
+                    return avaliacaoDto;
                 }).toList();
 
     }
 
-    public AvaliacaoItemDto update(AvaliacaoCreateDto avaliacaoAtualizar, Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
+    public AvaliacaoDto update(AvaliacaoCreateDto avaliacaoAtualizar, Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
         usuarioService.findById(idUsuario);
         itemService.findById(idItem);
 
@@ -97,7 +86,7 @@ public class AvaliacaoService {
 
         avaliacaoRepository.save(avaliacaoRecuperada);
 
-        return getAvaliacao(idUsuario, idItem);
+        return getByIds(idUsuario, idItem);
 
     }
 
@@ -110,18 +99,25 @@ public class AvaliacaoService {
         avaliacaoRepository.delete(avaliacao);
     }
 
-    public AvaliacaoItemDto getAvaliacao(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
+    public AvaliacaoDto getByIds(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
 
         usuarioService.findById(idUsuario);
         itemService.findById(idItem);
 
         AvaliacaoEntity avaliacaoEntity = this.findByIdAvaliacao(idUsuario, idItem);
 
-        AvaliacaoItemDto avaliacaoItemDto = objectMapper.convertValue(avaliacaoEntity, AvaliacaoItemDto.class);
-        avaliacaoItemDto.setIdItem(avaliacaoEntity.getAvaliacaoPK().getIdItem());
-        avaliacaoItemDto.setIdUsuario(avaliacaoEntity.getAvaliacaoPK().getIdUsuario());
+        AvaliacaoDto avaliacaoDto = getAvaliacaoDto(avaliacaoEntity);
 
-        return avaliacaoItemDto;
+        return avaliacaoDto;
+    }
+
+    private AvaliacaoDto getAvaliacaoDto(AvaliacaoEntity avaliacaoEntity) {
+        AvaliacaoDto avaliacaoDto = objectMapper.convertValue(avaliacaoEntity, AvaliacaoDto.class);
+        avaliacaoDto.setIdUsuario(avaliacaoEntity.getAvaliacaoPK().getIdUsuario());
+        avaliacaoDto.setIdItemEntretenimento(avaliacaoEntity.getAvaliacaoPK().getIdItem());
+        avaliacaoDto.setItemEntretenimento(objectMapper.convertValue(avaliacaoEntity.getItemEntretenimento(), ItemEntretenimentoDto.class));
+        avaliacaoDto.setUsuario(objectMapper.convertValue(avaliacaoEntity.getUsuario(), UsuarioDto.class));
+        return avaliacaoDto;
     }
 
     public AvaliacaoEntity findByIdAvaliacao(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {

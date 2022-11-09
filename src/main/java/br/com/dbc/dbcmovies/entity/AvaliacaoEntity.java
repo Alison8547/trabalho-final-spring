@@ -26,13 +26,13 @@ public class AvaliacaoEntity {
     private String comentario;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("idUsuario")
     @JoinColumn(name = "id_usuario")
     private UsuarioEntity usuario;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("idItem")
     @JoinColumn(name = "id_Item_Entretenimento")
     private ItemEntretenimentoEntity itemEntretenimento;

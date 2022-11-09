@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @Validated
-@RequestMapping("/indicar")
+@RequestMapping("/indicacao")
 public class IndicacaoController {
 
     private final IndicacaoService indicacaoService;
@@ -27,7 +27,7 @@ public class IndicacaoController {
     @Operation(summary = "Indicar um filme / série", description = "Adiciona uma indicação no banco de dados")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Marcado como assistido com sucesso"),
+                    @ApiResponse(responseCode = "200", description = "Item indicado com sucesso"),
                     @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
