@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class UsuarioAvaliacaoPersonalizadoDto {
-
     private Integer idUsuario;
     private String nome;
     private Integer idade;

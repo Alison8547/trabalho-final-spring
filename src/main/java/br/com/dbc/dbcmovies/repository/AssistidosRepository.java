@@ -6,7 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AssistidosRepository extends JpaRepository<ItemEntretenimentoEntity, Integer>/*implements Interacao*/ {
+public interface AssistidosRepository extends JpaRepository<ItemEntretenimentoEntity, Integer> {
+
     @Query(value = "  select count (id_usuario)        " +
             "  from EDUARDO_SEDREZ.assistidos a " +
             "  where a.id_usuario = ?1          ", nativeQuery = true)

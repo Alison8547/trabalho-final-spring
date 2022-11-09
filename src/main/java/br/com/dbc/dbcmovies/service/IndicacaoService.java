@@ -21,33 +21,34 @@ public class IndicacaoService {
     private final UsuarioService usuarioService;
     private final ObjectMapper objectMapper;
 
-    public IndicacaoDto incluirIndicacao(IndicacaoCreateDto indicacaoDto, Integer idUsuario) throws RegraDeNegocioException {
+    public IndicacaoDto incluirIndicacao(IndicacaoCreateDto indicacao, Integer idUsuario) throws RegraDeNegocioException {
 
-        UsuarioNomeDto usuarioNomeDto = objectMapper.convertValue(usuarioService.findById(idUsuario), UsuarioNomeDto.class);
-        IndicacaoPK indicacaoPK = new IndicacaoPK(idUsuario, indicacaoDto.getItemNome());
-        IndicacaoEntity indicacao = objectMapper.convertValue(indicacaoDto, IndicacaoEntity.class);
-        indicacao.setIndicacaoPK(indicacaoPK);
-        indicacao.setUsuario(usuarioService.findById(idUsuario));
-        indicacaoRepository.save(indicacao);
+        IndicacaoPK indicacaoPK = new IndicacaoPK(idUsuario, indicacao.getItemNome());
+        IndicacaoEntity indicacaoEntity = objectMapper.convertValue(indicacao, IndicacaoEntity.class);
+        indicacaoEntity.setIndicacaoPK(indicacaoPK);
+        indicacaoEntity.setUsuario(usuarioService.findById(idUsuario));
+        indicacaoRepository.save(indicacaoEntity);
 
-        IndicacaoDto indicacaoDTO = objectMapper.convertValue(indicacao, IndicacaoDto.class);
-        indicacaoDTO.setUsuario(usuarioNomeDto);
-        indicacaoDTO.setItemNome(indicacaoDto.getItemNome());
-        return indicacaoDTO;
+        UsuarioDto usuarioDto = objectMapper.convertValue(usuarioService.findById(idUsuario), UsuarioDto.class);
+
+        IndicacaoDto indicacaoDto = objectMapper.convertValue(indicacao, IndicacaoDto.class);
+        indicacaoDto.setItemNome(indicacao.getItemNome());
+        indicacaoDto.setUsuario(usuarioDto);
+        return indicacaoDto;
     }
 
-    public PageDTO<IndicacaoPagDto> listPessoaIndicacaoPaginada(Integer pagina, Integer tamanho) {
+    public PageDTO<IndicacaoDto> listPessoaIndicacaoPaginada(Integer pagina, Integer tamanho) {
         PageRequest pageRequest = PageRequest.of(pagina, tamanho);
         Page<IndicacaoEntity> paginaEntity = indicacaoRepository.findAll(pageRequest);
 
-        List<IndicacaoPagDto> indicacaoDtos = paginaEntity.getContent().stream()
+        List<IndicacaoDto> indicacaoDtos = paginaEntity.getContent().stream()
                 .map(indicacaoEntity -> {
-                    IndicacaoPagDto indicacaoDto = objectMapper.convertValue(indicacaoEntity, IndicacaoPagDto.class);
-                    indicacaoDto.setNomeItem(indicacaoEntity.getIndicacaoPK().getNomeItem());
-                    indicacaoDto.setIdUsuario(indicacaoEntity.getUsuario().getIdUsuario());
+                    IndicacaoDto indicacaoDto = objectMapper.convertValue(indicacaoEntity, IndicacaoDto.class);
+                    indicacaoDto.setItemNome(indicacaoEntity.getIndicacaoPK().getNomeItem());
+                    UsuarioDto usuarioDto = objectMapper.convertValue(indicacaoEntity.getUsuario(), UsuarioDto.class);
+                    indicacaoDto.setUsuario(usuarioDto);
                     return indicacaoDto;
                 }).toList();
-
 
         return new PageDTO<>(paginaEntity.getTotalElements(),
                 paginaEntity.getTotalPages(),

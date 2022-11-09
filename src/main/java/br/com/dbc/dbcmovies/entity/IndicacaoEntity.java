@@ -20,7 +20,7 @@ public class IndicacaoEntity {
     private IndicacaoPK indicacaoPK;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("idUsuario")
     @JoinColumn(name = "id_usuario")
     private UsuarioEntity usuario;

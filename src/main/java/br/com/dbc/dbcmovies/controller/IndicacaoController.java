@@ -2,7 +2,6 @@ package br.com.dbc.dbcmovies.controller;
 
 import br.com.dbc.dbcmovies.dto.IndicacaoCreateDto;
 import br.com.dbc.dbcmovies.dto.IndicacaoDto;
-import br.com.dbc.dbcmovies.dto.IndicacaoPagDto;
 import br.com.dbc.dbcmovies.dto.PageDTO;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.IndicacaoService;
@@ -46,7 +45,7 @@ public class IndicacaoController {
             }
     )
     @GetMapping("/indicacao-paginada")
-    public ResponseEntity<PageDTO<IndicacaoPagDto>> listIndicacaoPaginada(Integer pagina, Integer tamanho) {
+    public ResponseEntity<PageDTO<IndicacaoDto>> listIndicacaoPaginada(Integer pagina, Integer tamanho) {
         return new ResponseEntity<>(indicacaoService.listPessoaIndicacaoPaginada(pagina,tamanho),HttpStatus.OK);
     }
 }

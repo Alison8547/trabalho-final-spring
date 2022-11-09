@@ -4,6 +4,5 @@ import lombok.Data;
 
 @Data
 public class IndicacaoDto extends IndicacaoCreateDto{
-    private UsuarioNomeDto Usuario;
-
+    private UsuarioDto usuario;
 }

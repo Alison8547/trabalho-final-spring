@@ -15,7 +15,6 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity,Integer> 
 
     UsuarioEntity findByEmailAndSenha(String email,String senha);
 
-
     @Query("select new br.com.dbc.dbcmovies.dto.UsuarioItemPersonalizadoDto(" +
             " u.idUsuario," +
             " u.nome," +

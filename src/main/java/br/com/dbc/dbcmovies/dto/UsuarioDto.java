@@ -9,7 +9,6 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class UsuarioDto {
-
     @Schema(description = "Nome do usuário", example = "Alison")
     private String nome;
 
@@ -20,8 +19,10 @@ public class UsuarioDto {
     @Email
     @Schema(description = "Email do usuário", example = "alison@hotmail.com")
     private String email;
+
     @Schema(description = "Tipo do usuário", example = "CLIENTE")
     private TipoUsuario tipoUsuario;
+
     @Schema(description = "Id do usuário")
     private Integer idUsuario;
 }

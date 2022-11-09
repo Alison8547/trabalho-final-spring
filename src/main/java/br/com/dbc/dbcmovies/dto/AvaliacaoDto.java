@@ -4,12 +4,8 @@ import lombok.Data;
 
 @Data
 public class AvaliacaoDto extends AvaliacaoCreateDto {
-
     private Integer idUsuario;
-
     private Integer idItemEntretenimento;
-
     private UsuarioDto usuario;
-
     private ItemEntretenimentoDto itemEntretenimento;
 }
