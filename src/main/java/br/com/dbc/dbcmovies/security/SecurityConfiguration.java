@@ -3,6 +3,7 @@ package br.com.dbc.dbcmovies.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,6 +31,12 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeHttpRequests((authz) ->
                         authz.antMatchers("/auth/**").permitAll()
+                                .antMatchers("/usuario/**").hasAnyRole("CLIENTE", "ADMIN")
+                                .antMatchers("/assistido/**").hasAnyRole("CLIENTE", "ADMIN")
+                                .antMatchers("/avaliacao/**").hasAnyRole("CLIENTE", "ADMIN")
+                                .antMatchers("/indicacao/**").hasAnyRole("ADMIN", "CLIENTE")
+                                .antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
+                                .antMatchers(HttpMethod.GET, "/item").hasRole("CLIENTE")
                                 .anyRequest().authenticated()
                 );
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
