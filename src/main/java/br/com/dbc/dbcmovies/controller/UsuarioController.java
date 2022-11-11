@@ -117,20 +117,6 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Atualizar o tipo do Usuário", description = "Atualiza o tipo do usuário no banco de dados")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Atualizou com sucesso"),
-                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "404", description = "Não encontrado"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
-            }
-    )
-    @PutMapping("/{idUsuario}/admin")
-    public ResponseEntity<UsuarioDto> tornarUsuarioAdmin(@PathVariable(name = "idUsuario") Integer idUsuario) throws RegraDeNegocioException {
-        usuarioService.tornarUsuarioAdmin(idUsuario);
-        return new ResponseEntity<>(usuarioService.tornarUsuarioAdmin(idUsuario),HttpStatus.OK);
-    }
 
     @Operation(summary = "Pega a lista personaliza com os items do usuário", description = "Resgata a lista personalizada do banco de dados")
     @ApiResponses(

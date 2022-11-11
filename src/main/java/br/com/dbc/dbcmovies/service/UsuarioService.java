@@ -5,7 +5,6 @@ import br.com.dbc.dbcmovies.dto.UsuarioCreateDto;
 import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.dto.UsuarioItemPersonalizadoDto;
 import br.com.dbc.dbcmovies.entity.TipoTemplate;
-import br.com.dbc.dbcmovies.entity.TipoUsuario;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.UsuarioRepository;
@@ -73,14 +72,6 @@ public class UsuarioService {
         return objectMapper.convertValue(usuarioRepository.findByEmailAndSenha(email, senha),UsuarioDto.class);
     }
 
-    public UsuarioDto tornarUsuarioAdmin(Integer id) throws RegraDeNegocioException {
-        UsuarioEntity usuarioEncontrado = findById(id);
-        usuarioEncontrado.setTipoUsuario(TipoUsuario.ADMINISTRADOR);
-        usuarioRepository.save(usuarioEncontrado);
-
-        return objectMapper.convertValue(usuarioEncontrado, UsuarioDto.class);
-
-    }
 
     public UsuarioEntity findById(Integer id) throws RegraDeNegocioException {
         return usuarioRepository.findById(id)

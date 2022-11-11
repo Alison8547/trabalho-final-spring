@@ -1,6 +1,5 @@
 package br.com.dbc.dbcmovies.dto;
 
-import br.com.dbc.dbcmovies.entity.TipoUsuario;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -25,6 +24,4 @@ public class UsuarioCreateDto {
     @Schema(description = "Senha do usuário",example = "12345")
     private String senha;
 
-    @Schema(description = "Tipo do usuário", example = "CLIENTE")
-    private TipoUsuario tipoUsuario;
 }

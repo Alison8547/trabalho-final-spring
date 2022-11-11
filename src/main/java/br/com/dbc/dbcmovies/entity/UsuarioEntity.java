@@ -22,6 +22,9 @@ public  class UsuarioEntity {
     @Column(name = "nome")
     private String nome;
 
+    @Column(name = "login")
+    private String login;
+
     @Column(name = "idade")
     private Integer idade;
 
@@ -31,10 +34,7 @@ public  class UsuarioEntity {
     @Column(name = "senha")
     private String senha;
 
-
-    @Column(name = "tipo_usuario")
-    private TipoUsuario tipoUsuario;
-
+    
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "usuario")
     private Set<AvaliacaoEntity> avaliacaos;
