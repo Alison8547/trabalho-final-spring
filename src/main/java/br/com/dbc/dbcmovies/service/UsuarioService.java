@@ -4,9 +4,11 @@ import br.com.dbc.dbcmovies.dto.UsuarioAvaliacaoPersonalizadoDto;
 import br.com.dbc.dbcmovies.dto.UsuarioCreateDto;
 import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.dto.UsuarioItemPersonalizadoDto;
+import br.com.dbc.dbcmovies.entity.CargoEntity;
 import br.com.dbc.dbcmovies.entity.TipoTemplate;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
+import br.com.dbc.dbcmovies.repository.CargoRepository;
 import br.com.dbc.dbcmovies.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +27,7 @@ public class UsuarioService {
     private final ObjectMapper objectMapper;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
+    private final CargoRepository cargoRepository;
 
 
     public List<UsuarioDto> listar() {
@@ -52,10 +56,20 @@ public class UsuarioService {
     public UsuarioDto cadastrar(UsuarioCreateDto usuario) {
         String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
         UsuarioEntity usuarioEntity = objectMapper.convertValue(usuario, UsuarioEntity.class);
+        Optional<CargoEntity> cargo = cargoRepository.findById(2);
+        usuarioEntity.setCargos(Set.of(cargo.get()));
         usuarioEntity.setAtivo(1);
         usuarioEntity.setSenha(senhaCriptografada);
 
         return objectMapper.convertValue(usuarioRepository.save(usuarioEntity), UsuarioDto.class);
+    }
+
+    public UsuarioDto desativarConta(Integer idUsuario) throws RegraDeNegocioException {
+        UsuarioEntity usuarioEncontrado = findById(idUsuario);
+        usuarioEncontrado.setAtivo(0);
+        usuarioRepository.save(usuarioEncontrado);
+
+        return objectMapper.convertValue(usuarioEncontrado,UsuarioDto.class);
     }
 
     public UsuarioDto editar(Integer id, UsuarioCreateDto usuarioAtualizar) throws RegraDeNegocioException {

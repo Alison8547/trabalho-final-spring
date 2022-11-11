@@ -37,8 +37,6 @@ public  class UsuarioEntity implements UserDetails {
     @Column(name = "ativo")
     private Integer ativo;
 
-    @Transient
-    private boolean enable = true;
     
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "usuario")
@@ -93,6 +91,10 @@ public  class UsuarioEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enable;
+        if (ativo == 1) {
+            return true;
+        }else {
+            return false;
+        }
     }
 }

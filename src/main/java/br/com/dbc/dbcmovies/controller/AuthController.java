@@ -66,8 +66,30 @@ public class AuthController {
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Pegar conta logada", description = "Pegar sua conta logado no aplicativo")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "201", description = "Usuário pego com sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
     @GetMapping("/pegar-user-logado")
     public ResponseEntity<UsuarioDto> pegarUserLogado() throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.getLoggedUser(),HttpStatus.OK);
+    }
+
+    @Operation(summary = "Desativar conta", description = "Desativar sua conta do aplicativo")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "201", description = "Conta desativada com sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
+    @PutMapping("/desativar-conta/{idUsuario}")
+    public ResponseEntity<UsuarioDto> desativar(@PathVariable(name = "idUsuario")Integer idUsuario) throws RegraDeNegocioException {
+        return new ResponseEntity<>(usuarioService.desativarConta(idUsuario),HttpStatus.OK);
+
     }
 }
