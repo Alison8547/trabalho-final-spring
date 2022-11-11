@@ -10,6 +10,7 @@ import br.com.dbc.dbcmovies.entity.UsuarioEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.CargoRepository;
 import br.com.dbc.dbcmovies.repository.UsuarioRepository;
+import br.com.dbc.dbcmovies.security.TokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +29,7 @@ public class UsuarioService {
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final CargoRepository cargoRepository;
+    private final TokenService tokenService;
 
 
     public List<UsuarioDto> listar() {
@@ -116,5 +118,23 @@ public class UsuarioService {
     public List<UsuarioAvaliacaoPersonalizadoDto> listaPersonalizadaUsuarioAvaliacao(Integer idUsuario) {
         return usuarioRepository.listaPersonalizadaUsuarioAvaliacao(idUsuario)
                 .stream().toList();
+    }
+
+    public void recuperarSenha(String email) throws RegraDeNegocioException {
+        UsuarioEntity usuarioEntity = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RegraDeNegocioException("E-mail não encontrado!"));
+
+        String tokenRecuperacaoSenha = tokenService.getToken(usuarioEntity, true);
+
+        emailService.sendEmailRecuperacaoSenha(usuarioEntity, "email-recuperacao-senha-template.html", tokenRecuperacaoSenha);
+    }
+
+    public void alterarSenha(String email, String senha) throws RegraDeNegocioException {
+        UsuarioEntity usuario = (UsuarioEntity) this.findByEmail(email)
+                .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!"));
+
+        String senhaCriptografada = passwordEncoder.encode(senha);
+        usuario.setSenha(senhaCriptografada);
+        usuarioRepository.save(usuario);
     }
 }

@@ -3,6 +3,7 @@ package br.com.dbc.dbcmovies.service;
 import br.com.dbc.dbcmovies.dto.ItemEntretenimentoDto;
 import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.TipoTemplate;
+import br.com.dbc.dbcmovies.entity.UsuarioEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -120,5 +121,36 @@ public class EmailService {
             }
         }
         return FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
+    }
+
+    public void sendEmailRecuperacaoSenha(UsuarioEntity usuario,
+                                          String template,
+                                          String tokenRecuperacaoSenha) {
+        MimeMessage mimeMessage = emailSender.createMimeMessage();
+        try {
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+
+            mimeMessageHelper.setFrom(from);
+            mimeMessageHelper.setTo(usuario.getEmail());
+            mimeMessageHelper.setSubject("Recuperação de senha");
+            mimeMessageHelper.setText(getContentFromTemplateRecuperacaoSenha(usuario, template, tokenRecuperacaoSenha), true);
+
+            emailSender.send(mimeMessageHelper.getMimeMessage());
+        } catch (MessagingException | IOException | TemplateException | RegraDeNegocioException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getContentFromTemplateRecuperacaoSenha(UsuarioEntity usuario,
+                                                         String template,
+                                                         String tokenRecuperacaoSenha) throws IOException, TemplateException, RegraDeNegocioException {
+        Map<String, Object> dados = new HashMap<>();
+        dados.put("nome", usuario.getNome());
+        dados.put("emailUsuario", usuario.getEmail());
+        dados.put("token", tokenRecuperacaoSenha);
+        dados.put("email", from);
+        Template templateEmail = fmConfiguration.getTemplate(template);
+
+        return FreeMarkerTemplateUtils.processTemplateIntoString(templateEmail, dados);
     }
 }

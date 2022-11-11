@@ -28,11 +28,20 @@ public class TokenService {
     @Value("${jwt.secret}")
     private String secret;
 
-    public String getToken(UsuarioEntity usuarioEntity) {
+    public String getToken(UsuarioEntity usuarioEntity, Boolean recuperacao) {
+
         LocalDateTime dataLocalDateTime = LocalDateTime.now();
         Date date = Date.from(dataLocalDateTime.atZone(ZoneId.systemDefault()).toInstant());
-        LocalDateTime localDateExperation = dataLocalDateTime.plusDays(Long.parseLong(expiration));
-        Date dateExperition = Date.from(localDateExperation.atZone(ZoneId.systemDefault()).toInstant());
+
+        Date dateExperition;
+
+        if(recuperacao == true) {
+            LocalDateTime localDateExperation = dataLocalDateTime.plusMinutes(5);
+            dateExperition = Date.from(localDateExperation.atZone(ZoneId.systemDefault()).toInstant());
+        }else {
+            LocalDateTime localDateExperation = dataLocalDateTime.plusDays(Long.parseLong(expiration));
+            dateExperition = Date.from(localDateExperation.atZone(ZoneId.systemDefault()).toInstant());
+        }
 
         List<String> cargosDoUsuario = usuarioEntity.getCargos().stream()
                 .map(CargoEntity::getAuthority)

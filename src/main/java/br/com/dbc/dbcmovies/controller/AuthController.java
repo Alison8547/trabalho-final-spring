@@ -2,6 +2,7 @@ package br.com.dbc.dbcmovies.controller;
 
 
 import br.com.dbc.dbcmovies.dto.LoginDTO;
+import br.com.dbc.dbcmovies.dto.RecuperarSenhaDto;
 import br.com.dbc.dbcmovies.dto.UsuarioCreateDto;
 import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;
@@ -45,7 +46,7 @@ public class AuthController {
 
         UsuarioEntity usuarioEntity = (UsuarioEntity) principal;
 
-        return tokenService.getToken(usuarioEntity);
+        return tokenService.getToken(usuarioEntity, false);
 
 
     }
@@ -74,7 +75,7 @@ public class AuthController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @GetMapping("/pegar-user-logado")
+    @GetMapping("/usuario-logado")
     public ResponseEntity<UsuarioDto> pegarUserLogado() throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.getLoggedUser(),HttpStatus.OK);
     }
@@ -87,9 +88,33 @@ public class AuthController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PutMapping("/desativar-conta/{idUsuario}")
+    @PutMapping("/desativacao-conta/{idUsuario}")
     public ResponseEntity<UsuarioDto> desativar(@PathVariable(name = "idUsuario")Integer idUsuario) throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.desativarConta(idUsuario),HttpStatus.OK);
 
+    }
+
+    @Operation(summary = "Recuperar senha", description = "Envia e-mail com token para recuperação de senha")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "201", description = "E-mail de recuperação de senha enviado com sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
+    @PostMapping("/recuperacao-senha")
+    public ResponseEntity<Void> recuperarSenha(@Valid @RequestBody RecuperarSenhaDto email) throws RegraDeNegocioException {
+        log.info("Verificando e-mail...");
+        usuarioService.recuperarSenha(email.getEmail());
+        log.info("E-mail verificado! Foi enviado um token de recuperação de senha para o e-mail informado.");
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/alteracao-senha")
+    public ResponseEntity<Void> alterarSenha(String email, String senha) throws RegraDeNegocioException {
+        log.info("Alterando a senha...");
+        usuarioService.alterarSenha(email, senha);
+        log.info("Senha alterada com sucesso!");
+        return ResponseEntity.noContent().build();
     }
 }
