@@ -69,22 +69,6 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarioService.pegarLogin(email,senha), HttpStatus.OK);
     }
 
-    @Operation(summary = "Criar usuário", description = "Cria um usuário no banco de dados")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "201", description = "Usuário Criado com sucesso"),
-                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
-            }
-    )
-    @PostMapping
-    public ResponseEntity<UsuarioDto> adicionar(@Valid @RequestBody UsuarioCreateDto usuario){
-        log.info("Adicionando o Usuário...");
-        UsuarioDto user = usuarioService.adicionar(usuario);
-        log.info("Usuário adicionado com sucesso!");
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
-    }
-
     @Operation(summary = "Atualizar Usuário", description = "Atualiza o usuário no banco de dados")
     @ApiResponses(
             value = {

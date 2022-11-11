@@ -11,6 +11,7 @@ import br.com.dbc.dbcmovies.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
 
 
     public List<UsuarioDto> listar() {
@@ -47,14 +49,12 @@ public class UsuarioService {
         return objectMapper.convertValue(findById(getIdLoggedUser()), UsuarioDto.class);
     }
 
-    public UsuarioDto adicionar(UsuarioCreateDto usuario) {
-        UsuarioEntity usuarioEntityAdicionado = objectMapper.convertValue(usuario, UsuarioEntity.class);
-        usuarioEntityAdicionado = usuarioRepository.save(usuarioEntityAdicionado);
-        UsuarioDto usuarioDto = objectMapper.convertValue(usuarioEntityAdicionado, UsuarioDto.class);
+    public UsuarioDto cadastrar(UsuarioCreateDto usuario) {
+        String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
+        UsuarioEntity usuarioEntity = objectMapper.convertValue(usuario, UsuarioEntity.class);
+        usuarioEntity.setSenha(senhaCriptografada);
 
-        emailService.sendEmailUsuario(usuarioDto, TipoTemplate.CREATE);
-
-        return usuarioDto;
+        return objectMapper.convertValue(usuarioRepository.save(usuarioEntity), UsuarioDto.class);
     }
 
     public UsuarioDto editar(Integer id, UsuarioCreateDto usuarioAtualizar) throws RegraDeNegocioException {

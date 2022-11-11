@@ -2,12 +2,17 @@ package br.com.dbc.dbcmovies.controller;
 
 
 import br.com.dbc.dbcmovies.dto.LoginDTO;
+import br.com.dbc.dbcmovies.dto.UsuarioCreateDto;
 import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.security.TokenService;
 import br.com.dbc.dbcmovies.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,10 +23,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@Slf4j
 @RestController
-@RequestMapping("/auth")
 @Validated
 @RequiredArgsConstructor
+@RequestMapping("/auth")
 public class AuthController {
 
     private final TokenService tokenService;
@@ -44,10 +50,21 @@ public class AuthController {
 
     }
 
-//    @PostMapping("/create")
-//    public ResponseEntity<UsuarioDto> create(@RequestBody @Valid LoginDTO usuario) {
-//        return new ResponseEntity<>(usuarioService.create(usuario), HttpStatus.OK);
-//    }
+    @Operation(summary = "Cadastrar usuário", description = "Cadastra um novo usuário no banco de dados")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "201", description = "Usuário cadastrado com sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
+    @PostMapping("/cadastro-usuario")
+    public ResponseEntity<UsuarioDto> cadastrar(@Valid @RequestBody UsuarioCreateDto usuario){
+        log.info("Cadastrando novo usuário...");
+        UsuarioDto user = usuarioService.cadastrar(usuario);
+        log.info("Usuário cadastrado com sucesso!");
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
+    }
 
     @GetMapping("/pegar-user-logado")
     public ResponseEntity<UsuarioDto> pegarUserLogado() throws RegraDeNegocioException {
