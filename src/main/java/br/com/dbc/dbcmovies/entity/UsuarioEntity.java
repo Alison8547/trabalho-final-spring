@@ -25,9 +25,6 @@ public  class UsuarioEntity implements UserDetails {
     @Column(name = "nome")
     private String nome;
 
-    @Column(name = "login")
-    private String login;
-
     @Column(name = "idade")
     private Integer idade;
 
@@ -37,6 +34,11 @@ public  class UsuarioEntity implements UserDetails {
     @Column(name = "senha")
     private String senha;
 
+    @Column(name = "ativo")
+    private Integer ativo;
+
+    @Transient
+    private boolean enable = true;
     
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "usuario")
@@ -71,7 +73,7 @@ public  class UsuarioEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return login;
+        return email;
     }
 
     @Override
@@ -91,6 +93,6 @@ public  class UsuarioEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enable;
     }
 }

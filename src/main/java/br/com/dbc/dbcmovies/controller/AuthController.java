@@ -37,7 +37,7 @@ public class AuthController {
     @PostMapping
     public String auth(@RequestBody @Valid LoginDTO loginDTO) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(loginDTO.getLogin(), loginDTO.getSenha());
+                new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getSenha());
 
         Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 

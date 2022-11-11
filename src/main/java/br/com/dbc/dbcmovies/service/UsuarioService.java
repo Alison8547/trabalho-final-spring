@@ -37,8 +37,8 @@ public class UsuarioService {
         return objectMapper.convertValue(usuarioEntity, UsuarioDto.class);
     }
 
-    public Optional<UsuarioEntity> findByLogin(String login) {
-        return usuarioRepository.findByLogin(login);
+    public Optional<UsuarioEntity> findByEmail(String email) {
+        return usuarioRepository.findByEmail(email);
     }
 
     public Integer getIdLoggedUser() {
@@ -52,6 +52,7 @@ public class UsuarioService {
     public UsuarioDto cadastrar(UsuarioCreateDto usuario) {
         String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
         UsuarioEntity usuarioEntity = objectMapper.convertValue(usuario, UsuarioEntity.class);
+        usuarioEntity.setAtivo(1);
         usuarioEntity.setSenha(senhaCriptografada);
 
         return objectMapper.convertValue(usuarioRepository.save(usuarioEntity), UsuarioDto.class);
