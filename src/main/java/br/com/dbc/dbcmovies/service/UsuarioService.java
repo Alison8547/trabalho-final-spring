@@ -10,9 +10,11 @@ import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +33,18 @@ public class UsuarioService {
     public UsuarioDto pegar(Integer id) throws RegraDeNegocioException {
         UsuarioEntity usuarioEntity = findById(id);
         return objectMapper.convertValue(usuarioEntity, UsuarioDto.class);
+    }
+
+    public Optional<UsuarioEntity> findByLogin(String login) {
+        return usuarioRepository.findByLogin(login);
+    }
+
+    public Integer getIdLoggedUser() {
+        return Integer.parseInt((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+    }
+
+    public UsuarioDto getLoggedUser() throws RegraDeNegocioException {
+        return objectMapper.convertValue(findById(getIdLoggedUser()), UsuarioDto.class);
     }
 
     public UsuarioDto adicionar(UsuarioCreateDto usuario) {

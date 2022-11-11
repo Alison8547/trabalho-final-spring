@@ -4,6 +4,7 @@ package br.com.dbc.dbcmovies.controller;
 import br.com.dbc.dbcmovies.dto.LoginDTO;
 import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;
+import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.security.TokenService;
 import br.com.dbc.dbcmovies.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -43,13 +44,13 @@ public class AuthController {
 
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<UsuarioDTO> create(@RequestBody @Valid LoginDTO usuario) {
-        return new ResponseEntity<>(usuarioService.create(usuario), HttpStatus.OK);
-    }
+//    @PostMapping("/create")
+//    public ResponseEntity<UsuarioDto> create(@RequestBody @Valid LoginDTO usuario) {
+//        return new ResponseEntity<>(usuarioService.create(usuario), HttpStatus.OK);
+//    }
 
     @GetMapping("/pegar-user-logado")
-    public ResponseEntity<UsuarioDTO> pegarUserLogado() {
+    public ResponseEntity<UsuarioDto> pegarUserLogado() throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.getLoggedUser(),HttpStatus.OK);
     }
 }

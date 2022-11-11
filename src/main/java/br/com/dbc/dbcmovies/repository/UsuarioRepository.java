@@ -9,11 +9,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<UsuarioEntity,Integer> {
 
     UsuarioEntity findByEmailAndSenha(String email,String senha);
+
+    Optional<UsuarioEntity> findByLogin(String user);
 
     @Query("select new br.com.dbc.dbcmovies.dto.UsuarioItemPersonalizadoDto(" +
             " u.idUsuario," +
