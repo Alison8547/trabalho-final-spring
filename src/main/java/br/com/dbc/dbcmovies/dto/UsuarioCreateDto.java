@@ -13,6 +13,10 @@ public class UsuarioCreateDto {
     private String nome;
 
     @NotNull
+    @Schema(description = "Login do usuário",example = "luiz")
+    private String login;
+
+    @NotNull
     @Schema(description = "Idade do usuário",example = "20")
     private Integer idade;
 
@@ -23,5 +27,8 @@ public class UsuarioCreateDto {
     @NotNull
     @Schema(description = "Senha do usuário",example = "12345")
     private String senha;
+
+
+
 
 }
