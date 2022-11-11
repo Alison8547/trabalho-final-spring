@@ -2,6 +2,7 @@ package br.com.dbc.dbcmovies.controller;
 
 
 import br.com.dbc.dbcmovies.dto.LoginDTO;
+import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;
 import br.com.dbc.dbcmovies.security.TokenService;
 import br.com.dbc.dbcmovies.service.UsuarioService;
