@@ -1,10 +1,10 @@
-CREATE TABLE USUARIO (
-    id_usuario   NUMBER NOT NULL,
-    nome         VARCHAR2(255) NOT NULL,
-    idade        NUMBER NOT NULL,
-    email        VARCHAR2(255) NOT NULL,
-    senha        VARCHAR2(255) NOT NULL,
-    tipo_usuario NUMBER NOT NULL,
+CREATE TABLE USUARIO(
+    id_usuario NUMBER NOT NULL,
+    nome       VARCHAR2(255) NOT NULL,
+    login      VARCHAR2(512) UNIQUE NOT NULL,
+    idade      NUMBER NOT NULL,
+    email      VARCHAR2(255) NOT NULL,
+    senha      VARCHAR2(512) NOT NULL,
     PRIMARY KEY (id_usuario)
 );
 
@@ -13,8 +13,26 @@ CREATE SEQUENCE SEQ_USUARIO
     INCREMENT BY 1 NOCACHE NOCYCLE;
 
 
+CREATE TABLE CARGO(
+    id_cargo NUMBER NOT NULL,
+    nome     varchar2(512) UNIQUE NOT NULL,
+    PRIMARY KEY (id_cargo)
+);
 
-CREATE TABLE ITEM_ENTRETENIMENTO (
+CREATE SEQUENCE SEQ_CARGO
+    START WITH 1
+    INCREMENT BY 1 NOCACHE
+ NOCYCLE;
+
+CREATE TABLE USUARIO_CARGO(
+    id_usuario NUMBER NOT NULL,
+    id_cargo   NUMBER NOT NULL,
+    PRIMARY KEY (id_usuario, id_cargo),
+    CONSTRAINT FK_usuario_cargo_cargo FOREIGN KEY (id_cargo) REFERENCES CARGO (id_cargo),
+    CONSTRAINT FK_usuario_cargo_usuario FOREIGN KEY (id_usuario) REFERENCES USUARIO (id_usuario)
+);
+
+CREATE TABLE ITEM_ENTRETENIMENTO(
     id_item_entretenimento NUMBER NOT NULL,
     nome                   VARCHAR2(255) NOT NULL,
     tipo                   VARCHAR2(255) NOT NULL,
@@ -33,7 +51,7 @@ CREATE SEQUENCE SEQ_ITEM_ENTRETENIMENTO
     START WITH 1
     INCREMENT BY 1 NOCACHE NOCYCLE;
 
-CREATE TABLE AVALIACAO (
+CREATE TABLE AVALIACAO(
     id_usuario             NUMBER NOT NULL,
     id_item_entretenimento NUMBER NOT NULL,
     nota                   NUMBER NOT NULL,
@@ -45,7 +63,7 @@ CREATE TABLE AVALIACAO (
 
 
 
-CREATE TABLE ASSISTIDOS (
+CREATE TABLE ASSISTIDOS(
     id_usuario             NUMBER NOT NULL,
     id_item_entretenimento NUMBER NOT NULL,
     CONSTRAINT FK_id_usario_assistidos FOREIGN KEY (id_usuario) REFERENCES USUARIO (id_usuario),
@@ -54,7 +72,7 @@ CREATE TABLE ASSISTIDOS (
 );
 
 
-CREATE TABLE INDICACAO (
+CREATE TABLE INDICACAO(
     id_usuario NUMBER NOT NULL,
     nome_item  VARCHAR2(255) NOT NULL,
     CONSTRAINT FK_id_usario_indicacao FOREIGN KEY (id_usuario) REFERENCES USUARIO (id_usuario),
@@ -115,45 +133,19 @@ VALUES (SEQ_ITEM_ENTRETENIMENTO.nextval, 'A Maldição da Mansão Bly', 'serie',
         'Uma babá norte-americana chega a Bly Manor e começa a ver aparições em uma propriedade inglesa', '2020', 18,
         'Netflix', NULL, 1, 6);
 -- admins
--- admins
+INSERT INTO CARGO (ID_CARGO, NOME)
+VALUES (seq_cargo.nextval, 'ROLE_ADMIN');
 
-INSERT INTO USUARIO(id_usuario, nome, idade, email, senha, tipo_usuario)
-VALUES (SEQ_USUARIO.nextval, 'gustavo', 21, 'gustavo@gmail.com', '1234', 0);
+INSERT INTO CARGO (ID_CARGO, NOME)
+VALUES (seq_cargo.nextval, 'ROLE_CLIENTE');
 
-INSERT INTO USUARIO(id_usuario, nome, idade, email, senha, tipo_usuario)
-VALUES (SEQ_USUARIO.nextval, 'aliso', 21, 'aliso@gmail.com', '1234', 0);
+INSERT INTO USUARIO_CARGO (ID_USUARIO, ID_CARGO)
+VALUES (3, 2);
 
---clientes
-
-INSERT INTO USUARIO(id_usuario, nome, idade, email, senha, tipo_usuario)
-VALUES (SEQ_USUARIO.nextval, 'seu ze', 60, 'ze@gmail.com', '1234', 1);
-
-INSERT INTO ASSISTIDOS(id_usuario, id_item_entretenimento)
-VALUES (1, 1);
-
-INSERT INTO AVALIACAO (id_usuario, id_item_entretenimento, nota, comentario)
-VALUES (2, 2, 10, 'Bom');
-
-SELECT *
-FROM ITEM_ENTRETENIMENTO;
-
-SELECT *
-FROM USUARIO;
-
-SELECT *
-FROM AVALIACAO;
-
-SELECT *
-FROM ASSISTIDOS;
-
-SELECT *
-FROM INDICACAO;
-
-SELECT *
-FROM ASSISTIDOS a
-         INNER JOIN ITEM_ENTRETENIMENTO ie ON (ie.id_item_entretenimento = a.id_item_entretenimento)
-WHERE id_usuario = 1;
-
-SELECT AVG(nota) AS media
-FROM AVALIACAO
-WHERE id_item_entretenimento = 2;
+SELECT * FROM CARGO c;
+SELECT * FROM USUARIO_CARGO uc;
+SELECT * FROM ITEM_ENTRETENIMENTO ie;
+SELECT * FROM USUARIO u;
+SELECT * FROM AVALIACAO;
+SELECT * FROM ASSISTIDOS;
+SELECT * FROM INDICACAO;
