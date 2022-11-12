@@ -38,7 +38,7 @@ public class UsuarioController {
             }
     )
     @GetMapping
-    public ResponseEntity<List<UsuarioDto>> listar(){
+    public ResponseEntity<List<UsuarioDto>> listar() {
         return new ResponseEntity<>(usuarioService.listar(), HttpStatus.OK);
     }
 
@@ -65,8 +65,8 @@ public class UsuarioController {
             }
     )
     @GetMapping("/pegar-login")
-    public ResponseEntity<UsuarioDto> pegarLogin(@RequestParam(name = "email") String email,@RequestParam(name = "senha") String senha) throws RegraDeNegocioException {
-        return new ResponseEntity<>(usuarioService.pegarLogin(email,senha), HttpStatus.OK);
+    public ResponseEntity<UsuarioDto> pegarLogin(@RequestParam(name = "email") String email, @RequestParam(name = "senha") String senha) throws RegraDeNegocioException {
+        return new ResponseEntity<>(usuarioService.pegarLogin(email, senha), HttpStatus.OK);
     }
 
     @Operation(summary = "Atualizar Usuário", description = "Atualiza o usuário no banco de dados")
@@ -111,8 +111,8 @@ public class UsuarioController {
             }
     )
     @GetMapping("/usuario-item-personalizado")
-    public ResponseEntity<List<UsuarioItemPersonalizadoDto>> listaPersonalizadaUsuarioItem(@RequestParam(required = false, name = "idUsuario") Integer idUsuario){
-        return new ResponseEntity<>(usuarioService.listaPersonalizadaUsuarioItem(idUsuario),HttpStatus.OK);
+    public ResponseEntity<List<UsuarioItemPersonalizadoDto>> listaPersonalizadaUsuarioItem(@RequestParam(required = false, name = "idUsuario") Integer idUsuario) {
+        return new ResponseEntity<>(usuarioService.listaPersonalizadaUsuarioItem(idUsuario), HttpStatus.OK);
     }
 
     @Operation(summary = "Pega a lista personaliza com as avaliações do usuário", description = "Resgata a lista personalizada do banco de dados")
@@ -124,7 +124,7 @@ public class UsuarioController {
             }
     )
     @GetMapping("/usuario-avaliacao-personalizado")
-    public ResponseEntity<List<UsuarioAvaliacaoPersonalizadoDto>> listaPersonalizadaUsuarioAvaliacao(@RequestParam(required = false, name = "idUsuario") Integer idUsuario){
-        return new ResponseEntity<>(usuarioService.listaPersonalizadaUsuarioAvaliacao(idUsuario),HttpStatus.OK);
+    public ResponseEntity<List<UsuarioAvaliacaoPersonalizadoDto>> listaPersonalizadaUsuarioAvaliacao(@RequestParam(required = false, name = "idUsuario") Integer idUsuario) {
+        return new ResponseEntity<>(usuarioService.listaPersonalizadaUsuarioAvaliacao(idUsuario), HttpStatus.OK);
     }
 }
