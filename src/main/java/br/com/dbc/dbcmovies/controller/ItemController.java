@@ -1,6 +1,9 @@
 package br.com.dbc.dbcmovies.controller;
 
-import br.com.dbc.dbcmovies.dto.*;
+import br.com.dbc.dbcmovies.dto.FilmeCreateDto;
+import br.com.dbc.dbcmovies.dto.ItemEntretenimentoDto;
+import br.com.dbc.dbcmovies.dto.PageDTO;
+import br.com.dbc.dbcmovies.dto.SerieCreateDto;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.ItemService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,7 +27,6 @@ public class ItemController {
     private final ItemService itemService;
 
 
-
     @Operation(summary = "Criar Filme", description = "Cria um Filme no banco de dados")
     @ApiResponses(
             value = {
@@ -33,9 +35,9 @@ public class ItemController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PostMapping("/filme/{idAdmin}")
-    public ResponseEntity<ItemEntretenimentoDto> createFilme(@Valid @RequestBody FilmeCreateDto filmeCreateDto,@PathVariable("idAdmin") Integer idAdmin) throws RegraDeNegocioException {
-        return ResponseEntity.ok(itemService.createFilme(filmeCreateDto,idAdmin));
+    @PostMapping("/filme")
+    public ResponseEntity<ItemEntretenimentoDto> createFilme(@Valid @RequestBody FilmeCreateDto filmeCreateDto) {
+        return ResponseEntity.ok(itemService.createFilme(filmeCreateDto));
     }
 
     @Operation(summary = "Criar Serie", description = "Cria uma Serie no banco de dados")
@@ -46,9 +48,9 @@ public class ItemController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PostMapping("/serie/{idAdmin}")
-    public ResponseEntity<ItemEntretenimentoDto> createSerie(@Valid @RequestBody SerieCreateDto serieCreateDto,@PathVariable("idAdmin") Integer idAdmin) throws RegraDeNegocioException {
-        return ResponseEntity.ok(itemService.createSerie(serieCreateDto, idAdmin));
+    @PostMapping("/serie")
+    public ResponseEntity<ItemEntretenimentoDto> createSerie(@Valid @RequestBody SerieCreateDto serieCreateDto) {
+        return ResponseEntity.ok(itemService.createSerie(serieCreateDto));
     }
 
     @Operation(summary = "Listar Todos item", description = "Lista todos os Itens de entretenimento do banco de dados")
@@ -76,7 +78,7 @@ public class ItemController {
     @GetMapping("/filtro")
     public ResponseEntity<List<ItemEntretenimentoDto>> filterFilme(@RequestParam("tipo") String tipo,
                                                                    @RequestParam("genero") String genero,
-                                                                   @RequestParam("class") Integer classificacao){
+                                                                   @RequestParam("class") Integer classificacao) {
 
         return ResponseEntity.ok(itemService.filter(tipo, genero, classificacao));
     }
@@ -104,11 +106,11 @@ public class ItemController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PutMapping("/filme/{idItem}/{idAdmin}")
+    @PutMapping("/filme/{idItem}")
     public ResponseEntity<ItemEntretenimentoDto> updateFilme(@PathVariable("idItem") Integer id,
-                                                     @Valid @RequestBody FilmeCreateDto filmeCreateDto, @PathVariable("idAdmin") Integer idAdmin) throws RegraDeNegocioException {
+                                                             @Valid @RequestBody FilmeCreateDto filmeCreateDto) throws RegraDeNegocioException {
 
-        return ResponseEntity.ok(itemService.updateFilme(id, filmeCreateDto, idAdmin));
+        return ResponseEntity.ok(itemService.updateFilme(id, filmeCreateDto));
     }
 
     @Operation(summary = "Atualizar serie", description = "Atualiza uma serie no banco de dados")
@@ -119,11 +121,11 @@ public class ItemController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PutMapping("/serie/{idItem}/{idAdmin}")
+    @PutMapping("/serie/{idItem}")
     public ResponseEntity<ItemEntretenimentoDto> updateSerie(@PathVariable("idItem") Integer id,
-                                                             @Valid @RequestBody SerieCreateDto serieCreateDto, @PathVariable("idAdmin") Integer idAdmin) throws RegraDeNegocioException {
+                                                             @Valid @RequestBody SerieCreateDto serieCreateDto) throws RegraDeNegocioException {
 
-        return ResponseEntity.ok(itemService.updateSerie(id, serieCreateDto, idAdmin));
+        return ResponseEntity.ok(itemService.updateSerie(id, serieCreateDto));
     }
 
 
@@ -136,11 +138,12 @@ public class ItemController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @DeleteMapping("/{idItem}/{idAdmin}")
-    public ResponseEntity<Void> delete(@PathVariable("idItem") Integer id, @PathVariable("idAdmin") Integer idAdmin) throws RegraDeNegocioException {
-        itemService.delete(id, idAdmin);
+    @DeleteMapping("/{idItem}")
+    public ResponseEntity<Void> delete(@PathVariable("idItem") Integer id) throws RegraDeNegocioException {
+        itemService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
     @Operation(summary = "Pega a lista paginada de itens", description = "Resgata a lista de itens paginado")
     @ApiResponses(
             value = {
@@ -151,6 +154,6 @@ public class ItemController {
     )
     @GetMapping("/itens-paginados")
     public ResponseEntity<PageDTO<ItemEntretenimentoDto>> listaItemEntretenimentoPaginado(Integer pagina, Integer tamanho) {
-        return new ResponseEntity<>(itemService.listaItemEntretenimentoPaginado(pagina,tamanho),HttpStatus.OK);
+        return new ResponseEntity<>(itemService.listaItemEntretenimentoPaginado(pagina, tamanho), HttpStatus.OK);
     }
 }

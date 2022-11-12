@@ -1,6 +1,5 @@
 package br.com.dbc.dbcmovies.service;
 
-import br.com.dbc.dbcmovies.dto.ItemEntretenimentoDto;
 import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.TipoTemplate;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;
@@ -76,52 +75,6 @@ public class EmailService {
         return FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
     }
 
-
-    public void sendEmailItemEntretenimento(ItemEntretenimentoDto itemEntretenimentoDtoDto, TipoTemplate tipoTemplate, UsuarioDto usuarioDto) {
-        MimeMessage mimeMessage = emailSender.createMimeMessage();
-        try {
-
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-
-            mimeMessageHelper.setFrom(from);
-            mimeMessageHelper.setTo(usuarioDto.getEmail());
-            mimeMessageHelper.setSubject("subject");
-            mimeMessageHelper.setText(geContentFromTemplateItemEntretenimento(itemEntretenimentoDtoDto, tipoTemplate, usuarioDto), true);
-
-            emailSender.send(mimeMessageHelper.getMimeMessage());
-        } catch (MessagingException | IOException | TemplateException | RegraDeNegocioException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public String geContentFromTemplateItemEntretenimento(ItemEntretenimentoDto itemEntretenimentoDtoDto, TipoTemplate tipoTemplate, UsuarioDto usuarioDto) throws IOException, TemplateException, RegraDeNegocioException {
-        Map<String, Object> dados = new HashMap<>();
-        dados.put("nome", usuarioDto.getNome());
-        dados.put("genero", itemEntretenimentoDtoDto.getGenero());
-        dados.put("ano", itemEntretenimentoDtoDto.getAnoLancamento());
-        dados.put("classificacao", itemEntretenimentoDtoDto.getClassificacao());
-        dados.put("tipo", itemEntretenimentoDtoDto.getTipo());
-        dados.put("email", from);
-        dados.put("nomeItem", itemEntretenimentoDtoDto.getNome());
-        Template template = null;
-
-        switch (tipoTemplate) {
-            case CREATE -> {
-                template = fmConfiguration.getTemplate("email-itementretenimento-template.html");
-            }
-            case UPDATE -> {
-                template = fmConfiguration.getTemplate("email-itementretenimentoupdate-template.html");
-            }
-            case DELETE -> {
-                template = fmConfiguration.getTemplate("email-itementretenimentodelete-template.html");
-
-            }
-            default -> {
-                throw new RegraDeNegocioException("Tipo de template não encontrado!");
-            }
-        }
-        return FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
-    }
 
     public void sendEmailRecuperacaoSenha(UsuarioEntity usuario,
                                           String template,
