@@ -117,4 +117,17 @@ public class AuthController {
         log.info("Senha alterada com sucesso!");
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "Tornar conta admin", description = "Altera conta para admin")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "204", description = "Alterou com sucesso!"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
+    @PutMapping("/tornar-conta-admin/{idUsuario}")
+    public ResponseEntity<UsuarioDto> alterarSenha(@PathVariable(name = "idUsuario") Integer idUsuario) throws RegraDeNegocioException {
+        return new ResponseEntity<>(usuarioService.tornarContaAdmin(idUsuario), HttpStatus.OK);
+    }
 }

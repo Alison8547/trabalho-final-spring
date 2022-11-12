@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -71,7 +72,17 @@ public class UsuarioService {
         usuarioEncontrado.setAtivo(0);
         usuarioRepository.save(usuarioEncontrado);
 
-        return objectMapper.convertValue(usuarioEncontrado,UsuarioDto.class);
+        return objectMapper.convertValue(usuarioEncontrado, UsuarioDto.class);
+    }
+
+    public UsuarioDto tornarContaAdmin(Integer idUsuario) throws RegraDeNegocioException {
+        UsuarioEntity usuarioEncontrado = findById(idUsuario);
+        Optional<CargoEntity> cargo = cargoRepository.findById(1);
+        Set<CargoEntity> cargoSet = new HashSet<>();
+        cargoSet.add(cargo.get());
+        usuarioEncontrado.setCargos(cargoSet);
+        usuarioRepository.save(usuarioEncontrado);
+        return objectMapper.convertValue(usuarioEncontrado, UsuarioDto.class);
     }
 
     public UsuarioDto editar(Integer id, UsuarioCreateDto usuarioAtualizar) throws RegraDeNegocioException {
@@ -100,7 +111,7 @@ public class UsuarioService {
     }
 
     public UsuarioDto pegarLogin(String email, String senha) {
-        return objectMapper.convertValue(usuarioRepository.findByEmailAndSenha(email, senha),UsuarioDto.class);
+        return objectMapper.convertValue(usuarioRepository.findByEmailAndSenha(email, senha), UsuarioDto.class);
     }
 
 
