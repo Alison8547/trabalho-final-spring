@@ -32,13 +32,13 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((authz) ->
                         authz.antMatchers("/auth", "/auth/cadastro-usuario", "/auth/recuperacao-senha").permitAll()
                                 .antMatchers("/auth/alteracao-senha", "/auth/usuario-logado").hasAnyRole("RECUPERACAO")
+                                .antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
+                                .antMatchers(HttpMethod.GET, "/item").hasRole("CLIENTE")
+                                .antMatchers("/item/**").hasRole("ADMIN")
                                 .antMatchers("/usuario/**").hasAnyRole("CLIENTE", "ADMIN")
                                 .antMatchers("/assistido/**").hasAnyRole("CLIENTE", "ADMIN")
                                 .antMatchers("/avaliacao/**").hasAnyRole("CLIENTE", "ADMIN")
                                 .antMatchers("/indicacao/**").hasAnyRole("ADMIN", "CLIENTE")
-                                .antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
-                                .antMatchers("/item/**").hasRole("ADMIN")
-                                .antMatchers(HttpMethod.GET, "/item").hasRole("CLIENTE")
 //                                .antMatchers(HttpMethod.GET, "/auth").hasAnyRole("CLIENTE", "ADMIN")
                                 .anyRequest().authenticated()
                 );
