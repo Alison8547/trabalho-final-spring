@@ -124,17 +124,30 @@ public class UsuarioService {
         UsuarioEntity usuarioEntity = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RegraDeNegocioException("E-mail não encontrado!"));
 
+        Optional<CargoEntity> modoRecuperacao = cargoRepository.findById(3);
+
+        usuarioEntity.getCargos().add(modoRecuperacao.get());
         String tokenRecuperacaoSenha = tokenService.getToken(usuarioEntity, true);
 
-        emailService.sendEmailRecuperacaoSenha(usuarioEntity, "email-recuperacao-senha-template.html", tokenRecuperacaoSenha);
+        UsuarioEntity usuarioSalvo = usuarioRepository.save(usuarioEntity);
+
+        emailService.sendEmailRecuperacaoSenha(usuarioSalvo, "email-recuperacao-senha-template.html", tokenRecuperacaoSenha);
     }
 
-    public void alterarSenha(String email, String senha) throws RegraDeNegocioException {
-        UsuarioEntity usuario = (UsuarioEntity) this.findByEmail(email)
+    public void alterarSenha(String senha) throws RegraDeNegocioException {
+        UsuarioEntity usuario = (UsuarioEntity) this.findByEmail(getLoggedUser().getEmail())
                 .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!"));
+
+        Optional<CargoEntity> modoRecuperacao = cargoRepository.findById(3);
+
+        usuario.getCargos().stream()
+                .filter(cargo -> cargo.getIdCargo() == modoRecuperacao.get().getIdCargo())
+                .findFirst()
+                .orElseThrow(() -> new RegraDeNegocioException("Senha ja foi alterada!"));
 
         String senhaCriptografada = passwordEncoder.encode(senha);
         usuario.setSenha(senhaCriptografada);
+        usuario.getCargos().remove(modoRecuperacao.get());
         usuarioRepository.save(usuario);
     }
 }

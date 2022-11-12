@@ -111,9 +111,9 @@ public class AuthController {
     }
 
     @PutMapping("/alteracao-senha")
-    public ResponseEntity<Void> alterarSenha(String email, String senha) throws RegraDeNegocioException {
+    public ResponseEntity<Void> alterarSenha(String senha) throws RegraDeNegocioException {
         log.info("Alterando a senha...");
-        usuarioService.alterarSenha(email, senha);
+        usuarioService.alterarSenha(senha);
         log.info("Senha alterada com sucesso!");
         return ResponseEntity.noContent().build();
     }
