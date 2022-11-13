@@ -34,18 +34,11 @@ public class SecurityConfiguration {
                                 .antMatchers("/auth/alteracao-senha").hasAnyRole("RECUPERACAO")
                                 .antMatchers(HttpMethod.GET, "/item", "/item/itens-paginados", "/item/filtro", "/indicacao/indicacao-paginada").hasAnyRole("CLIENTE", "ADMIN")
                                 .antMatchers(HttpMethod.GET, "/avaliacao/{idUsuario}/user", "/avaliacao/ids").hasRole("ADMIN")
-                                .antMatchers("/assistidos/**").hasRole("CLIENTE")
-                                .antMatchers("/avaliacao/**").hasRole("CLIENTE")
-                                .antMatchers("/indicacao/**").hasRole("CLIENTE")
+                                .antMatchers("/assistidos/**").hasAnyRole("CLIENTE","ADMIN")
+                                .antMatchers("/avaliacao/**").hasAnyRole("CLIENTE","ADMIN")
+                                .antMatchers("/indicacao/**").hasAnyRole("CLIENTE","ADMIN")
                                 .antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
                                 .antMatchers( "/**").hasRole("ADMIN")
-
-//                                .antMatchers("/item/**").hasRole("ADMIN")
-//                                .antMatchers("/usuario/**").hasAnyRole("CLIENTE", "ADMIN")
-//                                .antMatchers("/assistido/**").hasAnyRole("CLIENTE", "ADMIN")
-//                                .antMatchers("/avaliacao/**").hasAnyRole("CLIENTE", "ADMIN")
-//                                .antMatchers("/indicacao/**").hasAnyRole("ADMIN", "CLIENTE")
-//                                .antMatchers(HttpMethod.GET, "/auth").hasAnyRole("CLIENTE", "ADMIN")
                                 .anyRequest().authenticated()
                 );
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
