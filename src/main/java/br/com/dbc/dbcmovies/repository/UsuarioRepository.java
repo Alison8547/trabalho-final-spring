@@ -14,8 +14,6 @@ import java.util.Optional;
 @Repository
 public interface UsuarioRepository extends JpaRepository<UsuarioEntity,Integer> {
 
-    UsuarioEntity findByEmailAndSenha(String email,String senha);
-
     Optional<UsuarioEntity> findByEmail(String email);
 
     @Query("select new br.com.dbc.dbcmovies.dto.UsuarioItemPersonalizadoDto(" +

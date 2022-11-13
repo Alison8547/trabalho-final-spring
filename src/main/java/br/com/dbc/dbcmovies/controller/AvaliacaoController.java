@@ -33,12 +33,11 @@ public class AvaliacaoController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PostMapping("/{idUsuario}/{idItem}")
+    @PostMapping("/{idItem}")
     public ResponseEntity<AvaliacaoDto> create(@Valid @RequestBody AvaliacaoCreateDto avaliacao,
-                                               @PathVariable("idUsuario") Integer idUsuario,
                                                @PathVariable("idItem") Integer idItem) throws RegraDeNegocioException {
 
-        return ResponseEntity.ok(avaliacaoService.create(avaliacao, idUsuario, idItem));
+        return ResponseEntity.ok(avaliacaoService.create(avaliacao, idItem));
     }
 
     @Operation(summary = "Listar Avaliações", description = "Lista todas as avaliações do banco de dados")
@@ -94,10 +93,9 @@ public class AvaliacaoController {
     )
     @PutMapping("/ids")
     public ResponseEntity<AvaliacaoDto> update(@Valid @RequestBody AvaliacaoCreateDto avaliacaoDto,
-                                               @RequestParam("idUsuario") Integer idUsuario,
                                                @RequestParam("idItem") Integer idItem) throws RegraDeNegocioException {
 
-        return ResponseEntity.ok(avaliacaoService.update(avaliacaoDto, idUsuario, idItem));
+        return ResponseEntity.ok(avaliacaoService.update(avaliacaoDto, idItem));
     }
 
     @Operation(summary = "Deletar Avaliação", description = "Deletar a avaliação no banco de dados")
@@ -110,9 +108,8 @@ public class AvaliacaoController {
             }
     )
     @DeleteMapping("/ids")
-    public ResponseEntity<Void> delete(@RequestParam("idUsuario") Integer idUsuario,
-                                       @RequestParam("idItem") Integer idItem) throws RegraDeNegocioException {
-        avaliacaoService.delete(idUsuario, idItem);
+    public ResponseEntity<Void> delete(@RequestParam("idItem") Integer idItem) throws RegraDeNegocioException {
+        avaliacaoService.delete(idItem);
         return ResponseEntity.noContent().build();
     }
 }

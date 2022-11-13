@@ -24,15 +24,15 @@ public class AssistidosService {
     private final AssistidosRepository assistidosRepository;
     private final ObjectMapper objectMapper;
 
-    public List<ItemEntretenimentoDto> listarAssistidos(Integer idUsuario) throws RegraDeNegocioException {
-        UsuarioEntity usuarioEntity = usuarioService.findById(idUsuario);
+    public List<ItemEntretenimentoDto> listarAssistidos() throws RegraDeNegocioException {
+        UsuarioEntity usuarioEntity = usuarioService.findById(usuarioService.getLoggedUser().getIdUsuario());
         return usuarioEntity.getItemEntretenimentos().stream()
                 .map(item -> objectMapper.convertValue(item, ItemEntretenimentoDto.class)).toList();
     }
 
-    public ItemEntretenimentoDto marcarAssistido(Integer idItem, Integer idUsuario) throws RegraDeNegocioException {
+    public ItemEntretenimentoDto marcarAssistido(Integer idItem) throws RegraDeNegocioException {
         ItemEntretenimentoEntity item = itemService.findById(idItem);
-        UsuarioEntity usuario = usuarioService.findById(idUsuario);
+        UsuarioEntity usuario = usuarioService.findById(usuarioService.getLoggedUser().getIdUsuario());
 
         verificarItemAssistido(usuario, idItem);
 
@@ -45,11 +45,11 @@ public class AssistidosService {
         return objectMapper.convertValue(item, ItemEntretenimentoDto.class);
     }
 
-    public void deletarAssistido(Integer idItem, Integer idUsuario) throws RegraDeNegocioException {
+    public void deletarAssistido(Integer idItem) throws RegraDeNegocioException {
         ItemEntretenimentoEntity item = itemService.findById(idItem);
-        UsuarioEntity usuario = usuarioService.findById(idUsuario);
+        UsuarioEntity usuario = usuarioService.findById(usuarioService.getLoggedUser().getIdUsuario());
 
-        this.verificarUsuarioNaTabela(idUsuario);
+        this.verificarUsuarioNaTabela(usuario.getIdUsuario());
         verificarItemNaTabela(idItem, usuario);
 
         item.getUsuarios().remove(usuario);

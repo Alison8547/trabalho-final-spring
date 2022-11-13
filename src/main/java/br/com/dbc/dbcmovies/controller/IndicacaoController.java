@@ -31,9 +31,9 @@ public class IndicacaoController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PostMapping("/{idUsuario}")
-    public ResponseEntity<IndicacaoDto> indicar(@PathVariable(name = "idUsuario") Integer idUsuario, @RequestBody IndicacaoCreateDto indicacaoDto) throws RegraDeNegocioException {
-        return new ResponseEntity<>(indicacaoService.incluirIndicacao(indicacaoDto, idUsuario), HttpStatus.OK);
+    @PostMapping()
+    public ResponseEntity<IndicacaoDto> indicar(@RequestBody IndicacaoCreateDto indicacaoDto) throws RegraDeNegocioException {
+        return new ResponseEntity<>(indicacaoService.incluirIndicacao(indicacaoDto), HttpStatus.OK);
     }
 
     @Operation(summary = "Pega a lista paginada de indicações", description = "Resgata a lista paginada do banco de dados")

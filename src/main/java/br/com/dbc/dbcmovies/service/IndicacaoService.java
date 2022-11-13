@@ -1,6 +1,9 @@
 package br.com.dbc.dbcmovies.service;
 
-import br.com.dbc.dbcmovies.dto.*;
+import br.com.dbc.dbcmovies.dto.IndicacaoCreateDto;
+import br.com.dbc.dbcmovies.dto.IndicacaoDto;
+import br.com.dbc.dbcmovies.dto.PageDTO;
+import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.IndicacaoEntity;
 import br.com.dbc.dbcmovies.entity.pk.IndicacaoPK;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
@@ -21,7 +24,9 @@ public class IndicacaoService {
     private final UsuarioService usuarioService;
     private final ObjectMapper objectMapper;
 
-    public IndicacaoDto incluirIndicacao(IndicacaoCreateDto indicacao, Integer idUsuario) throws RegraDeNegocioException {
+    public IndicacaoDto incluirIndicacao(IndicacaoCreateDto indicacao) throws RegraDeNegocioException {
+
+        Integer idUsuario = usuarioService.getLoggedUser().getIdUsuario();
 
         IndicacaoPK indicacaoPK = new IndicacaoPK(idUsuario, indicacao.getItemNome());
         IndicacaoEntity indicacaoEntity = objectMapper.convertValue(indicacao, IndicacaoEntity.class);

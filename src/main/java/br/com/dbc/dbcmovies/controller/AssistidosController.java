@@ -30,9 +30,9 @@ public class AssistidosController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @GetMapping("/{idUsuario}")
-    public ResponseEntity<List<ItemEntretenimentoDto>> listarAssistidos(@PathVariable(name = "idUsuario") Integer idUsuario) throws RegraDeNegocioException {
-        return new ResponseEntity<>(assistidosService.listarAssistidos(idUsuario), HttpStatus.OK);
+    @GetMapping()
+    public ResponseEntity<List<ItemEntretenimentoDto>> listarAssistidos() throws RegraDeNegocioException {
+        return new ResponseEntity<>(assistidosService.listarAssistidos(), HttpStatus.OK);
     }
 
     @Operation(summary = "Deletar Um Assistido", description = "Deletar um assistido no banco de dados")
@@ -44,9 +44,9 @@ public class AssistidosController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @DeleteMapping("/{idItem}/{idUsuario}")
-    public ResponseEntity<Void> deletarAssistido(@PathVariable(name = "idItem") Integer idItem, @PathVariable(name = "idUsuario") Integer idUsuario) throws RegraDeNegocioException {
-        assistidosService.deletarAssistido(idItem, idUsuario);
+    @DeleteMapping("/{idItem}")
+    public ResponseEntity<Void> deletarAssistido(@PathVariable(name = "idItem") Integer idItem) throws RegraDeNegocioException {
+        assistidosService.deletarAssistido(idItem);
         return ResponseEntity.noContent().build();
     }
 
@@ -58,8 +58,8 @@ public class AssistidosController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PostMapping("/{idItem}/{idUsuario}")
-    public ResponseEntity<ItemEntretenimentoDto> marcarAssistido(@PathVariable(name = "idItem") Integer idItem, @PathVariable(name = "idUsuario") Integer idUsuario) throws RegraDeNegocioException {
-        return new ResponseEntity<>(assistidosService.marcarAssistido(idItem, idUsuario), HttpStatus.OK);
+    @PostMapping("/{idItem}")
+    public ResponseEntity<ItemEntretenimentoDto> marcarAssistido(@PathVariable(name = "idItem") Integer idItem) throws RegraDeNegocioException {
+        return new ResponseEntity<>(assistidosService.marcarAssistido(idItem), HttpStatus.OK);
     }
 }

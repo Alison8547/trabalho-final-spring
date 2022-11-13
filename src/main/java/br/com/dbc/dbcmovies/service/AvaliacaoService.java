@@ -21,9 +21,11 @@ public class AvaliacaoService {
     private final ItemService itemService;
     private final ObjectMapper objectMapper;
 
-    public AvaliacaoDto create(AvaliacaoCreateDto avaliacaoDTO, Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
+    public AvaliacaoDto create(AvaliacaoCreateDto avaliacaoDTO, Integer idItem) throws RegraDeNegocioException {
 
-        UsuarioEntity usuarioEntity = usuarioService.findById(idUsuario);
+//        UsuarioEntity usuarioEntity = usuarioService.findById(idUsuario);
+        UsuarioEntity usuarioEntity = usuarioService.findById(usuarioService.getLoggedUser().getIdUsuario());
+
         this.verificarItemAvaliado(usuarioEntity, idItem);
 
         ItemEntretenimentoEntity itemEntity = itemService.findById(idItem);
@@ -31,7 +33,7 @@ public class AvaliacaoService {
         avaliacaoEntity.setAvaliacaoPK(new AvaliacaoPK());
 
         avaliacaoEntity.getAvaliacaoPK().setIdItem(idItem);
-        avaliacaoEntity.getAvaliacaoPK().setIdUsuario(idUsuario);
+        avaliacaoEntity.getAvaliacaoPK().setIdUsuario(usuarioEntity.getIdUsuario());
 
         avaliacaoEntity.setUsuario(usuarioEntity);
         avaliacaoEntity.setItemEntretenimento(itemEntity);
@@ -75,26 +77,26 @@ public class AvaliacaoService {
 
     }
 
-    public AvaliacaoDto update(AvaliacaoCreateDto avaliacaoAtualizar, Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
-        usuarioService.findById(idUsuario);
+    public AvaliacaoDto update(AvaliacaoCreateDto avaliacaoAtualizar, Integer idItem) throws RegraDeNegocioException {
+        UsuarioEntity usuarioEntity = usuarioService.findById(usuarioService.getLoggedUser().getIdUsuario());
         itemService.findById(idItem);
 
-        AvaliacaoEntity avaliacaoRecuperada = this.findByIdAvaliacao(idUsuario, idItem);
+        AvaliacaoEntity avaliacaoRecuperada = this.findByIdAvaliacao(usuarioEntity.getIdUsuario(), idItem);
 
         avaliacaoRecuperada.setNota(avaliacaoAtualizar.getNota());
         avaliacaoRecuperada.setComentario(avaliacaoAtualizar.getComentario());
 
         avaliacaoRepository.save(avaliacaoRecuperada);
 
-        return getByIds(idUsuario, idItem);
+        return getByIds(usuarioEntity.getIdUsuario(), idItem);
 
     }
 
-    public void delete(Integer idUsuario, Integer idItem) throws RegraDeNegocioException {
-        usuarioService.findById(idUsuario);
+    public void delete(Integer idItem) throws RegraDeNegocioException {
+        UsuarioEntity usuarioEntity = usuarioService.findById(usuarioService.getLoggedUser().getIdUsuario());
         itemService.findById(idItem);
 
-        AvaliacaoEntity avaliacao = this.findByIdAvaliacao(idUsuario, idItem);
+        AvaliacaoEntity avaliacao = this.findByIdAvaliacao(usuarioEntity.getIdUsuario(), idItem);
 
         avaliacaoRepository.delete(avaliacao);
     }

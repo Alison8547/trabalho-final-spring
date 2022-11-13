@@ -110,11 +110,6 @@ public class UsuarioService {
 
     }
 
-    public UsuarioDto pegarLogin(String email, String senha) {
-        return objectMapper.convertValue(usuarioRepository.findByEmailAndSenha(email, senha), UsuarioDto.class);
-    }
-
-
     public UsuarioEntity findById(Integer id) throws RegraDeNegocioException {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!"));
