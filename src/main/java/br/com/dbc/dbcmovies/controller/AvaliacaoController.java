@@ -24,7 +24,6 @@ public class AvaliacaoController {
 
     private final AvaliacaoService avaliacaoService;
 
-
     @Operation(summary = "Criar uma Avaliação", description = "Cria uma avaliação em algum filme/série no banco de dados")
     @ApiResponses(
             value = {

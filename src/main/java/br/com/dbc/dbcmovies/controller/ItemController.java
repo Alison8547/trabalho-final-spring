@@ -26,7 +26,6 @@ public class ItemController {
 
     private final ItemService itemService;
 
-
     @Operation(summary = "Criar Filme", description = "Cria um Filme no banco de dados")
     @ApiResponses(
             value = {

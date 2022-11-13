@@ -40,12 +40,6 @@ public class SecurityConfiguration {
                                 .antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
                                 .antMatchers( "/**").hasRole("ADMIN")
 
-//                                .antMatchers("/item/**").hasRole("ADMIN")
-//                                .antMatchers("/usuario/**").hasAnyRole("CLIENTE", "ADMIN")
-//                                .antMatchers("/assistido/**").hasAnyRole("CLIENTE", "ADMIN")
-//                                .antMatchers("/avaliacao/**").hasAnyRole("CLIENTE", "ADMIN")
-//                                .antMatchers("/indicacao/**").hasAnyRole("ADMIN", "CLIENTE")
-//                                .antMatchers(HttpMethod.GET, "/auth").hasAnyRole("CLIENTE", "ADMIN")
                                 .anyRequest().authenticated()
                 );
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
