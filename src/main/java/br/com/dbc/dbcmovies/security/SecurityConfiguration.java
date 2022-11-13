@@ -39,6 +39,7 @@ public class SecurityConfiguration {
                                 .antMatchers("/indicacao/**").hasAnyRole("CLIENTE","ADMIN")
                                 .antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
                                 .antMatchers( "/**").hasRole("ADMIN")
+
                                 .anyRequest().authenticated()
                 );
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
