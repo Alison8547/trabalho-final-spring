@@ -85,6 +85,12 @@ public class UsuarioService {
         return objectMapper.convertValue(usuarioEncontrado, UsuarioDto.class);
     }
 
+    public List<UsuarioDto> contasInativas(){
+        return usuarioRepository.findByAtivo(0).stream()
+                .map(usuarioEntity -> objectMapper.convertValue(usuarioEntity,UsuarioDto.class))
+                .toList();
+    }
+
     public UsuarioDto editar(Integer id, UsuarioCreateDto usuarioAtualizar) throws RegraDeNegocioException {
         UsuarioEntity usuarioEncontrado = findById(id);
         usuarioEncontrado.setNome(usuarioAtualizar.getNome());

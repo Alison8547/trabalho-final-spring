@@ -19,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -129,5 +130,18 @@ public class AuthController {
     @PutMapping("/tornar-conta-admin/{idUsuario}")
     public ResponseEntity<UsuarioDto> alterarSenha(@PathVariable(name = "idUsuario") Integer idUsuario) throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.tornarContaAdmin(idUsuario), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Listar contas inativas", description = "Listar todas as contas inativas do aplicativo")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Retorna a lista de usuários inativos"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
+    @GetMapping
+    public ResponseEntity<List<UsuarioDto>> listarContaInativas() {
+        return new ResponseEntity<>(usuarioService.contasInativas(), HttpStatus.OK);
     }
 }
