@@ -31,7 +31,7 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeHttpRequests((authz) ->
                         authz.antMatchers("/auth", "/auth/cadastro-usuario", "/auth/recuperacao-senha").permitAll()
-                                .antMatchers("/auth/alteracao-senha", "/auth/usuario-logado").hasAnyRole("RECUPERACAO")
+                                .antMatchers("/auth/alteracao-senha").hasAnyRole("RECUPERACAO")
                                 .antMatchers(HttpMethod.GET, "/item", "/item/itens-paginados", "/item/filtro", "/indicacao/indicacao-paginada").hasAnyRole("CLIENTE", "ADMIN")
                                 .antMatchers(HttpMethod.GET, "/avaliacao/{idUsuario}/user", "/avaliacao/ids").hasRole("ADMIN")
                                 .antMatchers("/assistidos/**").hasRole("CLIENTE")
