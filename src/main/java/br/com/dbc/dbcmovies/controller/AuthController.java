@@ -140,7 +140,7 @@ public class AuthController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @GetMapping
+    @GetMapping("/contas-inativas")
     public ResponseEntity<List<UsuarioDto>> listarContaInativas() {
         return new ResponseEntity<>(usuarioService.contasInativas(), HttpStatus.OK);
     }
