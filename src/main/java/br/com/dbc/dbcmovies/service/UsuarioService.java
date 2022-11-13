@@ -90,7 +90,7 @@ public class UsuarioService {
         usuarioEncontrado.setNome(usuarioAtualizar.getNome());
         usuarioEncontrado.setIdade(usuarioAtualizar.getIdade());
         usuarioEncontrado.setEmail(usuarioAtualizar.getEmail());
-        usuarioEncontrado.setSenha(usuarioAtualizar.getSenha());
+        usuarioEncontrado.setSenha(passwordEncoder.encode(usuarioAtualizar.getSenha()));
 
         usuarioRepository.save(usuarioEncontrado);
 
