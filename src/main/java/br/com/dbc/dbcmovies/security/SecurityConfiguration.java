@@ -31,8 +31,8 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeHttpRequests((authz) ->
                         authz.antMatchers("/auth", "/auth/cadastro-usuario", "/auth/recuperacao-senha").permitAll()
-                                .antMatchers("/auth/alteracao-senha").hasAnyRole("RECUPERACAO")
-                                .antMatchers(HttpMethod.GET, "/item", "/item/itens-paginados", "/item/filtro", "/indicacao/indicacao-paginada").hasAnyRole("CLIENTE", "ADMIN")
+                                .antMatchers("/auth/alteracao-senha").hasRole("RECUPERACAO")
+                                .antMatchers(HttpMethod.GET, "/item", "/item/itens-paginados", "/item/filtro").hasAnyRole("CLIENTE", "ADMIN")
                                 .antMatchers(HttpMethod.GET, "/avaliacao/{idUsuario}/user", "/avaliacao/ids").hasRole("ADMIN")
                                 .antMatchers("/assistidos/**").hasAnyRole("CLIENTE","ADMIN")
                                 .antMatchers("/avaliacao/**").hasAnyRole("CLIENTE","ADMIN")
@@ -51,8 +51,7 @@ public class SecurityConfiguration {
         return (web) -> web.ignoring().antMatchers("/v3/api-docs",
                 "/v3/api-docs/**",
                 "/swagger-resources/**",
-                "/swagger-ui/**",
-                "/vemser-dbc/**"
+                "/swagger-ui/**"
         );
     }
 

@@ -22,8 +22,8 @@ import java.util.List;
 public class TokenService {
 
     private static final String CHAVE_CARGOS = "CARGOS";
-    @Value("${jwt.expiration}")
-    private String expiration;
+    private static final int VALIDADE_TOKEN_CINCO_MINUTOS = 5;
+    private static final int VALIDADE_TOKEN_UM_DIA = 1;
 
     @Value("${jwt.secret}")
     private String secret;
@@ -35,11 +35,11 @@ public class TokenService {
 
         Date dateExperition;
 
-        if(recuperacao == true) {
-            LocalDateTime localDateExperation = dataLocalDateTime.plusMinutes(5);
+        if(recuperacao) {
+            LocalDateTime localDateExperation = dataLocalDateTime.plusMinutes(VALIDADE_TOKEN_CINCO_MINUTOS);
             dateExperition = Date.from(localDateExperation.atZone(ZoneId.systemDefault()).toInstant());
         }else {
-            LocalDateTime localDateExperation = dataLocalDateTime.plusDays(Long.parseLong(expiration));
+            LocalDateTime localDateExperation = dataLocalDateTime.plusDays(VALIDADE_TOKEN_UM_DIA);
             dateExperition = Date.from(localDateExperation.atZone(ZoneId.systemDefault()).toInstant());
         }
 

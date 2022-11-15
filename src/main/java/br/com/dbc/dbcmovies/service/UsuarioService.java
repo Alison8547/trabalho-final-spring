@@ -5,6 +5,7 @@ import br.com.dbc.dbcmovies.dto.UsuarioCreateDto;
 import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.dto.UsuarioItemPersonalizadoDto;
 import br.com.dbc.dbcmovies.entity.CargoEntity;
+import br.com.dbc.dbcmovies.entity.TipoCargo;
 import br.com.dbc.dbcmovies.entity.TipoTemplate;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
@@ -25,6 +26,10 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class UsuarioService {
+
+    private static final int USUARIO_ATIVO = 1;
+    private static final int USUARIO_INATIVO = 0;
+
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final EmailService emailService;
@@ -59,9 +64,9 @@ public class UsuarioService {
     public UsuarioDto cadastrar(UsuarioCreateDto usuario) {
         String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
         UsuarioEntity usuarioEntity = objectMapper.convertValue(usuario, UsuarioEntity.class);
-        Optional<CargoEntity> cargo = cargoRepository.findById(2);
+        Optional<CargoEntity> cargo = cargoRepository.findById(TipoCargo.CLIENTE.ordinal());
         usuarioEntity.setCargos(Set.of(cargo.get()));
-        usuarioEntity.setAtivo(1);
+        usuarioEntity.setAtivo(USUARIO_ATIVO);
         usuarioEntity.setSenha(senhaCriptografada);
 
         return objectMapper.convertValue(usuarioRepository.save(usuarioEntity), UsuarioDto.class);
@@ -69,7 +74,7 @@ public class UsuarioService {
 
     public UsuarioDto desativarConta(Integer idUsuario) throws RegraDeNegocioException {
         UsuarioEntity usuarioEncontrado = findById(idUsuario);
-        usuarioEncontrado.setAtivo(0);
+        usuarioEncontrado.setAtivo(USUARIO_INATIVO);
         usuarioRepository.save(usuarioEncontrado);
 
         return objectMapper.convertValue(usuarioEncontrado, UsuarioDto.class);
@@ -77,7 +82,7 @@ public class UsuarioService {
 
     public UsuarioDto tornarContaAdmin(Integer idUsuario) throws RegraDeNegocioException {
         UsuarioEntity usuarioEncontrado = findById(idUsuario);
-        Optional<CargoEntity> cargo = cargoRepository.findById(1);
+        Optional<CargoEntity> cargo = cargoRepository.findById(TipoCargo.ADMIN.ordinal());
         Set<CargoEntity> cargoSet = new HashSet<>();
         cargoSet.add(cargo.get());
         usuarioEncontrado.setCargos(cargoSet);
@@ -86,7 +91,7 @@ public class UsuarioService {
     }
 
     public List<UsuarioDto> contasInativas(){
-        return usuarioRepository.findByAtivo(0).stream()
+        return usuarioRepository.findByAtivo(USUARIO_INATIVO).stream()
                 .map(usuarioEntity -> objectMapper.convertValue(usuarioEntity,UsuarioDto.class))
                 .toList();
     }
@@ -136,7 +141,7 @@ public class UsuarioService {
         UsuarioEntity usuarioEntity = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RegraDeNegocioException("E-mail não encontrado!"));
 
-        Optional<CargoEntity> modoRecuperacao = cargoRepository.findById(3);
+        Optional<CargoEntity> modoRecuperacao = cargoRepository.findById(TipoCargo.RECUPERACAO.ordinal());
 
         usuarioEntity.getCargos().add(modoRecuperacao.get());
         String tokenRecuperacaoSenha = tokenService.getToken(usuarioEntity, true);
@@ -147,10 +152,9 @@ public class UsuarioService {
     }
 
     public void alterarSenha(String senha) throws RegraDeNegocioException {
-        UsuarioEntity usuario = (UsuarioEntity) this.findByEmail(getLoggedUser().getEmail())
-                .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!"));
+        UsuarioEntity usuario = objectMapper.convertValue(getLoggedUser(), UsuarioEntity.class);
 
-        Optional<CargoEntity> modoRecuperacao = cargoRepository.findById(3);
+        Optional<CargoEntity> modoRecuperacao = cargoRepository.findById(TipoCargo.RECUPERACAO.ordinal());
 
         usuario.getCargos().stream()
                 .filter(cargo -> cargo.getIdCargo() == modoRecuperacao.get().getIdCargo())
