@@ -1,6 +1,7 @@
 package br.com.dbc.dbcmovies.entity;
 
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @ToString
 @Entity(name = "LANCAMENTOS")
+@Document(collection = "log")
 public class LancamentosEntity {
 
     @Id
