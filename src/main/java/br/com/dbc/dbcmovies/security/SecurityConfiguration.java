@@ -34,6 +34,7 @@ public class SecurityConfiguration {
                                 .antMatchers("/auth/alteracao-senha").hasRole("RECUPERACAO")
                                 .antMatchers(HttpMethod.GET, "/item", "/item/itens-paginados", "/item/filtro").hasAnyRole("CLIENTE", "ADMIN")
                                 .antMatchers(HttpMethod.GET, "/avaliacao/{idUsuario}/user", "/avaliacao/ids").hasRole("ADMIN")
+                                .antMatchers("/lancamentos/**").hasAnyRole("CLIENTE","ADMIN")
                                 .antMatchers("/assistidos/**").hasAnyRole("CLIENTE","ADMIN")
                                 .antMatchers("/avaliacao/**").hasAnyRole("CLIENTE","ADMIN")
                                 .antMatchers("/indicacao/**").hasAnyRole("CLIENTE","ADMIN")

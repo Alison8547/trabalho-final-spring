@@ -32,7 +32,7 @@ public class LancamentosService {
     }
 
 
-    public LancamentoDto updateLancamento(Integer id, LancamentoDto lancamentoAtualizar) throws RegraDeNegocioException {
+    public LancamentoDto updateLancamento(Integer id, LancamentoCreateDto lancamentoAtualizar) throws RegraDeNegocioException {
 
         LancamentosEntity lancamentoEncontrado = findById(id);
         lancamentoEncontrado.setNome(lancamentoAtualizar.getNome());
