@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class LancamentoDto  extends LancamentoCreateDto {
 
-    private Integer idLancamento;
+    private String idLancamento;
 }

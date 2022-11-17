@@ -1,8 +1,7 @@
 package br.com.dbc.dbcmovies.controller;
 
 
-import br.com.dbc.dbcmovies.dto.FilmeCreateDto;
-import br.com.dbc.dbcmovies.dto.ItemEntretenimentoDto;
+
 import br.com.dbc.dbcmovies.dto.LancamentoCreateDto;
 import br.com.dbc.dbcmovies.dto.LancamentoDto;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
@@ -26,13 +25,20 @@ public class LancamentosController {
 
     private final LancamentosService lancamentosService;
 
-
+    @Operation(summary = "Listar Lancamentos", description = "Lista os lançamentos no banco de dados")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "201", description = "Filme Criado com sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
     @GetMapping
     public ResponseEntity<List<LancamentoDto>> listAll() throws RegraDeNegocioException {
         return ResponseEntity.ok(lancamentosService.list());
     }
 
-    @Operation(summary = "Criar Filme", description = "Cria um Filme no banco de dados")
+    @Operation(summary = "Criar Lancamento", description = "Cria um Filme no banco de dados")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "201", description = "Filme Criado com sucesso"),
@@ -45,7 +51,7 @@ public class LancamentosController {
         return ResponseEntity.ok(lancamentosService.createLancamento(lancamentoCreateDto));
     }
 
-    @Operation(summary = "Atualizar filme", description = "Atualiza um filme no banco de dados")
+    @Operation(summary = "Atualizar Lancamento", description = "Atualiza um filme no banco de dados")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Atualizou com sucesso"),
@@ -54,12 +60,12 @@ public class LancamentosController {
             }
     )
     @PutMapping("/filme/{idItem}")
-    public ResponseEntity<LancamentoDto> updateFilme(@PathVariable("idItem") Integer id,
+    public ResponseEntity<LancamentoDto> updateFilme(@PathVariable("idItem") String id,
                                                              @Valid @RequestBody LancamentoCreateDto lancamentoCreateDto) throws RegraDeNegocioException {
         return ResponseEntity.ok(lancamentosService.updateLancamento(id, lancamentoCreateDto));
     }
 
-    @Operation(summary = "Deletar item", description = "Deletar um item entretenimento no banco de dados")
+    @Operation(summary = "Deletar Lancamento", description = "Deletar um item entretenimento no banco de dados")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "204", description = "Deletado com sucesso"),
@@ -69,7 +75,7 @@ public class LancamentosController {
             }
     )
     @DeleteMapping("/{idItem}")
-    public ResponseEntity<Void> delete(@PathVariable("idItem") Integer id) throws RegraDeNegocioException {
+    public ResponseEntity<Void> delete(@PathVariable("idItem") String id) throws RegraDeNegocioException {
         lancamentosService.delete(id);
         return ResponseEntity.noContent().build();
     }

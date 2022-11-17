@@ -41,6 +41,9 @@ public class LancamentoCreateDto {
     private String plataforma;
 
     @NotBlank
-    @Schema(example = "CinemaProximo")
+    @Schema(example = "150")
     private String duracao;
+
+    @Schema(example = "01/01/2022")
+    private String dataLancamento;
 }

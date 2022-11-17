@@ -2,7 +2,6 @@ package br.com.dbc.dbcmovies.service;
 
 
 import br.com.dbc.dbcmovies.dto.*;
-import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
 import br.com.dbc.dbcmovies.entity.LancamentosEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.LancamentosRepository;
@@ -32,7 +31,7 @@ public class LancamentosService {
     }
 
 
-    public LancamentoDto updateLancamento(Integer id, LancamentoCreateDto lancamentoAtualizar) throws RegraDeNegocioException {
+    public LancamentoDto updateLancamento(String id, LancamentoCreateDto lancamentoAtualizar) throws RegraDeNegocioException {
 
         LancamentosEntity lancamentoEncontrado = findById(id);
         lancamentoEncontrado.setNome(lancamentoAtualizar.getNome());
@@ -43,19 +42,20 @@ public class LancamentosService {
         lancamentoEncontrado.setClassificacao(lancamentoAtualizar.getClassificacao());
         lancamentoEncontrado.setPlataforma(lancamentoAtualizar.getPlataforma());
         lancamentoEncontrado.setDuracao(lancamentoAtualizar.getDuracao());
+        lancamentoEncontrado.setDataLancamento(lancamentoEncontrado.getDataLancamento());
         lancamentosRepository.save(lancamentoEncontrado);
 
         return objectMapper.convertValue(lancamentoEncontrado, LancamentoDto.class);
     }
 
-    public void delete(Integer id) throws RegraDeNegocioException {
+    public void delete(String id) throws RegraDeNegocioException {
         LancamentosEntity lancamentosEntity = findById(id);
         lancamentosRepository.delete(lancamentosEntity);
     }
 
-    public LancamentosEntity findById(Integer id) throws RegraDeNegocioException {
+    public LancamentosEntity findById(String id) throws RegraDeNegocioException {
         return lancamentosRepository.findById(id)
-                .orElseThrow(() -> new RegraDeNegocioException("Item não encontrado!"));
+                .orElseThrow(() -> new RegraDeNegocioException("lancamento não encontrado!"));
     }
 
 }
