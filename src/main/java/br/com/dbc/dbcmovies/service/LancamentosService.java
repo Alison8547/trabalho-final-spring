@@ -31,7 +31,7 @@ public class LancamentosService {
                 .toList();
     }
 
-    
+
     public LancamentoDto updateLancamento(Integer id, LancamentoDto lancamentoAtualizar) throws RegraDeNegocioException {
 
         LancamentosEntity lancamentoEncontrado = findById(id);
