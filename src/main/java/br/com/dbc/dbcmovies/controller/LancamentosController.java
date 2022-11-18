@@ -93,4 +93,16 @@ public class LancamentosController {
         return new ResponseEntity<>(lancamentosService.findDataLancamento(data), HttpStatus.OK);
     }
 
+    @Operation(summary = "Listar Lançamentos por classificação", description = "Lista os lançamentos por data no banco de dados")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "201", description = "Lista feita com sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
+    @GetMapping("/classificacao-lancamentos")
+    public ResponseEntity<List<LancamentoDto>> findAllByClassificacao(Integer classificacao) {
+        return new ResponseEntity<>(lancamentosService.findAllByClassificacao(classificacao), HttpStatus.OK);
+    }
 }

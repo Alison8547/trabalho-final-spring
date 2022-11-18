@@ -10,4 +10,6 @@ import java.util.List;
 public interface LancamentosRepository extends MongoRepository<LancamentosEntity, String> {
 
     List<LancamentosEntity> findAllByDataLancamentoContains(String data);
+
+    List<LancamentosEntity> findAllByClassificacao(Integer classificacao);
 }

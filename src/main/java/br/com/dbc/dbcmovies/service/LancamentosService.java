@@ -65,5 +65,11 @@ public class LancamentosService {
                 .toList();
     }
 
+    public List<LancamentoDto> findAllByClassificacao(Integer classificacao) {
+        return lancamentosRepository.findAllByClassificacao(classificacao).stream()
+                .map(lancamentosEntity -> objectMapper.convertValue(lancamentosEntity, LancamentoDto.class))
+                .toList();
+    }
+
 
 }
