@@ -1,7 +1,8 @@
 package br.com.dbc.dbcmovies.service;
 
 
-import br.com.dbc.dbcmovies.dto.*;
+import br.com.dbc.dbcmovies.dto.LancamentoCreateDto;
+import br.com.dbc.dbcmovies.dto.LancamentoDto;
 import br.com.dbc.dbcmovies.entity.LancamentosEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.LancamentosRepository;
@@ -57,5 +58,12 @@ public class LancamentosService {
         return lancamentosRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("lancamento não encontrado!"));
     }
+
+    public List<LancamentoDto> findDataLancamento(String data) {
+        return lancamentosRepository.findAllByDataLancamentoContains(data).stream()
+                .map(lancamentosEntity -> objectMapper.convertValue(lancamentosEntity, LancamentoDto.class))
+                .toList();
+    }
+
 
 }

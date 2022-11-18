@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Document(collection = "lancamentos")
 public class LancamentosEntity {
 
