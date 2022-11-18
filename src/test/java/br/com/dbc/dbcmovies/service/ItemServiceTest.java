@@ -66,7 +66,7 @@ public class ItemServiceTest {
         // Verificação (ASSERT)
         assertNotNull(filmeDtoRetorno);
         assertNotNull(filmeDtoRetorno.getIdItem());
-        assertEquals("Hulk",filmeDtoRetorno.getNome());
+        assertEquals("Hulk", filmeDtoRetorno.getNome());
         assertNull(filmeDtoRetorno.getEpisodios());
         assertNull(filmeDtoRetorno.getTemporadas());
     }
@@ -86,7 +86,7 @@ public class ItemServiceTest {
         // Verificação (ASSERT)
         assertNotNull(serieDtoRetorno);
         assertNotNull(serieDtoRetorno.getIdItem());
-        assertEquals("A Maldição da Mansão Bly",serieDtoRetorno.getNome());
+        assertEquals("A Maldição da Mansão Bly", serieDtoRetorno.getNome());
         assertNull(serieDtoRetorno.getDuracao());
 
     }
@@ -105,7 +105,7 @@ public class ItemServiceTest {
         // Verificação (ASSERT)
         assertNotNull(list);
         assertTrue(list.size() > 0);
-        assertEquals(1,list.size());
+        assertEquals(1, list.size());
     }
 
     @Test
@@ -172,7 +172,7 @@ public class ItemServiceTest {
 
         // Verificação (ASSERT)
         assertNotNull(itemEntretenimentoDto);
-        assertNotEquals("Velozes e Furiosos",itemEntretenimentoDto.getNome());
+        assertNotEquals("Velozes e Furiosos", itemEntretenimentoDto.getNome());
     }
 
     @Test
@@ -194,7 +194,7 @@ public class ItemServiceTest {
 
         // Verificação (ASSERT)
         assertNotNull(itemEntretenimentoDto);
-        assertNotEquals("Stranger Things",itemEntretenimentoDto.getNome());
+        assertNotEquals("Stranger Things", itemEntretenimentoDto.getNome());
     }
 
 
@@ -217,7 +217,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void deveTestarFilterComSucesso(){
+    public void deveTestarFilterComSucesso() {
 
         // Criar variaveis (SETUP)
         String tipo = "Filme";
@@ -226,22 +226,22 @@ public class ItemServiceTest {
         List<ItemEntretenimentoEntity> itemEntretenimentoEntityList = new ArrayList<>();
         ItemEntretenimentoEntity itemEntretenimentoEntityFilme = getItemEntretenimentoEntityFilme();
         itemEntretenimentoEntityList.add(itemEntretenimentoEntityFilme);
-        when(itemRepository.filtrar(any(),any(),anyInt())).thenReturn(itemEntretenimentoEntityList);
+        when(itemRepository.filtrar(any(), any(), anyInt())).thenReturn(itemEntretenimentoEntityList);
 
         // Ação (ACT)
         List<ItemEntretenimentoDto> itemEntretenimentoDtoList = itemService.filter(tipo, genero, classificacao);
 
         // Verificação (ASSERT)
         assertNotNull(itemEntretenimentoDtoList);
-        assertEquals("Hulk",itemEntretenimentoEntityFilme.getNome());
-        assertEquals("Ação",itemEntretenimentoEntityFilme.getGenero());
-        assertEquals(16,itemEntretenimentoEntityFilme.getClassificacao());
+        assertEquals("Hulk", itemEntretenimentoEntityFilme.getNome());
+        assertEquals("Ação", itemEntretenimentoEntityFilme.getGenero());
+        assertEquals(16, itemEntretenimentoEntityFilme.getClassificacao());
 
     }
 
 
     @Test
-    public void deveTestarListPaginadoComSucesso(){
+    public void deveTestarListPaginadoComSucesso() {
         // SETUP
         Integer pagina = 5;
         Integer quantidade = 3;
@@ -258,9 +258,6 @@ public class ItemServiceTest {
         assertEquals(1, itemEntretenimentoDtoPageDTO.getQuantidadePaginas());
         assertEquals(1, itemEntretenimentoDtoPageDTO.getTotalElementos());
     }
-
-
-
 
 
     private static ItemEntretenimentoEntity getItemEntretenimentoEntityFilme() {
