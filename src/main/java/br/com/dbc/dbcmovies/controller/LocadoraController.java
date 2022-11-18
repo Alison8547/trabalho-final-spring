@@ -32,8 +32,8 @@ public class LocadoraController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PostMapping("/create")
+    @PostMapping("/alugar")
     public ResponseEntity<LocadoraDto> create(@Valid @RequestBody LocadoraCreateDto locadoraCreateDto) {
-        return ResponseEntity.ok(locadoraService.createLancamento(locadoraCreateDto));
+        return ResponseEntity.ok(locadoraService.alugar(locadoraCreateDto));
     }
 }

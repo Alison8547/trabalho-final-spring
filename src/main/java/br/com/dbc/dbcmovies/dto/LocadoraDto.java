@@ -6,6 +6,7 @@ import lombok.Data;
 public class LocadoraDto {
 
     private String idLocadora;
+    private String nomePessoa;
     private Double preco;
     private Integer diasLocacao;
     private String nomeItem;

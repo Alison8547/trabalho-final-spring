@@ -16,6 +16,8 @@ public class LocadoraEntity {
     @Id
     private String idLocadora;
 
+    private String nomePessoa;
+
     private Double preco;
 
     private Integer diasLocacao;
@@ -23,6 +25,7 @@ public class LocadoraEntity {
     private String nomeItem;
 
     private boolean disponibilidade;
+
 
 
 }

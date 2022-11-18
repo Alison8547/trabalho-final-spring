@@ -13,6 +13,10 @@ public class LocadoraCreateDto {
     @Schema(description = "Preço do filme" , example = "10,0")
     private Double preco;
 
+    @NotBlank
+    @Schema(description = "Seu nome" , example = "Alison")
+    private String nomePessoa;
+
     @NotNull
     @Schema(description = "Dias da locação do Filme/Série" , example = "4")
     private Integer diasLocacao;
