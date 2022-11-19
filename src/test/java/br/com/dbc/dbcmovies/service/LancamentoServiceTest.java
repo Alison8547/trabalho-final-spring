@@ -3,6 +3,7 @@ package br.com.dbc.dbcmovies.service;
 
 import br.com.dbc.dbcmovies.dto.LancamentoCreateDto;
 import br.com.dbc.dbcmovies.dto.LancamentoDto;
+import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
 import br.com.dbc.dbcmovies.entity.LancamentosEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.LancamentosRepository;
@@ -91,6 +92,24 @@ public class LancamentoServiceTest {
         assertEquals(1, lista.size());
     }
 
+    @Test
+    public void deveTestarFindByIdComSucesso() throws RegraDeNegocioException {
+        // Criar variaveis (SETUP)
+        String busca = "6376a0fae9bf89fa58bc6ebe";
+
+        //pessoaRepository.findById(id)
+        LancamentosEntity lancamentosEntity = getLancamentoEntity();
+        lancamentosEntity.setIdLancamento(busca);
+        when(lancamentosRepository.findById(any())).thenReturn(Optional.of(lancamentosEntity));
+
+        // Ação (ACT)
+        LancamentosEntity lancamentosEntity1 = lancamentosService.findById(busca);
+
+        // Verificação (ASSERT)
+        assertNotNull(lancamentosEntity1);
+        assertEquals("6376a0fae9bf89fa58bc6ebe", lancamentosEntity1.getIdLancamento());
+    }
+
     @Test(expected = RegraDeNegocioException.class)
     public void deveTestarFindByIdComErro() throws RegraDeNegocioException {
         // Criar variaveis (SETUP)
@@ -99,6 +118,50 @@ public class LancamentoServiceTest {
 
         // Ação (ACT)
         lancamentosService.findById(busca);
+    }
+
+    @Test
+    public void deveTestarDataLancamentoComSucesso(){
+        // SETUP
+        String data = "09/11/2022";
+        List<LancamentosEntity> lista = new ArrayList<>();
+        lista.add(getLancamentoEntity());
+
+        //lancamentosRepository.findAllByDataLancamentoContains(data)
+        LancamentosEntity lancamentosEntity = getLancamentoEntity();
+        lancamentosEntity.setDataLancamento(data);
+        when(lancamentosRepository.findAllByDataLancamentoContains(anyString())).thenReturn(lista);
+
+        // ACT
+        List<LancamentoDto> dataLancamento = lancamentosService.findDataLancamento(data);
+
+
+        // ASSERT
+        assertNotNull(dataLancamento);
+        assertTrue(dataLancamento.size() > 0);
+        assertEquals(1, dataLancamento.size());
+    }
+
+    @Test
+    public void deveTestarByClassificacaoComSucesso(){
+        // SETUP
+        Integer classificacao = 16;
+        List<LancamentosEntity> lista = new ArrayList<>();
+        lista.add(getLancamentoEntity());
+
+        //lancamentosRepository.findAllByClassificacao(classificacao)
+        LancamentosEntity lancamentosEntity = getLancamentoEntity();
+        lancamentosEntity.setClassificacao(classificacao);
+        when(lancamentosRepository.findAllByClassificacao(anyInt())).thenReturn(lista);
+
+        // ACT
+        List<LancamentoDto> byClassificacao = lancamentosService.findAllByClassificacao(classificacao);
+
+
+        // ASSERT
+        assertNotNull(byClassificacao);
+        assertTrue(byClassificacao.size() > 0);
+        assertEquals(1, byClassificacao.size());
     }
 
     @Test
