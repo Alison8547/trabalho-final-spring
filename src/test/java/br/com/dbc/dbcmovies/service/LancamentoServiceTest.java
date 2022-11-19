@@ -3,7 +3,6 @@ package br.com.dbc.dbcmovies.service;
 
 import br.com.dbc.dbcmovies.dto.LancamentoCreateDto;
 import br.com.dbc.dbcmovies.dto.LancamentoDto;
-import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
 import br.com.dbc.dbcmovies.entity.LancamentosEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.LancamentosRepository;
