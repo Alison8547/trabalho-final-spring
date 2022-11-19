@@ -23,9 +23,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.*;
@@ -48,6 +51,9 @@ public class IndicacaoServiceTest {
     @Mock
     private IndicacaoRepository indicacaoRepository;
 
+    @Mock
+    private UsuarioRepository usuarioRepository;
+
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -59,34 +65,44 @@ public class IndicacaoServiceTest {
         ReflectionTestUtils.setField(indicacaoService, "objectMapper", objectMapper);
     }
 
+
+//
 //    @Test
 //    public void deveTestarIncluirIndicacaoComSucesso() throws RegraDeNegocioException {
 //
 //        // Criar variaveis (SETUP)
 //        IndicacaoCreateDto indicacao = new IndicacaoCreateDto();
 //        indicacao.setItemNome("Death note");
+//        UsernamePasswordAuthenticationToken dto
+//                       = new UsernamePasswordAuthenticationToken(1, null, Collections.emptyList());
+//                SecurityContextHolder.getContext().setAuthentication(dto);
 //
+//        Integer idLoggedUser = usuarioService.getIdLoggedUser();
 //
-//        IndicacaoPK indicacaoPK = new IndicacaoPK(1, indicacao.getItemNome());
+//        IndicacaoPK indicacaoPK = new IndicacaoPK(idLoggedUser, indicacao.getItemNome());
 //
 //        IndicacaoEntity indicacaoEntity = new IndicacaoEntity();
 //        indicacaoEntity.setIndicacaoPK(indicacaoPK);
-//        indicacaoEntity.setUsuario(usuarioService.findById(1));
+//        indicacaoEntity.setUsuario(usuarioService.findById(idLoggedUser));
 //
 //
+//        UsuarioEntity usuarioEntity = getUsuarioEntity();
+//        usuarioEntity.setIdUsuario(1);
+//        when(usuarioService.findById(anyInt())).thenReturn(usuarioEntity);
 //        when(indicacaoRepository.save(any())).thenReturn(indicacaoEntity);
 //
 //
 //
 //
 //        // Ação (ACT)
-//        IndicacaoDto indicacaoDto2 = indicacaoService.incluirIndicacao(indicacao);
+//        IndicacaoDto indicacaoDto = indicacaoService.incluirIndicacao(indicacao);
 //
 //
 //
 //
 //        // Verificação (ASSERT)
-//        assertNotNull(indicacaoDto2);
+//       // assertNotNull(indicacaoDto);
+//        assertEquals(1,idLoggedUser);
 //    }
 
     @Test
@@ -116,5 +132,23 @@ public class IndicacaoServiceTest {
         assertEquals(1, indicacaoDtoPageDTO.getTotalElementos());
     }
 
+    private static UsuarioEntity getUsuarioEntity() {
+        UsuarioEntity usuarioEntity = new UsuarioEntity();
+        usuarioEntity.setNome("Luiz Martins");
+        usuarioEntity.setIdade(25);
+        usuarioEntity.setEmail("luiz@dbccompany.com.br");
+        usuarioEntity.setSenha("123");
+        usuarioEntity.setAtivo(1);
+        usuarioEntity.setCargos(new HashSet<>());
+        return usuarioEntity;
+    }
+
+    private static UsuarioDto getUsuarioDto() {
+        UsuarioDto usuarioDto = new UsuarioDto();
+        usuarioDto.setNome("Eduardo Sedrez");
+        usuarioDto.setIdade(24);
+        usuarioDto.setEmail("eduardo@dbccompany.com.br");
+        return usuarioDto;
+    }
 
 }

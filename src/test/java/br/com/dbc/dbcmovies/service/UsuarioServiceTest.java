@@ -1,9 +1,13 @@
 package br.com.dbc.dbcmovies.service;
 
+import br.com.dbc.dbcmovies.dto.IndicacaoCreateDto;
+import br.com.dbc.dbcmovies.dto.IndicacaoDto;
 import br.com.dbc.dbcmovies.dto.UsuarioCreateDto;
 import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.CargoEntity;
+import br.com.dbc.dbcmovies.entity.IndicacaoEntity;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;
+import br.com.dbc.dbcmovies.entity.pk.IndicacaoPK;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.UsuarioRepository;
 import br.com.dbc.dbcmovies.security.TokenService;
@@ -17,6 +21,8 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -303,6 +309,41 @@ public class UsuarioServiceTest {
 
         // Verificação (ASSERT)
         verify(emailService, times(1)).sendEmailRecuperacaoSenha(any(), any(), any());
+    }
+
+
+    @Test
+    public void deveTestargetIdLoggedUser(){
+
+        // Criar variaveis (SETUP)
+        UsernamePasswordAuthenticationToken dto
+                = new UsernamePasswordAuthenticationToken(1, null, Collections.emptyList());
+        SecurityContextHolder.getContext().setAuthentication(dto);
+
+        // Ação (ACT)
+        Integer idLoggedUser = usuarioService.getIdLoggedUser();
+
+
+        // Verificação (ASSERT)
+        assertEquals(1,idLoggedUser);
+    }
+
+    @Test
+    public void deveTestargetLoggedUser() throws RegraDeNegocioException {
+
+        // Criar variaveis (SETUP)
+        UsernamePasswordAuthenticationToken dto
+                = new UsernamePasswordAuthenticationToken(1, null, Collections.emptyList());
+        SecurityContextHolder.getContext().setAuthentication(dto);
+        UsuarioEntity usuarioEntity = getUsuarioEntity();
+        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuarioEntity));
+
+        // Ação (ACT)
+        UsuarioDto loggedUser = usuarioService.getLoggedUser();
+        loggedUser.setIdUsuario(1);
+
+        // Verificação (ASSERT)
+        assertEquals(1,loggedUser.getIdUsuario());
     }
 
 //    @Test
