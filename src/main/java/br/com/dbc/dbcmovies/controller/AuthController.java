@@ -53,7 +53,7 @@ public class AuthController {
             }
     )
     @PostMapping("/cadastro-usuario")
-    public ResponseEntity<UsuarioDto> cadastrar(@Valid @RequestBody UsuarioCreateDto usuario) {
+    public ResponseEntity<UsuarioDto> cadastrar(@Valid @RequestBody UsuarioCreateDto usuario) throws RegraDeNegocioException {
         log.info("Cadastrando novo usuário...");
         UsuarioDto user = usuarioService.cadastrar(usuario);
         log.info("Usuário cadastrado com sucesso!");

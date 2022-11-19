@@ -9,7 +9,6 @@ import br.com.dbc.dbcmovies.entity.TipoCargo;
 import br.com.dbc.dbcmovies.entity.TipoTemplate;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
-import br.com.dbc.dbcmovies.repository.CargoRepository;
 import br.com.dbc.dbcmovies.repository.UsuarioRepository;
 import br.com.dbc.dbcmovies.security.TokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,7 +33,7 @@ public class UsuarioService {
     private final ObjectMapper objectMapper;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
-    private final CargoRepository cargoRepository;
+    private final CargoService cargoService;
     private final TokenService tokenService;
 
 
@@ -54,18 +53,18 @@ public class UsuarioService {
     }
 
     public Integer getIdLoggedUser() {
-        return Integer.parseInt((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        return Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
     }
 
     public UsuarioDto getLoggedUser() throws RegraDeNegocioException {
         return objectMapper.convertValue(findById(getIdLoggedUser()), UsuarioDto.class);
     }
 
-    public UsuarioDto cadastrar(UsuarioCreateDto usuario) {
+    public UsuarioDto cadastrar(UsuarioCreateDto usuario) throws RegraDeNegocioException {
         String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
         UsuarioEntity usuarioEntity = objectMapper.convertValue(usuario, UsuarioEntity.class);
-        Optional<CargoEntity> cargo = cargoRepository.findById(TipoCargo.CLIENTE.ordinal());
-        usuarioEntity.setCargos(Set.of(cargo.get()));
+        CargoEntity cargo = cargoService.findById(TipoCargo.CLIENTE.ordinal());
+        usuarioEntity.setCargos(Set.of(cargo));
         usuarioEntity.setAtivo(USUARIO_ATIVO);
         usuarioEntity.setSenha(senhaCriptografada);
 
@@ -82,9 +81,9 @@ public class UsuarioService {
 
     public UsuarioDto tornarContaAdmin(Integer idUsuario) throws RegraDeNegocioException {
         UsuarioEntity usuarioEncontrado = findById(idUsuario);
-        Optional<CargoEntity> cargo = cargoRepository.findById(TipoCargo.ADMIN.ordinal());
+        CargoEntity cargo = cargoService.findById(TipoCargo.ADMIN.ordinal());
         Set<CargoEntity> cargoSet = new HashSet<>();
-        cargoSet.add(cargo.get());
+        cargoSet.add(cargo);
         usuarioEncontrado.setCargos(cargoSet);
         usuarioRepository.save(usuarioEncontrado);
         return objectMapper.convertValue(usuarioEncontrado, UsuarioDto.class);
@@ -141,9 +140,9 @@ public class UsuarioService {
         UsuarioEntity usuarioEntity = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RegraDeNegocioException("E-mail não encontrado!"));
 
-        Optional<CargoEntity> modoRecuperacao = cargoRepository.findById(TipoCargo.RECUPERACAO.ordinal());
+        CargoEntity modoRecuperacao = cargoService.findById(TipoCargo.RECUPERACAO.ordinal());
 
-        usuarioEntity.getCargos().add(modoRecuperacao.get());
+        usuarioEntity.getCargos().add(modoRecuperacao);
         String tokenRecuperacaoSenha = tokenService.getToken(usuarioEntity, true);
 
         UsuarioEntity usuarioSalvo = usuarioRepository.save(usuarioEntity);
@@ -154,16 +153,16 @@ public class UsuarioService {
     public void alterarSenha(String senha) throws RegraDeNegocioException {
         UsuarioEntity usuario = objectMapper.convertValue(getLoggedUser(), UsuarioEntity.class);
 
-        Optional<CargoEntity> modoRecuperacao = cargoRepository.findById(TipoCargo.RECUPERACAO.ordinal());
+        CargoEntity modoRecuperacao = cargoService.findById(TipoCargo.RECUPERACAO.ordinal());
 
         usuario.getCargos().stream()
-                .filter(cargo -> cargo.getIdCargo() == modoRecuperacao.get().getIdCargo())
+                .filter(cargo -> cargo.getIdCargo() == modoRecuperacao.getIdCargo())
                 .findFirst()
                 .orElseThrow(() -> new RegraDeNegocioException("Senha ja foi alterada!"));
 
         String senhaCriptografada = passwordEncoder.encode(senha);
         usuario.setSenha(senhaCriptografada);
-        usuario.getCargos().remove(modoRecuperacao.get());
+        usuario.getCargos().remove(modoRecuperacao);
         usuarioRepository.save(usuario);
     }
 }
