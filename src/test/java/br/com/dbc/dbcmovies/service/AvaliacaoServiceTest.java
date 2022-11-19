@@ -3,7 +3,6 @@ package br.com.dbc.dbcmovies.service;
 import br.com.dbc.dbcmovies.dto.*;
 import br.com.dbc.dbcmovies.entity.AvaliacaoEntity;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
-import br.com.dbc.dbcmovies.entity.LancamentosEntity;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;
 import br.com.dbc.dbcmovies.entity.pk.AvaliacaoPK;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
@@ -23,7 +22,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
