@@ -1,9 +1,6 @@
 package br.com.dbc.dbcmovies.service;
 
-import br.com.dbc.dbcmovies.dto.AvaliacaoCreateDto;
-import br.com.dbc.dbcmovies.dto.AvaliacaoDto;
-import br.com.dbc.dbcmovies.dto.LancamentoCreateDto;
-import br.com.dbc.dbcmovies.dto.LancamentoDto;
+import br.com.dbc.dbcmovies.dto.*;
 import br.com.dbc.dbcmovies.entity.AvaliacaoEntity;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
 import br.com.dbc.dbcmovies.entity.LancamentosEntity;
@@ -29,7 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -42,6 +39,12 @@ public class AvaliacaoServiceTest {
 
     @Mock
     private AvaliacaoRepository avaliacaoRepository;
+
+    @Mock
+    private UsuarioService usuarioService;
+
+    @Mock
+    private ItemService itemService;
 
     @Before
     public void init() {
@@ -113,23 +116,58 @@ public class AvaliacaoServiceTest {
         assertEquals(1, lista.size());
     }
 
-//    @Test
-//    public void deveTestarFindByIdsComSucesso() throws RegraDeNegocioException {
-//        // SETUP
-//        Integer idUsuario = 1;
-//        Integer idItem = 1;
-//        AvaliacaoEntity avaliacaoEntity = getAvaliacaoEntity();
-//        when(avaliacaoRepository.findByIdAvaliacao(1,1)).thenReturn(avaliacaoEntity);
-//
-//        // ACT
-//        AvaliacaoEntity avaliacaoEntity1 = avaliacaoService.findByIdAvaliacao(1, 1);
-//
-//        // ASSERT
-//        assertNotNull(avaliacaoEntity1);
-//        assertEquals(1, avaliacaoEntity1.getUsuario().getIdUsuario());
-//        assertEquals(1, avaliacaoEntity1.getItemEntretenimento().getIdItem());
-//        assertThrowsExactly(RegraDeNegocioException.class);
-//    }
+    @Test
+    public void deveTestarFindByIdsAvaliacaoComSucesso() throws RegraDeNegocioException {
+        // SETUP
+        AvaliacaoEntity avaliacaoEntity = getAvaliacaoEntity();
+        when(avaliacaoRepository.findByIdAvaliacao(1,1)).thenReturn(avaliacaoEntity);
+
+        // ACT
+        AvaliacaoEntity avaliacaoEntity1 = avaliacaoService.findByIdAvaliacao(1, 1);
+
+        // ASSERT
+        assertNotNull(avaliacaoEntity1);
+        assertEquals(1, avaliacaoEntity1.getUsuario().getIdUsuario());
+        assertEquals(1, avaliacaoEntity1.getItemEntretenimento().getIdItem());
+    }
+    @Test(expected = RegraDeNegocioException.class)
+    public void deveTestarFindByIdsAvaliacaoComFalha() throws RegraDeNegocioException {
+        // SETUP
+        AvaliacaoEntity avaliacaoEntity = getAvaliacaoEntity();
+
+        // ACT
+        AvaliacaoEntity avaliacaoEntity1 = avaliacaoService.findByIdAvaliacao(5, 5);
+    }
+
+    @Test
+    public void deveTestarGetByIds() throws RegraDeNegocioException {
+
+        // Criar variaveis (SETUP)
+        Integer idUsuario = 1;
+        Integer idItem = 1;
+        AvaliacaoEntity avaliacaoEntity = getAvaliacaoEntity();
+        when(avaliacaoRepository.findByIdAvaliacao(anyInt(), anyInt())).thenReturn(avaliacaoEntity);
+
+        // Ação (ACT)
+        AvaliacaoDto avaliacaoDto = avaliacaoService.getByIds(idUsuario, idItem);
+
+        // Verificação (ASSERT)
+        assertNotNull(avaliacaoDto);
+        assertEquals(1, avaliacaoDto.getIdUsuario());
+        assertEquals(1, avaliacaoDto.getIdItemEntretenimento());
+    }
+
+    @Test
+    public void deveTestarVerificarItemAvalicadoComSucesso(){
+        // SETUP
+
+
+        // ACT
+
+
+        // ASSERT
+    }
+
 
 
 //    @Test
