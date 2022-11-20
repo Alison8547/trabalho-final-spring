@@ -63,7 +63,7 @@ public class UsuarioService {
     public UsuarioDto cadastrar(UsuarioCreateDto usuario) throws RegraDeNegocioException {
         String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
         UsuarioEntity usuarioEntity = objectMapper.convertValue(usuario, UsuarioEntity.class);
-        CargoEntity cargo = cargoService.findById(TipoCargo.CLIENTE.ordinal());
+        CargoEntity cargo = cargoService.findById(TipoCargo.CLIENTE.getCargo());
         usuarioEntity.setCargos(Set.of(cargo));
         usuarioEntity.setAtivo(USUARIO_ATIVO);
         usuarioEntity.setSenha(senhaCriptografada);
@@ -81,7 +81,7 @@ public class UsuarioService {
 
     public UsuarioDto tornarContaAdmin(Integer idUsuario) throws RegraDeNegocioException {
         UsuarioEntity usuarioEncontrado = findById(idUsuario);
-        CargoEntity cargo = cargoService.findById(TipoCargo.ADMIN.ordinal());
+        CargoEntity cargo = cargoService.findById(TipoCargo.ADMIN.getCargo());
         Set<CargoEntity> cargoSet = new HashSet<>();
         cargoSet.add(cargo);
         usuarioEncontrado.setCargos(cargoSet);
@@ -140,7 +140,7 @@ public class UsuarioService {
         UsuarioEntity usuarioEntity = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RegraDeNegocioException("E-mail não encontrado!"));
 
-        CargoEntity modoRecuperacao = cargoService.findById(TipoCargo.RECUPERACAO.ordinal());
+        CargoEntity modoRecuperacao = cargoService.findById(TipoCargo.RECUPERACAO.getCargo());
 
         usuarioEntity.getCargos().add(modoRecuperacao);
         String tokenRecuperacaoSenha = tokenService.getToken(usuarioEntity, true);
@@ -153,7 +153,7 @@ public class UsuarioService {
     public void alterarSenha(String senha) throws RegraDeNegocioException {
         UsuarioEntity usuario = objectMapper.convertValue(getLoggedUser(), UsuarioEntity.class);
 
-        CargoEntity modoRecuperacao = cargoService.findById(TipoCargo.RECUPERACAO.ordinal());
+        CargoEntity modoRecuperacao = cargoService.findById(TipoCargo.RECUPERACAO.getCargo());
 
         usuario.getCargos().stream()
                 .filter(cargo -> cargo.getIdCargo() == modoRecuperacao.getIdCargo())
