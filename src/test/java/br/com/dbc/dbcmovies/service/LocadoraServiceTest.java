@@ -1,8 +1,9 @@
 package br.com.dbc.dbcmovies.service;
 
-import br.com.dbc.dbcmovies.dto.*;
-import br.com.dbc.dbcmovies.entity.*;
-import br.com.dbc.dbcmovies.entity.pk.AvaliacaoPK;
+import br.com.dbc.dbcmovies.dto.LocadoraCreateDto;
+import br.com.dbc.dbcmovies.dto.LocadoraDto;
+import br.com.dbc.dbcmovies.dto.PrecoDto;
+import br.com.dbc.dbcmovies.entity.LocadoraEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.LocadoraRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -19,7 +20,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -62,7 +62,7 @@ public class LocadoraServiceTest {
     }
 
     @Test
-    public void deveTestarAlugarComSucesso(){
+    public void deveTestarAlugarComSucesso() {
         // SETUP
         LocadoraCreateDto locadoraCreateDto = getLocadoraCreateDto();
 
@@ -85,7 +85,52 @@ public class LocadoraServiceTest {
         // ASSERT
         assertNotNull(locadoraDto);
         assertNotEquals(2, locadoraDto.getDiasLocacao());
-        assertNotEquals(40,locadoraDto.getPreco());
+        assertNotEquals(40, locadoraDto.getPreco());
+    }
+
+    @Test
+    public void deveTestarListQuantidadePreco() {
+
+        // SETUP
+        List<PrecoDto> lista = new ArrayList<>();
+        PrecoDto precoDto = new PrecoDto();
+        precoDto.setPreco(12.0);
+        precoDto.setQuantidade(1);
+        lista.add(precoDto);
+        when(locadoraRepository.listQuantidadePreco()).thenReturn(lista);
+
+        // ACT
+        List<PrecoDto> list = locadoraService.quantidadePrecos();
+
+        // ASSERT
+        assertNotNull(list);
+        assertTrue(list.size() > 0);
+        assertEquals(1, list.size());
+
+    }
+
+    @Test
+    public void deveTestarFindPreco() {
+
+        // SETUP
+        Double preco = 10.4;
+        List<LocadoraDto> lista = new ArrayList<>();
+        LocadoraDto locadoraDto = new LocadoraDto();
+        locadoraDto.setNomePessoa("Alison");
+        locadoraDto.setPreco(preco);
+        locadoraDto.setIdLocadora("1");
+        locadoraDto.setNomeItem("Hulk");
+        locadoraDto.setDiasLocacao(4);
+        lista.add(locadoraDto);
+        when(locadoraRepository.findByPreco(any())).thenReturn(lista);
+        // ACT
+        List<LocadoraDto> list = locadoraService.findByPreco(preco);
+
+        // ASSERT
+        assertNotNull(list);
+        assertTrue(list.size() > 0);
+        assertEquals(1, list.size());
+
     }
 
 
@@ -100,7 +145,7 @@ public class LocadoraServiceTest {
         return locadoraEntity;
     }
 
-    private static LocadoraCreateDto getLocadoraCreateDto(){
+    private static LocadoraCreateDto getLocadoraCreateDto() {
         LocadoraCreateDto locadoraCreateDto = new LocadoraCreateDto();
         locadoraCreateDto.setNomePessoa("Eduardo");
         locadoraCreateDto.setPreco(20.0);
