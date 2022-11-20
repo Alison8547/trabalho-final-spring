@@ -1,6 +1,8 @@
 package br.com.dbc.dbcmovies.service;
 
-import br.com.dbc.dbcmovies.dto.*;
+import br.com.dbc.dbcmovies.dto.AvaliacaoCreateDto;
+import br.com.dbc.dbcmovies.dto.AvaliacaoDto;
+import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.AvaliacaoEntity;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;
@@ -17,16 +19,16 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.util.ReflectionTestUtils;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AvaliacaoServiceTest {
@@ -169,30 +171,53 @@ public class AvaliacaoServiceTest {
 
 
 
-//    @Test
-//    public void deveTestarUpdateComSucesso() throws RegraDeNegocioException {
-//        // SETUP
-//        Integer idItem = 1;
-//        AvaliacaoCreateDto avaliacaoCreateDto = getAvaliacaoCreateDto();
-//
-//        // findById(id);
-//        AvaliacaoEntity avaliacaoEntity = getAvaliacaoEntity();
-//        avaliacaoCreateDto.setNota(9.0);
-//        avaliacaoCreateDto.setComentario("Muito bom, excelente efeitos visuais.");
-//        when(avaliacaoRepository.findById(any())).thenReturn(Optional.of(avaliacaoEntity));
-//
-//        // pessoaRepository.save(pessoaEntityRecuperada);
-//        AvaliacaoEntity avaliacaoEntity1 = getAvaliacaoEntity();
-//        when(avaliacaoRepository.save(any())).thenReturn(avaliacaoEntity1);
-//
-//        // ACT
-//        AvaliacaoDto avaliacaoDto = avaliacaoService.update(avaliacaoCreateDto, 1);
-//
-//        // ASSERT
+    @Test
+    public void deveTestarUpdateComSucesso() throws RegraDeNegocioException {
+        // SETUP
+        UsernamePasswordAuthenticationToken dto
+                = new UsernamePasswordAuthenticationToken(1, null, Collections.emptyList());
+        SecurityContextHolder.getContext().setAuthentication(dto);
+
+        AvaliacaoEntity avaliacaoEntity = getAvaliacaoEntity();
+
+        when(usuarioService.getLoggedUser()).thenReturn(getUsuarioDto());
+
+//        avaliacaoEntity.setNota();
+        when(avaliacaoRepository.findByIdAvaliacao(any(), anyInt())).thenReturn(avaliacaoEntity);
+
+        // ACT
+        AvaliacaoDto avaliacaoDto = avaliacaoService.update(getAvaliacaoCreateDto(), 1);
+
+        // ASSERT
 //        assertNotNull(avaliacaoDto);
 //        assertNotEquals(9.0, avaliacaoDto.getNota());
 //        assertNotEquals("Muito bom, excelente efeitos visuais.",avaliacaoDto.getComentario());
-//    }
+        verify(avaliacaoRepository, times(1)).save(any());
+    }
+
+    @Test
+    public void deveTestarRemoverComSucesso() throws RegraDeNegocioException {
+        // Criar variaveis (SETUP)
+
+        UsernamePasswordAuthenticationToken dto
+                = new UsernamePasswordAuthenticationToken(1, null, Collections.emptyList());
+        SecurityContextHolder.getContext().setAuthentication(dto);
+
+        UsuarioEntity usuarioEntity = getUsuarioEntity();
+        usuarioEntity.setAvaliacaos(Set.of(getAvaliacaoEntity()));
+
+        when(avaliacaoRepository.findByIdAvaliacao(anyInt(), anyInt())).thenReturn(getAvaliacaoEntity());
+
+        when(usuarioService.getLoggedUser()).thenReturn(getUsuarioDto());
+
+        // Ação (ACT)
+        avaliacaoService.delete(usuarioEntity.getIdUsuario());
+
+        // Verificação (ASSERT)
+//        verify(itemService, times(1)).findById(any());
+
+        verify(avaliacaoRepository, times(1)).delete(any());
+    }
 
     private static AvaliacaoEntity getAvaliacaoEntity() {
         AvaliacaoEntity avaliacaoEntity = new AvaliacaoEntity();
@@ -221,5 +246,26 @@ public class AvaliacaoServiceTest {
         avaliacaoCreateDto.setNota(9.0);
         avaliacaoCreateDto.setComentario("Muito bom, excelente efeitos visuais.");
         return avaliacaoCreateDto;
+    }
+
+    private static UsuarioEntity getUsuarioEntity() {
+        UsuarioEntity usuarioEntity = new UsuarioEntity();
+        usuarioEntity.setIdUsuario(1);
+        usuarioEntity.setNome("Luiz Martins");
+        usuarioEntity.setIdade(25);
+        usuarioEntity.setEmail("luiz@dbccompany.com.br");
+        usuarioEntity.setSenha("123");
+        usuarioEntity.setAtivo(1);
+        usuarioEntity.setCargos(new HashSet<>());
+        return usuarioEntity;
+    }
+
+    private static UsuarioDto getUsuarioDto() {
+        UsuarioDto usuarioDto = new UsuarioDto();
+        usuarioDto.setIdUsuario(1);
+        usuarioDto.setNome("Eduardo Sedrez");
+        usuarioDto.setIdade(24);
+        usuarioDto.setEmail("eduardo@dbccompany.com.br");
+        return usuarioDto;
     }
 }
