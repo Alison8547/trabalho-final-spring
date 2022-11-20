@@ -25,7 +25,5 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(dtoToken);
 
         filterChain.doFilter(request, response);
-
-
     }
 }

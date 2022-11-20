@@ -151,7 +151,8 @@ public class UsuarioService {
     }
 
     public void alterarSenha(String senha) throws RegraDeNegocioException {
-        UsuarioEntity usuario = objectMapper.convertValue(getLoggedUser(), UsuarioEntity.class);
+        UsuarioEntity usuario = (UsuarioEntity) this.findByEmail(getLoggedUser().getEmail())
+                .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!"));
 
         CargoEntity modoRecuperacao = cargoService.findById(TipoCargo.RECUPERACAO.getCargo());
 

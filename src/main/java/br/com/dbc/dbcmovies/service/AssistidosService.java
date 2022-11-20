@@ -33,8 +33,9 @@ public class AssistidosService {
     }
 
     public ItemEntretenimentoDto marcarAssistido(Integer idItem) throws RegraDeNegocioException {
-        ItemEntretenimentoEntity item = itemService.findById(idItem);
         UsuarioEntity usuario = usuarioService.findById(usuarioService.getLoggedUser().getIdUsuario());
+
+        ItemEntretenimentoEntity item = itemService.findById(idItem);
 
         verificarItemAssistido(usuario, idItem);
 
