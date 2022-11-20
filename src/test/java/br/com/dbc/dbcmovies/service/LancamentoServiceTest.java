@@ -1,6 +1,7 @@
 package br.com.dbc.dbcmovies.service;
 
 
+import br.com.dbc.dbcmovies.dto.ClassificaoDto;
 import br.com.dbc.dbcmovies.dto.LancamentoCreateDto;
 import br.com.dbc.dbcmovies.dto.LancamentoDto;
 import br.com.dbc.dbcmovies.entity.LancamentosEntity;
@@ -228,6 +229,27 @@ public class LancamentoServiceTest {
         // Verificação (ASSERT)
         // verificar se chamou pelo menos 1 vez o metodo pessoaRepository.delete(pessoaEntityRecuperada);
         verify(lancamentosRepository, times(1)).delete(any());
+    }
+
+    @Test
+    public void deveTestarListaGroupClassificacaoComSucesso() {
+
+        // Criar variaveis (SETUP)
+        List<ClassificaoDto> classificaoDtoList = new ArrayList<>();
+        ClassificaoDto classificao = new ClassificaoDto();
+        classificao.setClassificacao(22);
+        classificao.setQuantidade(1);
+        classificaoDtoList.add(classificao);
+
+        when(lancamentosRepository.groupByClassificacao()).thenReturn(classificaoDtoList);
+
+        // Ação (ACT)
+        List<ClassificaoDto> classificaoDtos = lancamentosService.listGroup();
+
+        // Verificação (ASSERT)
+        assertNotNull(classificaoDtos);
+        assertTrue(classificaoDtos.size() > 0);
+        assertEquals(1, classificaoDtos.size());
     }
 
     private static LancamentosEntity getLancamentoEntity() {

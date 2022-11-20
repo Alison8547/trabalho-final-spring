@@ -2,6 +2,7 @@ package br.com.dbc.dbcmovies.service;
 
 import br.com.dbc.dbcmovies.dto.LocadoraCreateDto;
 import br.com.dbc.dbcmovies.dto.LocadoraDto;
+import br.com.dbc.dbcmovies.dto.PrecoDto;
 import br.com.dbc.dbcmovies.entity.LocadoraEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.LocadoraRepository;
@@ -34,6 +35,12 @@ public class LocadoraService {
                 .toList();
     }
 
+    public List<PrecoDto> quantidadePrecos() {
+        return locadoraRepository.listQuantidadePreco();
+    }
 
+    public List<LocadoraDto> findByPreco(Double preco) {
+        return locadoraRepository.findByPreco(preco);
+    }
 
 }

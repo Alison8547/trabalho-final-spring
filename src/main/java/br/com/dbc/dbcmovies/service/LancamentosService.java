@@ -1,6 +1,7 @@
 package br.com.dbc.dbcmovies.service;
 
 
+import br.com.dbc.dbcmovies.dto.ClassificaoDto;
 import br.com.dbc.dbcmovies.dto.LancamentoCreateDto;
 import br.com.dbc.dbcmovies.dto.LancamentoDto;
 import br.com.dbc.dbcmovies.entity.LancamentosEntity;
@@ -69,6 +70,10 @@ public class LancamentosService {
         return lancamentosRepository.findAllByClassificacao(classificacao).stream()
                 .map(lancamentosEntity -> objectMapper.convertValue(lancamentosEntity, LancamentoDto.class))
                 .toList();
+    }
+
+    public List<ClassificaoDto> listGroup() {
+        return lancamentosRepository.groupByClassificacao();
     }
 
 

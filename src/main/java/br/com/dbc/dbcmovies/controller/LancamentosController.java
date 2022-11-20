@@ -1,6 +1,7 @@
 package br.com.dbc.dbcmovies.controller;
 
 
+import br.com.dbc.dbcmovies.dto.ClassificaoDto;
 import br.com.dbc.dbcmovies.dto.LancamentoCreateDto;
 import br.com.dbc.dbcmovies.dto.LancamentoDto;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
@@ -104,5 +105,18 @@ public class LancamentosController {
     @GetMapping("/classificacao-lancamentos")
     public ResponseEntity<List<LancamentoDto>> findAllByClassificacao(Integer classificacao) {
         return new ResponseEntity<>(lancamentosService.findAllByClassificacao(classificacao), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Lista quantidade de classificação", description = "Lista quantidade de classificação no banco de dados")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "201", description = "Lista feita com sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
+    @GetMapping("/group")
+    public ResponseEntity<List<ClassificaoDto>> listAllGroup() {
+        return ResponseEntity.ok(lancamentosService.listGroup());
     }
 }
