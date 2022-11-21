@@ -6,8 +6,6 @@ import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.repository.AssistidosRepository;
-import br.com.dbc.dbcmovies.repository.ItemRepository;
-import br.com.dbc.dbcmovies.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -26,7 +24,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AssistidosServiceTest {
@@ -41,15 +39,6 @@ public class AssistidosServiceTest {
 
     @Mock
     private UsuarioService usuarioService;
-
-    @Mock
-    private ItemService itemService;
-
-    @Mock
-    private ItemRepository itemRepository;
-
-    @Mock
-    private UsuarioRepository usuarioRepository;
 
     @Before
     public void init() {
@@ -85,64 +74,6 @@ public class AssistidosServiceTest {
         assertTrue(itens.size() > 0);
         assertEquals(1, lista.size());
     }
-
-//    @Test
-//    public void deveTestarMarcarAssistidoComSucesso() throws RegraDeNegocioException {
-//        // Criar variaveis (SETUP)
-//        UsernamePasswordAuthenticationToken dto
-//                = new UsernamePasswordAuthenticationToken(1, null, Collections.emptyList());
-//        SecurityContextHolder.getContext().setAuthentication(dto);
-//
-//        ItemEntretenimentoEntity itemEntity = getItemEntretenimento();
-//        ItemEntretenimentoEntity itemEntity2 = getItemEntretenimento();
-//        itemEntity2.setIdItem(5);
-//        UsuarioEntity usuarioEntity = getUsuarioEntity();
-//        usuarioEntity.setItemEntretenimentos(Set.of(itemEntity));
-//        itemEntity.setUsuarios(Set.of(usuarioEntity));
-//
-//        when(usuarioService.findById(anyInt())).thenReturn(usuarioEntity);
-//
-//        when(itemService.findById(anyInt())).thenReturn(itemEntity2);
-//
-//        when(usuarioService.getLoggedUser()).thenReturn(getUsuarioDto());
-//
-//        // Ação (ACT)
-//        ItemEntretenimentoDto itemDto = assistidosService.marcarAssistido(itemEntity2.getIdItem());
-//
-//        // Verificação (ASSERT)
-////        assertNotNull(usuarioDto);
-////        assertNotNull(usuarioDto.getIdUsuario());
-////        assertEquals("luiz@dbccompany.com.br", usuarioDto.getEmail());
-//        verify(itemRepository, times(1)).save(itemEntity);
-//        verify(usuarioRepository, times(1)).save(usuarioEntity);
-//    }
-
-//    @Test
-//    public void deveTestarDeletarAssistidoComSucesso() throws RegraDeNegocioException {
-//        // Criar variaveis (SETUP)
-//        UsernamePasswordAuthenticationToken dto
-//                = new UsernamePasswordAuthenticationToken(getUsuarioEntity(), null, Collections.emptyList());
-//        SecurityContextHolder.getContext().setAuthentication(dto);
-//
-//        ItemEntretenimentoEntity itemEntity = getItemEntretenimento();
-//        UsuarioEntity usuarioEntity = getUsuarioEntity();
-//        usuarioEntity.setItemEntretenimentos(Set.of(itemEntity));
-//
-//        when(itemService.findById(anyInt())).thenReturn(getItemEntretenimento());
-//
-//        when(usuarioService.findById(anyInt())).thenReturn(getUsuarioEntity());
-//
-//        when(usuarioService.getLoggedUser()).thenReturn(getUsuarioDto());
-//
-//        when(assistidosRepository.verificarUsuarioNaTabela(anyInt())).thenReturn(usuarioEntity.getIdUsuario());
-//
-//        // Ação (ACT)
-//        assistidosService.deletarAssistido(itemEntity.getIdItem());
-//
-//        // Verificação (ASSERT)
-//        verify(usuarioRepository, times(1)).save(usuarioEntity);
-//        verify(itemRepository, times(1)).save(itemEntity);
-//    }
 
     @Test
     public void deveTestarVerificarItemAssistidoComSucesso() throws RegraDeNegocioException {
@@ -187,7 +118,6 @@ public class AssistidosServiceTest {
         boolean retorno = assistidosService.verificarUsuarioNaTabela(usuarioEntity.getIdUsuario());
 
         // Verificação (ASSERT)
-
         assertTrue(retorno);
     }
 

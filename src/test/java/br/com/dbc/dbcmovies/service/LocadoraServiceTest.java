@@ -46,7 +46,6 @@ public class LocadoraServiceTest {
     @Test
     public void deveTestarListComSucesso() throws RegraDeNegocioException {
         // Criar variaveis (SETUP)
-        // lancamentosRepository.findAll()
         List<LocadoraEntity> lista = new ArrayList<>();
         lista.add(getLocadoraEntity());
         when(locadoraRepository.findAll()).thenReturn(lista);

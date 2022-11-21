@@ -1,8 +1,6 @@
 package br.com.dbc.dbcmovies.service;
 
-import br.com.dbc.dbcmovies.dto.AvaliacaoCreateDto;
 import br.com.dbc.dbcmovies.dto.AvaliacaoDto;
-import br.com.dbc.dbcmovies.dto.UsuarioDto;
 import br.com.dbc.dbcmovies.entity.AvaliacaoEntity;
 import br.com.dbc.dbcmovies.entity.ItemEntretenimentoEntity;
 import br.com.dbc.dbcmovies.entity.UsuarioEntity;
@@ -35,10 +33,10 @@ public class AvaliacaoServiceTest {
     @InjectMocks
     private AvaliacaoService avaliacaoService;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-
     @Mock
     private AvaliacaoRepository avaliacaoRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Mock
     private UsuarioService usuarioService;
@@ -54,38 +52,9 @@ public class AvaliacaoServiceTest {
         ReflectionTestUtils.setField(avaliacaoService, "objectMapper", objectMapper);
     }
 
-
-//    @Test
-//    public void deveTestarCreateAvaliacaoComSucesso() throws RegraDeNegocioException {
-//        // Criar variaveis (SETUP)
-//        AvaliacaoCreateDto avaliacaoCreateDto = getAvaliacaoCreateDto();
-//
-//        AvaliacaoEntity avaliacaoEntity = getAvaliacaoEntity();
-//
-//        // avaliacaoRepository.save(avaliacaoEntity);
-//        avaliacaoEntity.setNota(9.0);
-//        avaliacaoEntity.setComentario("Muito Bom o filme.");
-//        AvaliacaoPK avaliacaoPK = new AvaliacaoPK();
-//        avaliacaoPK.setIdItem(1);
-//        avaliacaoPK.setIdUsuario(1);
-//        avaliacaoEntity.setAvaliacaoPK(avaliacaoPK);
-//        when(avaliacaoRepository.save(any())).thenReturn(avaliacaoEntity);
-//
-//        // Ação (ACT)
-//        AvaliacaoDto avaliacaoDto = avaliacaoService.create(avaliacaoCreateDto, 1);
-//
-//        // Verificação (ASSERT)
-//        assertNotNull(avaliacaoDto);
-//        assertNotNull(avaliacaoDto.getIdUsuario());
-//        assertNotNull(avaliacaoDto.getUsuario());
-//        assertEquals(9.0,avaliacaoDto.getNota());
-//        assertEquals("Muito Bom o filme.", avaliacaoDto.getComentario());
-//    }
-
     @Test
     public void deveTestarListComSucesso() throws RegraDeNegocioException {
         // Criar variaveis (SETUP)
-        // lancamentosRepository.findAll()
         List<AvaliacaoEntity> lista = new ArrayList<>();
         lista.add(getAvaliacaoEntity());
         when(avaliacaoRepository.findAll()).thenReturn(lista);
@@ -100,9 +69,8 @@ public class AvaliacaoServiceTest {
     }
 
     @Test
-    public void deveTestarListByUsersComSucesso() throws RegraDeNegocioException {
+    public void deveTestarListByUsersComSucesso() {
         // Criar variaveis (SETUP)
-        // lancamentosRepository.findByUsers()
         List<AvaliacaoEntity> lista = new ArrayList<>();
         lista.add(getAvaliacaoEntity());
         when(avaliacaoRepository.pegarUsuario(1)).thenReturn(lista);
@@ -146,6 +114,11 @@ public class AvaliacaoServiceTest {
         Integer idUsuario = 1;
         Integer idItem = 1;
         AvaliacaoEntity avaliacaoEntity = getAvaliacaoEntity();
+
+        when(usuarioService.findById(anyInt())).thenReturn(getUsuarioEntity());
+
+        when(itemService.findById(anyInt())).thenReturn(getItemEntretenimento());
+
         when(avaliacaoRepository.findByIdAvaliacao(anyInt(), anyInt())).thenReturn(avaliacaoEntity);
 
         // Ação (ACT)
@@ -156,67 +129,6 @@ public class AvaliacaoServiceTest {
         assertEquals(1, avaliacaoDto.getIdUsuario());
         assertEquals(1, avaliacaoDto.getIdItemEntretenimento());
     }
-
-//    @Test
-//    public void deveTestarVerificarItemAvalicadoComSucesso(){
-//        // SETUP
-//
-//
-//        // ACT
-//
-//
-//        // ASSERT
-//    }
-
-
-
-//    @Test
-//    public void deveTestarUpdateComSucesso() throws RegraDeNegocioException {
-//        // SETUP
-//        UsernamePasswordAuthenticationToken dto
-//                = new UsernamePasswordAuthenticationToken(1, null, Collections.emptyList());
-//        SecurityContextHolder.getContext().setAuthentication(dto);
-//
-//        AvaliacaoEntity avaliacaoEntity = getAvaliacaoEntity();
-//
-//        when(usuarioService.getLoggedUser()).thenReturn(getUsuarioDto());
-//
-////        avaliacaoEntity.setNota();
-//        when(avaliacaoRepository.findByIdAvaliacao(any(), anyInt())).thenReturn(avaliacaoEntity);
-//
-//        // ACT
-//        AvaliacaoDto avaliacaoDto = avaliacaoService.update(getAvaliacaoCreateDto(), 1);
-//
-//        // ASSERT
-////        assertNotNull(avaliacaoDto);
-////        assertNotEquals(9.0, avaliacaoDto.getNota());
-////        assertNotEquals("Muito bom, excelente efeitos visuais.",avaliacaoDto.getComentario());
-//        verify(avaliacaoRepository, times(1)).save(any());
-//    }
-
-//    @Test
-//    public void deveTestarRemoverComSucesso() throws RegraDeNegocioException {
-//        // Criar variaveis (SETUP)
-//
-//        UsernamePasswordAuthenticationToken dto
-//                = new UsernamePasswordAuthenticationToken(1, null, Collections.emptyList());
-//        SecurityContextHolder.getContext().setAuthentication(dto);
-//
-//        UsuarioEntity usuarioEntity = getUsuarioEntity();
-//        usuarioEntity.setAvaliacaos(Set.of(getAvaliacaoEntity()));
-//
-//        when(avaliacaoRepository.findByIdAvaliacao(anyInt(), anyInt())).thenReturn(getAvaliacaoEntity());
-//
-//        when(usuarioService.getLoggedUser()).thenReturn(getUsuarioDto());
-//
-//        // Ação (ACT)
-//        avaliacaoService.delete(usuarioEntity.getIdUsuario());
-//
-//        // Verificação (ASSERT)
-////        verify(itemService, times(1)).findById(any());
-//
-//        verify(avaliacaoRepository, times(1)).delete(any());
-//    }
 
     private static AvaliacaoEntity getAvaliacaoEntity() {
         AvaliacaoEntity avaliacaoEntity = new AvaliacaoEntity();
@@ -240,13 +152,6 @@ public class AvaliacaoServiceTest {
         return avaliacaoEntity;
     }
 
-    private static AvaliacaoCreateDto getAvaliacaoCreateDto() {
-        AvaliacaoCreateDto avaliacaoCreateDto = new AvaliacaoCreateDto();
-        avaliacaoCreateDto.setNota(9.0);
-        avaliacaoCreateDto.setComentario("Muito bom, excelente efeitos visuais.");
-        return avaliacaoCreateDto;
-    }
-
     private static UsuarioEntity getUsuarioEntity() {
         UsuarioEntity usuarioEntity = new UsuarioEntity();
         usuarioEntity.setIdUsuario(1);
@@ -256,15 +161,22 @@ public class AvaliacaoServiceTest {
         usuarioEntity.setSenha("123");
         usuarioEntity.setAtivo(1);
         usuarioEntity.setCargos(new HashSet<>());
+        usuarioEntity.setItemEntretenimentos(new HashSet<>());
         return usuarioEntity;
     }
 
-    private static UsuarioDto getUsuarioDto() {
-        UsuarioDto usuarioDto = new UsuarioDto();
-        usuarioDto.setIdUsuario(1);
-        usuarioDto.setNome("Eduardo Sedrez");
-        usuarioDto.setIdade(24);
-        usuarioDto.setEmail("eduardo@dbccompany.com.br");
-        return usuarioDto;
+    public static ItemEntretenimentoEntity getItemEntretenimento() {
+        ItemEntretenimentoEntity item = new ItemEntretenimentoEntity();
+        item.setIdItem(1);
+        item.setNome("Homem Aranha");
+        item.setTipo("Filme");
+        item.setGenero("ação");
+        item.setSinopse("O homem que sobe pelas paredes e joga teia");
+        item.setAnoLancamento("02/02/2002");
+        item.setClassificacao(16);
+        item.setPlataforma("Netflix");
+        item.setDuracao("155");
+        item.setUsuarios(new HashSet<>());
+        return item;
     }
 }

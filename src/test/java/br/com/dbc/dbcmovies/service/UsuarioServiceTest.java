@@ -342,38 +342,6 @@ public class UsuarioServiceTest {
         assertEquals(1,loggedUser.getIdUsuario());
     }
 
-//    @Test
-//    public void deveTestarAlterarSenhaComSucesso() throws RegraDeNegocioException {
-//        // Criar variaveis (SETUP)
-//        UsernamePasswordAuthenticationToken dto
-//                = new UsernamePasswordAuthenticationToken(1, null, Collections.emptyList());
-//        SecurityContextHolder.getContext().setAuthentication(dto);
-//
-//        String senha = "123";
-//        String senhaCriptografada = "$ibijbfce9u7vw7gb3uf";
-//
-//        CargoEntity cargoRecuperacao = getCargoEntity();
-//
-//        UsuarioEntity usuario = getUsuarioEntity();
-//
-//        when(usuarioService.findById(any())).thenReturn(usuario);
-//
-//        when(usuarioService.getLoggedUser()).thenReturn(getUsuarioDto());
-//
-//        when(cargoService.findById(any())).thenReturn(cargoRecuperacao);
-//
-//        when(passwordEncoder.encode(anyString())).thenReturn(senhaCriptografada);
-//
-//        // Ação (ACT)
-//        usuarioService.alterarSenha(senha);
-//
-//        // Verificação (ASSERT)
-//        verify(usuarioRepository, times(1)).save(any());
-//
-//    }
-
-
-
     private static UsuarioEntity getUsuarioEntity() {
         UsuarioEntity usuarioEntity = new UsuarioEntity();
         usuarioEntity.setNome("Luiz Martins");
@@ -392,14 +360,6 @@ public class UsuarioServiceTest {
         usuarioCreateDto.setEmail("alison@dbccompany.com.br");
         usuarioCreateDto.setSenha("123");
         return usuarioCreateDto;
-    }
-
-    private static UsuarioDto getUsuarioDto() {
-        UsuarioDto usuarioDto = new UsuarioDto();
-        usuarioDto.setNome("Eduardo Sedrez");
-        usuarioDto.setIdade(24);
-        usuarioDto.setEmail("eduardo@dbccompany.com.br");
-        return usuarioDto;
     }
 
     private static CargoEntity getCargoEntity() {
