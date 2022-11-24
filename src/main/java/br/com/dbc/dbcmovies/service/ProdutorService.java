@@ -2,6 +2,8 @@ package br.com.dbc.dbcmovies.service;
 
 
 import br.com.dbc.dbcmovies.dto.LocadoraDto;
+import br.com.dbc.dbcmovies.dto.UsuarioDto;
+import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -28,6 +31,8 @@ public class ProdutorService {
 
     private final ObjectMapper objectMapper;
 
+    private final UsuarioService usuarioService;
+
 
     @Value(value = "${kafka.topic}")
     private String topico;
@@ -37,7 +42,14 @@ public class ProdutorService {
     private Integer particao;
 
 
-    public void sendTo(LocadoraDto locadora) throws JsonProcessingException {
+    public void sendTo(String nomeItem, Integer diaAlugado) throws JsonProcessingException, RegraDeNegocioException {
+        LocadoraDto locadora = new LocadoraDto();
+        Integer idUsuario = usuarioService.getLoggedUser().getIdUsuario();
+        UsuarioDto usuarioDto = objectMapper.convertValue(usuarioService.findById(idUsuario), UsuarioDto.class);
+        locadora.setUsuario(usuarioDto);
+        locadora.setNomeItem(nomeItem);
+        locadora.setDiaAlugado(diaAlugado);
+        locadora.setData(LocalDateTime.now());
 
         String mensagemStr = objectMapper.writeValueAsString(locadora);
 
@@ -52,7 +64,7 @@ public class ProdutorService {
         enviadoParaTopico.addCallback(new ListenableFutureCallback<>() {
             @Override
             public void onSuccess(SendResult result) {
-                log.info("Foi enviada com sucesso: id: {} | NomePessoa: {} | Preço: {} | NomeItem: {} | Disponibilidade: {} ", locadora.getIdLocadora(), locadora.getNomePessoa(), locadora.getPreco(), locadora.getNomeItem(), locadora.isDisponibilidade());
+                log.info("{} Sua mensagem foi enviado com sucesso!", usuarioDto.getNome());
             }
 
             @Override

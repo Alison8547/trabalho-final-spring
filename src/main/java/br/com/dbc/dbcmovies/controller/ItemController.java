@@ -1,6 +1,9 @@
 package br.com.dbc.dbcmovies.controller;
 
-import br.com.dbc.dbcmovies.dto.*;
+import br.com.dbc.dbcmovies.dto.FilmeCreateDto;
+import br.com.dbc.dbcmovies.dto.ItemEntretenimentoDto;
+import br.com.dbc.dbcmovies.dto.PageDTO;
+import br.com.dbc.dbcmovies.dto.SerieCreateDto;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.ItemService;
 import br.com.dbc.dbcmovies.service.ProdutorService;
@@ -166,8 +169,8 @@ public class ItemController {
             }
     )
     @PostMapping("/enviar")
-    public ResponseEntity<Void> enviarParaLocadora(@RequestBody LocadoraDto locadora) throws JsonProcessingException {
-        produtorService.sendTo(locadora);
+    public ResponseEntity<Void> enviarParaLocadora(@RequestParam String nomeItem, @RequestParam Integer diasAlugados) throws JsonProcessingException, RegraDeNegocioException {
+        produtorService.sendTo(nomeItem, diasAlugados);
         return ResponseEntity.ok().build();
     }
 }

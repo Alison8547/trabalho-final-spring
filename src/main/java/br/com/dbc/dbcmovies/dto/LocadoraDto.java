@@ -2,11 +2,13 @@ package br.com.dbc.dbcmovies.dto;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class LocadoraDto {
-    private String idLocadora;
-    private String nomePessoa;
-    private Double preco;
+    private UsuarioDto usuario;
+    private LocalDateTime data;
     private String nomeItem;
-    private boolean disponibilidade;
+    private Integer diaAlugado;
+
 }
