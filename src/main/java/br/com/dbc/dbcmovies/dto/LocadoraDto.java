@@ -6,9 +6,9 @@ import java.time.LocalDateTime;
 
 @Data
 public class LocadoraDto {
-    private UsuarioDto usuario;
+    private UsuarioLocacaoDto usuario;
     private LocalDateTime data;
-    private String nomeItem;
-    private Integer diaAlugado;
-
+    private String nomeFilme;
+    private Double precoFilme;
+    private Integer qtdDiasLocacao;
 }

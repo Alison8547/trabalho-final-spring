@@ -2,7 +2,8 @@ package br.com.dbc.dbcmovies.service;
 
 
 import br.com.dbc.dbcmovies.dto.LocadoraDto;
-import br.com.dbc.dbcmovies.dto.UsuarioDto;
+import br.com.dbc.dbcmovies.dto.UsuarioLocacaoDto;
+import br.com.dbc.dbcmovies.entity.NomeFilmes;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,14 +43,15 @@ public class ProdutorService {
     private Integer particao;
 
 
-    public void sendTo(String nomeItem, Integer diaAlugado) throws JsonProcessingException, RegraDeNegocioException {
+    public void sendTo(NomeFilmes nomeFilme, Integer qtdDiasAlugado) throws JsonProcessingException, RegraDeNegocioException {
         LocadoraDto locadora = new LocadoraDto();
         Integer idUsuario = usuarioService.getLoggedUser().getIdUsuario();
-        UsuarioDto usuarioDto = objectMapper.convertValue(usuarioService.findById(idUsuario), UsuarioDto.class);
+        UsuarioLocacaoDto usuarioDto = objectMapper.convertValue(usuarioService.findById(idUsuario), UsuarioLocacaoDto.class);
         locadora.setUsuario(usuarioDto);
-        locadora.setNomeItem(nomeItem);
-        locadora.setDiaAlugado(diaAlugado);
         locadora.setData(LocalDateTime.now());
+        locadora.setNomeFilme(nomeFilme.getDescricao());
+        locadora.setPrecoFilme(nomeFilme.getPreco());
+        locadora.setQtdDiasLocacao(qtdDiasAlugado);
 
         String mensagemStr = objectMapper.writeValueAsString(locadora);
 
@@ -73,5 +75,4 @@ public class ProdutorService {
             }
         });
     }
-
 }
