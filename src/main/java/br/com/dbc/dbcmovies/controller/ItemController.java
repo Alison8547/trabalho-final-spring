@@ -1,11 +1,10 @@
 package br.com.dbc.dbcmovies.controller;
 
-import br.com.dbc.dbcmovies.dto.FilmeCreateDto;
-import br.com.dbc.dbcmovies.dto.ItemEntretenimentoDto;
-import br.com.dbc.dbcmovies.dto.PageDTO;
-import br.com.dbc.dbcmovies.dto.SerieCreateDto;
+import br.com.dbc.dbcmovies.dto.*;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.ItemService;
+import br.com.dbc.dbcmovies.service.ProdutorService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,6 +24,8 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
+
+    private final ProdutorService produtorService;
 
     @Operation(summary = "Criar Filme", description = "Cria um Filme no banco de dados")
     @ApiResponses(
@@ -154,5 +155,19 @@ public class ItemController {
     @GetMapping("/itens-paginados")
     public ResponseEntity<PageDTO<ItemEntretenimentoDto>> listaItemEntretenimentoPaginado(Integer pagina, Integer tamanho) {
         return new ResponseEntity<>(itemService.listaItemEntretenimentoPaginado(pagina, tamanho), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Enviar para locadora", description = "Enviar para locadora atraves do kafka")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Enviado com sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
+    @PostMapping("/enviar")
+    public ResponseEntity<Void> enviarParaLocadora(@RequestBody LocadoraDto locadora) throws JsonProcessingException {
+        produtorService.sendTo(locadora);
+        return ResponseEntity.ok().build();
     }
 }
