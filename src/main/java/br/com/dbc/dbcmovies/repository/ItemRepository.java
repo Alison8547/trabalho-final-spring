@@ -13,4 +13,6 @@ public interface ItemRepository extends JpaRepository<ItemEntretenimentoEntity,I
     @Query(" select i from ITEM_ENTRETENIMENTO i " +
             "WHERE UPPER(i.tipo) = :tipo  and UPPER(i.genero) = :genero and i.classificacao = :classificacao")
     List<ItemEntretenimentoEntity> filtrar(String tipo,String genero,Integer classificacao);
+
+    List<ItemEntretenimentoEntity>findByDisponibilidade(Integer disponibilidade);
 }

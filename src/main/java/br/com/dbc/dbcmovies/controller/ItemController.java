@@ -4,11 +4,8 @@ import br.com.dbc.dbcmovies.dto.FilmeCreateDto;
 import br.com.dbc.dbcmovies.dto.ItemEntretenimentoDto;
 import br.com.dbc.dbcmovies.dto.PageDTO;
 import br.com.dbc.dbcmovies.dto.SerieCreateDto;
-import br.com.dbc.dbcmovies.entity.NomeFilmes;
 import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import br.com.dbc.dbcmovies.service.ItemService;
-import br.com.dbc.dbcmovies.service.ProdutorService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -28,8 +25,6 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
-
-    private final ProdutorService produtorService;
 
     @Operation(summary = "Criar Filme", description = "Cria um Filme no banco de dados")
     @ApiResponses(
@@ -159,19 +154,5 @@ public class ItemController {
     @GetMapping("/itens-paginados")
     public ResponseEntity<PageDTO<ItemEntretenimentoDto>> listaItemEntretenimentoPaginado(Integer pagina, Integer tamanho) {
         return new ResponseEntity<>(itemService.listaItemEntretenimentoPaginado(pagina, tamanho), HttpStatus.OK);
-    }
-
-    @Operation(summary = "Locar um filme", description = "Chama o serviço de locação de filmes através de um evento enviado para o kafka")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Evento enviado com sucesso"),
-                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
-            }
-    )
-    @PostMapping("/locacao")
-    public ResponseEntity<Void> enviarParaLocadora(@RequestParam NomeFilmes nomeFilme, @RequestParam Integer qtdDiasLocacao) throws JsonProcessingException, RegraDeNegocioException {
-        produtorService.sendTo(nomeFilme, qtdDiasLocacao);
-        return ResponseEntity.ok().build();
     }
 }

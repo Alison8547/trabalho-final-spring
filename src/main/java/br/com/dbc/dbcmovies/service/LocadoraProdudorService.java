@@ -2,9 +2,6 @@ package br.com.dbc.dbcmovies.service;
 
 
 import br.com.dbc.dbcmovies.dto.LocadoraDto;
-import br.com.dbc.dbcmovies.dto.UsuarioLocacaoDto;
-import br.com.dbc.dbcmovies.entity.NomeFilmes;
-import br.com.dbc.dbcmovies.exceptions.RegraDeNegocioException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +16,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ProdutorService {
+public class LocadoraProdudorService {
 
 
     private final KafkaTemplate<String, String> kafkaTemplate;
@@ -33,7 +29,6 @@ public class ProdutorService {
     private final ObjectMapper objectMapper;
 
     private final UsuarioService usuarioService;
-
 
     @Value(value = "${kafka.topic}")
     private String topico;
@@ -43,15 +38,7 @@ public class ProdutorService {
     private Integer particao;
 
 
-    public void sendTo(NomeFilmes nomeFilme, Integer qtdDiasAlugado) throws JsonProcessingException, RegraDeNegocioException {
-        LocadoraDto locadora = new LocadoraDto();
-        Integer idUsuario = usuarioService.getLoggedUser().getIdUsuario();
-        UsuarioLocacaoDto usuarioDto = objectMapper.convertValue(usuarioService.findById(idUsuario), UsuarioLocacaoDto.class);
-        locadora.setUsuario(usuarioDto);
-        locadora.setData(LocalDateTime.now());
-        locadora.setNomeFilme(nomeFilme.getDescricao());
-        locadora.setPrecoFilme(nomeFilme.getPreco());
-        locadora.setQtdDiasLocacao(qtdDiasAlugado);
+    public void sendTo(LocadoraDto locadora) throws JsonProcessingException {
 
         String mensagemStr = objectMapper.writeValueAsString(locadora);
 
@@ -66,7 +53,7 @@ public class ProdutorService {
         enviadoParaTopico.addCallback(new ListenableFutureCallback<>() {
             @Override
             public void onSuccess(SendResult result) {
-                log.info("{} Sua mensagem foi enviado com sucesso!", usuarioDto.getNome());
+                log.info("{} Sua mensagem foi enviado com sucesso!", locadora.getUsuario().getNome());
             }
 
             @Override

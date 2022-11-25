@@ -17,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemService {
 
+    private static final int DISPONIVEL = 1;
     private final ItemRepository itemRepository;
     private final ObjectMapper objectMapper;
 
@@ -99,6 +100,12 @@ public class ItemService {
     public ItemEntretenimentoEntity findById(Integer id) throws RegraDeNegocioException {
         return itemRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("Item não encontrado!"));
+    }
+
+    public List<FilmeDisponivelDto> findByDisponibilidade() {
+        List<ItemEntretenimentoEntity> filmesDisponiveisEntity = itemRepository.findByDisponibilidade(DISPONIVEL);
+        return filmesDisponiveisEntity.stream()
+                .map(filme -> objectMapper.convertValue(filme, FilmeDisponivelDto.class)).toList();
     }
 
     public PageDTO<ItemEntretenimentoDto> listaItemEntretenimentoPaginado(Integer pagina, Integer tamanho) {
